@@ -1,81 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-
-  <head>
-    {% block meta %}
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    {% endblock %}
-
-    {% block extra_meta %}
-    {% endblock %}
-
-    {% block corecss %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Montserrat&display=swap" rel="stylesheet">
-    {% endblock %}
-
-    {% block extra_css %}
-    {% endblock %}
-
-
-    {% block corejs %}
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    {% endblock %}
-
-    {% block extra_js %}
-    {% endblock %}
-
-
-    <title>Dom's Burger Joint {% block extra_title %}{% endblock %}</title>
-  </head>
+{% load static %}
+	<head>
+		{% block meta %}
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		{% endblock %}
+	
+		{% block extra_meta %}
+		{% endblock %}
+	
+		{% block corecss %}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abel&family=Montserrat&display=swap">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.css">
+		<link rel="stylesheet" href="{% static 'css/base.css' %}">
+		{% endblock %}
+	
+		{% block extra_css %}
+		{% endblock %}
+	
+	
+		{% block corejs %}
+		<!-- JQuery -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+		{% endblock %}
+	
+		{% block extra_js %}
+		{% endblock %}
+	
+	
+		<title>Dom's Burger Joint {% block extra_title %}{% endblock %}</title>
+	</head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">HOME<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">MENU<span class="sr-only"></span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">DEALS</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            Dropdown
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
+		<header>
+			<div class="navbar-fixed">
+				<nav>
+					<div class="nav-wrapper">
+                        <div class="logo-container">
+                            <a href="#!" class="brand-logo center">
+                                <img src="{% static '/images/simplefastfoodicon.svg' %}" alt="">
+                                <h1>DOM'S BURGER JOINT</h1>
+                            </a>
                         </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                    </li>
-                </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
-            </div>
-        </nav>
-    <header></header>
-    <h1>Dom's Burger Joint</h1>
+                        <div class="menu-container">
+                            <ul class="right hide-on-small-and-down">
+                                <li><a href="#">HOME</a></li>
+                                <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">MENU
+                                <i class="material-icons right">arrow_drop_down</i></a></li>
+                                <li><a href="#">DEALS</a></li>
+                                <li><a href="#">CHECKOUT</a></li>
+                            </ul>
+                        </div>
+                        <a href="#" data-target="slide-out" class="sidenav-trigger right hide-on-med-and-up"><i class="material-icons">menu</i></a>
+					</div>
+				</nav>
+			</div>
 
-  </body>
+            <ul id="dropdown1" class="dropdown-content">
+				<li><a href="#!">BURGERS</a></li>
+				<li><a href="#!">SIDES</a></li>
+				<li><a href="#!">DRINKS</a></li>
+                <li><a href="#!">VEGETARIAN</a></li>
+				<li><a href="#!">DESERTS</a></li>
+			</ul>
+
+			<ul id="dropdown2" class="dropdown-content">
+				<li><a href="#!">BURGERS</a></li>
+				<li><a href="#!">SIDES</a></li>
+				<li><a href="#!">DRINKS</a></li>
+                <li><a href="#!">VEGETARIAN</a></li>
+				<li><a href="#!">DESERTS</a></li>
+			</ul>
+
+            <!-- Sidebar navigation -->
+            
+			<ul id="slide-out" class="sidenav">
+                <li><a class="sidenav-close" href="#!"><span class="material-icons">close</span></a></li>
+
+				<li>
+				</li>
+				<li><a href="#">HOME</a></li>
+                <li>
+                    <a class="dropdown-trigger" href="#!" data-target="dropdown2">MENU
+                    <i class="material-icons right">arrow_drop_down</i></a>
+
+                    <!--<ul class="collapsible collapsible-accordion">
+                        <a class="collapsible-header">MENU<i class="material-icons">arrow_drop_down</i></a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="#!">BURGERS</a></li>
+                                <li><a href="#!">SIDES</a></li>
+                                <li><a href="#!">DRINKS</a></li>
+                                <li><a href="#!">VEGETARIAN</a></li>
+                                <li><a href="#!">DESERTS</a></li>
+                            </ul>
+                        </div>
+                    </ul>-->
+                </li>
+                <li><a href="#">DEALS</a></li>
+                <li><a href="#">CHECKOUT</a></li>
+			</ul>
+
+		</header>
+
+        {% block content %}
+        {% endblock %}
+
+        <script>
+            
+		$(document).ready(function(){
+            $(".sidenav").sidenav({edge: "right", menuWidth: 275});
+            $(".dropdown-trigger").dropdown({coverTrigger: false, closeOnClick: false});
+            $(".collapsible").collapsible({accordion: true});
+            // var elemSideNav = document.querySelectorAll('.sidenav');
+            // var instanceSideNav = M.Sidenav.init(elemSideNav, {edge:'right'});
+            // $(".dropdown-trigger").dropdown({
+            //     coverTrigger: false,
+            //     closeOnClick: false
+            // });
+            //$('.sidenav').sidenav();
+            // $(".button-collapse").sideNav({
+            //     menuWidth: 275
+            // });
+            //$('.collapsible').collapsible();
+            // var elemCollapsible = document.querySelectorAll('.collapsible');
+            // var instanceCollapsible = M.Collapsible.init(elemCollapsible, {accordion: true});
+        });
+        </script>
+    </body>
 
 </html>

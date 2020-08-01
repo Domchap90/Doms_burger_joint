@@ -1,0 +1,142 @@
+h1 {
+    font-family: 'Abel', sans-serif;
+    margin: auto 20px;
+    font-size: 1.8rem;
+    color: black;
+}
+
+p {
+    font-family: 'Montserrat', sans-serif;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: black;
+    border-color: black !important;
+    font-family: 'Abel', sans-serif;
+    font-size: 1.4rem;
+}
+
+button:hover {
+    background-color: #ffff00;
+}
+button:hover a {
+    color: black;
+}
+
+button a {
+    color: white;
+    width: 100%;
+    height: 100%;
+}
+
+a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+/********************************************************* Navbar   */
+
+.navbar-fixed nav {
+    height: 174px;
+    background-color: white;
+}
+
+.nav-wrapper{
+    display: block;
+}
+
+.menu-container {
+    width: 100%;
+    height: fit-content;
+}
+
+.menu-container ul {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    font-family: 'Abel', sans-serif;
+}
+
+#dropdown1 {
+    width: 150px !important;
+}
+
+.nav-wrapper ul li a {
+    color: black;
+}
+
+
+.brand-logo {
+    text-align: center;
+    width: fit-content;
+}
+
+a.sidenav-trigger {
+    color: black;
+}
+
+#slide-out {
+    font-family: 'Abel', sans-serif;
+}
+
+.sidenav-close {
+    text-align: right;
+}
+span {
+    padding-top: 15px;
+}
+
+img {
+    width: 100px;
+    height: 100px;
+}
+
+@media (min-width: 450px){
+    .navbar-brand {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media (min-width: 600px){
+    .navbar-fixed nav {
+        height: 210px;
+    }
+    .menu-container {
+        padding-top: 150px;
+    }
+}
+
+/********************************************************* Home page   */
+.container{
+    width: 100%;
+    max-width:initial;          
+}
+.hero-burger-image {
+    background: url(/media/heroimage_burger_fries.jpg);
+    height: calc(100vh - 174px);
+    width: 100vw;
+    margin-top: 112px;
+    background-size: contain;
+    background-position: top center;
+    background-repeat: no-repeat;
+}
+.button-container {
+    position: absolute;
+    width: inherit;
+    display: flex;
+    height: 30%;
+    justify-content: center;
+    align-items: center;
+}
+#menu-button {
+    
+}
+
+@media (min-width: 450px){
+    .hero-burger-image {
+        height: calc(100vh - 174px);
+        margin-top: 110px;
+    }
+}
