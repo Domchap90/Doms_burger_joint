@@ -1,0 +1,42 @@
+[
+  {
+    "pk": 1,
+    "model": "menu.food_category",
+    "fields": {
+      "name": "burgers",
+      "friendly_name": "Burgers"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "menu.food_category",
+    "fields": {
+      "name": "sides",
+      "friendly_name": "Sides"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "menu.food_category",
+    "fields": {
+      "name": "drinks",
+      "friendly_name": "Drinks"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "menu.food_category",
+    "fields": {
+      "name": "dessert",
+      "friendly_name": "Dessert"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "menu.food_category",
+    "fields": {
+      "name": "vegetarian",
+      "friendly_name": "Vegetarian"
+    }
+  }
+]
