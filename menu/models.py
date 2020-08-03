@@ -4,6 +4,9 @@ from django.db import models
 
 
 class Food_Category (models.Model):
+
+    class Meta:
+        verbose_name_plural = 'Food_Categories'
     name = models.CharField(max_length=20)
     friendly_name = models.CharField(max_length=20, null=True, blank=True)
 
