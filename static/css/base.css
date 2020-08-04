@@ -9,6 +9,10 @@ p {
     font-family: 'Montserrat', sans-serif;
 }
 
+img {
+    width: 100%;
+}
+
 button {
     padding: 8px 16px;
     background-color: black;
@@ -87,7 +91,7 @@ span {
     padding-top: 15px;
 }
 
-img {
+.brand-logo img {
     width: 100px;
     height: 100px;
 }
@@ -138,5 +142,19 @@ img {
     .hero-burger-image {
         height: calc(100vh - 174px);
         margin-top: 110px;
+    }
+}
+
+/********************************************************* Menu page   */
+
+.below-nav-container {
+    margin-top: 120px;
+    padding: 20px 10px;
+    background-color: beige;
+}
+
+@media (min-width: 600px){
+    .below-nav-container{
+        margin-top: 147px;
     }
 }
