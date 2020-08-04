@@ -153,6 +153,12 @@ span {
     background-color: beige;
 }
 
+.category-title {
+    text-transform: uppercase;
+    font-family: "Abel", sans-serif;
+    font-size: 1.8rem;
+}
+
 @media (min-width: 600px){
     .below-nav-container{
         margin-top: 147px;
