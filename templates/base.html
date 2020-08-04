@@ -68,14 +68,6 @@
 				<li><a href="#!">DESERTS</a></li>
 			</ul>
 
-			<ul id="dropdown2" class="dropdown-content">
-				<li><a href="#!">BURGERS</a></li>
-				<li><a href="#!">SIDES</a></li>
-				<li><a href="#!">DRINKS</a></li>
-                <li><a href="#!">VEGETARIAN</a></li>
-				<li><a href="#!">DESERTS</a></li>
-			</ul>
-
             <!-- Sidebar navigation -->
             
 			<ul id="slide-out" class="sidenav">
@@ -85,21 +77,20 @@
 				</li>
 				<li><a href="#">HOME</a></li>
                 <li>
-                    <a class="dropdown-trigger" href="#!" data-target="dropdown2">MENU
-                    <i class="material-icons right">arrow_drop_down</i></a>
-
-                    <!--<ul class="collapsible collapsible-accordion">
-                        <a class="collapsible-header">MENU<i class="material-icons">arrow_drop_down</i></a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="#!">BURGERS</a></li>
-                                <li><a href="#!">SIDES</a></li>
-                                <li><a href="#!">DRINKS</a></li>
-                                <li><a href="#!">VEGETARIAN</a></li>
-                                <li><a href="#!">DESERTS</a></li>
-                            </ul>
-                        </div>
-                    </ul>-->
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
+                            <div class="collapsible-header">MENU<i class="material-icons">arrow_drop_down</i></div>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="#!">BURGERS</a></li>
+                                    <li><a href="#!">SIDES</a></li>
+                                    <li><a href="#!">DRINKS</a></li>
+                                    <li><a href="#!">VEGETARIAN</a></li>
+                                    <li><a href="#!">DESERTS</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
                 </li>
                 <li><a href="#">DEALS</a></li>
                 <li><a href="#">CHECKOUT</a></li>
@@ -116,13 +107,6 @@
             $(".sidenav").sidenav({edge: "right", menuWidth: 275});
             $(".dropdown-trigger").dropdown({coverTrigger: false, closeOnClick: false});
             $(".collapsible").collapsible({accordion: true});
-            // var elemSideNav = document.querySelectorAll('.sidenav');
-            // var instanceSideNav = M.Sidenav.init(elemSideNav, {edge:'right'});
-            // $(".dropdown-trigger").dropdown({
-            //     coverTrigger: false,
-            //     closeOnClick: false
-            // });
-            //$('.sidenav').sidenav();
             // $(".button-collapse").sideNav({
             //     menuWidth: 275
             // });
