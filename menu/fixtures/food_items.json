@@ -7,7 +7,7 @@
       "description": "This is a description of item 1",
       "price": 9.99,
       "category": 1,
-      "order_quantity": 0,
+      "order_quantity": 10,
       "image": "burger_1.jpg"
     }
   },
@@ -19,7 +19,7 @@
       "description": "This is a description of item 2",
       "price": 9.99,
       "category": 1,
-      "order_quantity": 0,
+      "order_quantity": 3,
       "image": "burger_2.jpg"
     }
   },
@@ -31,7 +31,7 @@
       "description": "This is a description of item 3",
       "price": 9.99,
       "category": 1,
-      "order_quantity": 0,
+      "order_quantity": 4,
       "image": "burger_3.jpg"
     }
   },
@@ -43,7 +43,7 @@
       "description": "This is a description of item 4",
       "price": 9.99,
       "category": 1,
-      "order_quantity": 0,
+      "order_quantity": 5,
       "image": "burger_4.jpg"
     }
   },
@@ -55,7 +55,7 @@
       "description": "This is a description of item 5",
       "price": 9.99,
       "category": 1,
-      "order_quantity": 0,
+      "order_quantity": 6,
       "image": "burger_5.jpg"
     }
   },
@@ -67,7 +67,7 @@
       "description": "This is a description of item 6",
       "price": 9.99,
       "category": 1,
-      "order_quantity": 0,
+      "order_quantity": 1,
       "image": "burger_6.jpg"
     }
   },
@@ -79,7 +79,7 @@
       "description": "This is a description of item 7",
       "price": 9.99,
       "category": 1,
-      "order_quantity": 0,
+      "order_quantity": 2,
       "image": "burger_7.jpg"
     }
   },
@@ -91,7 +91,7 @@
       "description": "This is a description of item 8",
       "price": 9.99,
       "category": 1,
-      "order_quantity": 0,
+      "order_quantity": 9,
       "image": "burger_8.jpg"
     }
   },
@@ -102,7 +102,7 @@
       "name": "Burger Item 9",
       "description": "This is a description of item 9",
       "price": 9.99,
-      "category": 1,
+      "category": 7,
       "order_quantity": 0,
       "image": "burger_9.jpg"
     }

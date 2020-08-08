@@ -159,6 +159,26 @@ span {
     font-size: 1.8rem;
 }
 
+.switch label .lever {
+    background-color: #8e8282;
+}
+
+.switch label .lever:after {
+    background-color: #605858;
+}
+
+.switch label input[type=checkbox]:checked + .lever {
+    background-color: #dbdb1b;
+}
+
+.switch label input[type=checkbox]:checked + .lever:after {
+    background-color: #ffff00;
+}
+
+#filter-btn-container {
+    text-align: right;
+}
+
 @media (min-width: 600px){
     .below-nav-container{
         margin-top: 147px;
