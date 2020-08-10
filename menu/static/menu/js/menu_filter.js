@@ -35,13 +35,17 @@ function getFilteredResults(category_name) {
         url: "sort/",
         data: dataToSend,
         dataType: 'json',
-        success: function(data) {
-            console.log("SUCCESS");
-            $('#ajax-data').html(data);    
-        }
-        //, error: function (data) {
-        //     console.log("ERROR")    
-        //     console.log(data)
-        // }
-    })
-}
+        success: function(response) {
+            let itemsList = JSON.parse(response['items']);
+            let counter = 0;
+            for(item of itemsList) {
+                counter++;
+                $("#item-name-"+counter).html(item['fields']['name']);
+                $("#item-pic-"+counter).attr('src', '/media/'+item['fields']['image']);
+                $("#item-desc-inline-"+counter).html(item['fields']['description']);
+                $("#item-price-"+counter).html(item['fields']['price']);
+                $("#item-desc-block-"+counter).html(item['fields']['description']);
+                }
+            }
+        })
+    }

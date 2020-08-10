@@ -48,29 +48,27 @@
             </div>
             {% endfor %}
         </div>
-        <div id="ajax-data">
-        </div>
         {% for item in items %}
         <div class="row">
-            <div class="col s12">
+            <div class="col s12" id="item-name-{{ forloop.counter }}">
                 {{ item.name }}
             </div>
         </div>
 		<div class="row">
             <div class="col s6 m4">
-                <img src="/media/{{item.image}}" alt="">
+                <img src="/media/{{item.image}}" id="item-pic-{{ forloop.counter }}" alt="">
             </div> 
-            <div class="col m6 hide-on-small-and-down">
+            <div class="col m6 hide-on-small-and-down" id="item-desc-inline-{{ forloop.counter }}">
                 {{ item.description }}
             </div> 
             <div class="col s3 hide-on-med-and-up">
             </div> 
-            <div class="col s3 m2">
+            <div class="col s3 m2 item-price" id="item-price-{{ forloop.counter }}">
                 £{{ item.price }}
             </div> 
 		</div>
         <div class="row hide-on-med-and-up">
-            <div class="col s12">
+            <div class="col s12" id="item-desc-block-{{ forloop.counter }}">
                 {{ item.description }}
             </div>
         </div>
