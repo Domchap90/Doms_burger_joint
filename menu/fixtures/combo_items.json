@@ -1,0 +1,482 @@
+[
+  {
+    "pk": 1,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 1
+    }
+  },
+  {
+    "pk": 2,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 1
+    }
+  },
+  {
+    "pk": 3,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 1
+    }
+  },
+  {
+    "pk": 4,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 2
+    }
+  },
+  {
+    "pk": 5,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 2
+    }
+  },
+  {
+    "pk": 6,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 2
+    }
+  },
+  {
+    "pk": 7,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 3
+    }
+  },
+  {
+    "pk": 8,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 3
+    }
+  },
+  {
+    "pk": 9,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 3
+    }
+  },
+  {
+    "pk": 10,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 4
+    }
+  },
+  {
+    "pk": 11,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 4
+    }
+  },
+  {
+    "pk": 12,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 4
+    }
+  },
+  {
+    "pk": 13,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 5
+    }
+  },
+  {
+    "pk": 14,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 5
+    }
+  },
+  {
+    "pk": 15,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 5
+    }
+  },
+  {
+    "pk": 16,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 6
+    }
+  },
+  {
+    "pk": 17,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 6
+    }
+  },
+  {
+    "pk": 18,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 6
+    }
+  },
+  {
+    "pk": 19,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 7
+    }
+  },
+  {
+    "pk": 20,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 7
+    }
+  },
+  {
+    "pk": 21,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 7
+    }
+  },
+  {
+    "pk": 22,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 8
+    }
+  },
+  {
+    "pk": 23,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 8
+    }
+  },
+  {
+    "pk": 24,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 8
+    }
+  },
+  {
+    "pk": 25,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 9
+    }
+  },
+  {
+    "pk": 26,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 9
+    }
+  },
+  {
+    "pk": 27,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 9
+    }
+  },
+  {
+    "pk": 28,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 10
+    }
+  },
+  {
+    "pk": 29,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 10
+    }
+  },
+  {
+    "pk": 30,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 10
+    }
+  },
+  {
+    "pk": 31,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 11
+    }
+  },
+  {
+    "pk": 32,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 11
+    }
+  },
+  {
+    "pk": 33,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 11
+    }
+  },
+  {
+    "pk": 34,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 12
+    }
+  },
+  {
+    "pk": 35,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 12
+    }
+  },
+  {
+    "pk": 36,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 12
+    }
+  },
+  {
+    "pk": 37,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 13
+    }
+  },
+  {
+    "pk": 38,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 13
+    }
+  },
+  {
+    "pk": 39,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 13
+    }
+  },
+  {
+    "pk": 40,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 14
+    }
+  },
+  {
+    "pk": 41,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 14
+    }
+  },
+  {
+    "pk": 42,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 14
+    }
+  },
+  {
+    "pk": 43,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 15
+    }
+  },
+  {
+    "pk": 44,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 15
+    }
+  },
+  {
+    "pk": 45,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 15
+    }
+  },
+  {
+    "pk": 46,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 16
+    }
+  },
+  {
+    "pk": 47,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 17
+    }
+  },
+  {
+    "pk": 48,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 18
+    }
+  },
+  {
+    "pk": 49,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 20
+    }
+  },
+  {
+    "pk": 50,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 20
+    }
+  },
+  {
+    "pk": 51,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 20
+    }
+  },
+ {
+    "pk": 52,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 21
+    }
+  },
+  {
+    "pk": 53,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 21
+    }
+  },
+  {
+    "pk": 54,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 21
+    }
+  },
+   {
+    "pk": 55,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 23
+    }
+  },
+  {
+    "pk": 56,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 23
+    }
+  },
+  {
+    "pk": 57,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 23
+    }
+  },
+   {
+    "pk": 58,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 1,
+      "item": 25
+    }
+  },
+  {
+    "pk": 59,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 2,
+      "item": 25
+    }
+  },
+  {
+    "pk": 60,
+    "model": "menu.combo_item",
+    "fields": {
+      "combo": 3,
+      "item": 25
+    }
+  }
+]

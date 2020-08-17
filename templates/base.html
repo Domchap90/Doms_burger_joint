@@ -48,10 +48,10 @@
                         </div>
                         <div class="menu-container">
                             <ul class="right hide-on-small-and-down">
-                                <li><a href="#">HOME</a></li>
+                                <li><a href="{% url 'home' %}">HOME</a></li>
                                 <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">MENU
                                 <i class="material-icons right">arrow_drop_down</i></a></li>
-                                <li><a href="#">DEALS</a></li>
+                                <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">DEALS</a></li>
                                 <li><a href="#">CHECKOUT</a></li>
                             </ul>
                         </div>
@@ -68,6 +68,11 @@
 				<li><a href="{% url 'menu' %}?category=dessert">DESSERTS</a></li>
 			</ul>
 
+            <ul id="dropdown2" class="dropdown-content">
+				<li><a href="{% url 'menu' %}?category=popular">POPULAR</a></li>
+				<li><a href="{% url 'combo' %}">COMBOS</a></li>
+			</ul>
+
             <!-- Sidebar navigation -->
             
 			<ul id="slide-out" class="sidenav">
@@ -75,7 +80,7 @@
 
 				<li>
 				</li>
-				<li><a href="#">HOME</a></li>
+				<li><a href="{% url 'home' %}">HOME</a></li>
                 <li>
                     <ul class="collapsible collapsible-accordion">
                         <li>
@@ -92,7 +97,19 @@
                         </li>
                     </ul>
                 </li>
-                <li><a href="#">DEALS</a></li>
+                <li>
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
+                            <div class="collapsible-header">DEALS<i class="material-icons">arrow_drop_down</i></div>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="{% url 'menu' %}?category=popular">POPULAR</a></li>
+                                    <li><a href="{% url 'menu' %}?category=combos">COMBOS</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
                 <li><a href="#">CHECKOUT</a></li>
 			</ul>
 

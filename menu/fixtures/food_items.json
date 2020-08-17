@@ -102,7 +102,7 @@
       "name": "Burger Item 9",
       "description": "This is a description of item 9",
       "price": 9.99,
-      "category": 7,
+      "category": 1,
       "order_quantity": 0,
       "image": "burger_9.jpg"
     }

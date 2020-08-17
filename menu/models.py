@@ -17,6 +17,15 @@ class Food_Category (models.Model):
         return self.friendly_name
 
 
+class Food_Combo (models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=4, decimal_places=2)
+
+    def __str__(self):
+        return self.name
+
+
 class Food_Item (models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
@@ -25,6 +34,13 @@ class Food_Item (models.Model):
                                  on_delete=models.SET_NULL)
     order_quantity = models.IntegerField()
     image = models.ImageField(null=True, blank=True)
-
+    food_combos = models.ManyToManyField(Food_Combo, related_name='food_items')
+    
     def __str__(self):
         return self.name
+
+
+# class Combo_Item (models.Model):
+#     combo = models.ForeignKey(Food_Combo, on_delete=models.CASCADE)
+#     item = models.ForeignKey(Food_Item, on_delete=models.CASCADE)
+

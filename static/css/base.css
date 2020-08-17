@@ -19,10 +19,12 @@ button {
     border-color: black !important;
     font-family: 'Abel', sans-serif;
     font-size: 1.4rem;
+    color: white;
 }
 
 button:hover {
     background-color: #ffff00;
+    color: #000;
 }
 button:hover a {
     color: black;
@@ -182,5 +184,45 @@ span {
 @media (min-width: 600px){
     .below-nav-container{
         margin-top: 147px;
+    }
+}
+
+/********************************************************* Combo Deal page   */
+
+.combo-desc {
+    line-height: 325%;
+    font-size: 16px;
+}
+.combo-img-container {
+    display: flex;
+    justify-content: center;
+}
+.combo-desc-container {
+    display: flex;
+    justify-content: center;
+}
+
+.combo-img {
+    width: 120px;
+    height: 120px;
+}
+
+.order-btn-container {
+    text-align: right;
+}
+
+@media (min-width: 600px) {
+    .combo-desc {
+        margin: 1.9466666667rem 0 1.168rem 0;
+        font-size: 18px;
+    }
+    .combo-img {
+        width: 150px;
+        height: 150px;
+    }
+}
+@media (min-width: 992px) {
+    .combo-desc-container {
+        justify-content: start;
     }
 }

@@ -38,5 +38,13 @@
       "name": "vegetarian",
       "friendly_name": "Vegetarian"
     }
+  },
+  {
+    "pk": 6,
+    "model": "menu.food_category",
+    "fields": {
+      "name": "popular",
+      "friendly_name": "Popular"
+    }
   }
 ]

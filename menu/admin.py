@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Food_Item, Food_Category
+from .models import Food_Item, Food_Category, Food_Combo
 
 # Register your models here.
 
@@ -17,6 +17,14 @@ class Food_ItemAdmin(admin.ModelAdmin):
     ordering = ('order_quantity', 'category')
 
 
+class Food_ComboAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'description',
+        'price',
+    )
+
+
 class Food_CategoryAdmin(admin.ModelAdmin):
     list_display = (
         'name',
@@ -25,4 +33,6 @@ class Food_CategoryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Food_Item, Food_ItemAdmin)
+admin.site.register(Food_Combo, Food_ComboAdmin)
 admin.site.register(Food_Category, Food_CategoryAdmin)
+# admin.site.register(Combo_Item, Combo_ItemAdmin)
