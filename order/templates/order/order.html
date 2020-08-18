@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="below-nav-container">
+
+        <div class="row">
+            <div class="col s8">
+                <div class="category-title">Your Order</div>
+            </div>
+        </div>
+        <div>Min delivery threshold: £{{ min_delivery_threshold }}</div>
+        {% if order_items %}
+        <div>{{ min_delivery_threshold }}</div>
+        {% else %}
+        <p>There are currently no items in your order.</p>
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block postloadjs %}
+{% endblock %}
