@@ -9,6 +9,11 @@ p {
     font-family: 'Montserrat', sans-serif;
 }
 
+.row {
+    display: flex;
+    align-items: center;
+}
+
 img {
     width: 100%;
 }
@@ -34,6 +39,10 @@ button a {
     color: white;
     width: 100%;
     height: 100%;
+}
+
+.disabled {
+    color: grey;
 }
 
 a:hover {
@@ -89,7 +98,7 @@ a.sidenav-trigger {
 .sidenav-close {
     text-align: right;
 }
-span {
+.sidenav span {
     padding-top: 15px;
 }
 
@@ -225,4 +234,49 @@ span {
     .combo-desc-container {
         justify-content: start;
     }
+}
+
+/********************************************************* Checkout page   */
+
+.col-headers {
+    font-weight: 800;
+}
+
+.order-quantity {
+    text-align: center;
+}
+
+.order-qty {
+    padding: 0px 0px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+input.order-qty-input {
+    border-bottom: none !important;
+    margin-bottom: 0px !important;
+    text-align: center;
+    width: 33% !important;
+    height: auto;
+    background-color: white !important;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+button.qty-btn {
+    padding: 0px 0px;
+    width: 33%;
+    max-width: 42px;
+    background-color: beige;
+    border: none;
+    color: black;
 }

@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="below-nav-container">
+
+        <div class="row">
+            <div class="col s8">
+                <div class="category-title">Your Order</div>
+            </div>
+        </div>
+
+        <div>Min delivery threshold: £{{ min_delivery_threshold|floatformat:2 }}</div>
+
+        {% if remaining_delivery_amount > 0 %}
+            <div>You still need to spend £{{ remaining_delivery_amount }} more to be eligible for delivery.</div>
+        {% endif %}
+
+        {% if order_items %}
+            <div class="row col-headers">
+                <div class="col s3 m2">Food Item</div>
+                <div class="col hide-on-small-and-down m6">Description</div>
+                <div class="order-quantity col s4 m2">Quantity</div>
+                <div class="col s1 hide-on-med-and-up"></div>
+                <div class="col s2">Unit Price</div>
+                <div class="col s1 hide-on-med-and-up"></div>
+            </div>
+            <div class="item_container">
+                {% for item in order_items %}
+                <div class="row" id="itemrow_{{ item.food_item.id }}">
+                    <div class="col s3 m2">{{ item.food_item.name }}</div>
+                    <div class="col hide-on-small-and-down m6">{{ item.food_item.description }}</div>
+                    <div class="order-qty col s4 m2">
+                        
+                        <button class="qty-btn remove" id="{{ item.food_item.id }}_remove" onclick="decreaseQuantity(this)">
+                            <span class="material-icons">remove</span>
+                        </button>
+
+                        <input class="order-qty-input" id="{{ item.food_item.id }}_qty" type="number" name="food-qty" value="{{ item.quantity }}" min="1" max="5">
+                        
+                        <button class="qty-btn add" id="{{ item.food_item.id }}_add" onclick="increaseQuantity(this)">
+                            <i class="material-icons">add</i>
+                        </button>
+                        
+                    </div>
+                    <div class="col s1 hide-on-med-and-up"></div>
+                    <div class="col s1">
+                        £{{ item.food_item.price }}
+                    </div>
+                    <div class="col s1 hide-on-med-and-up"></div>
+                    <div class="col s1">
+                        <span class="material-icons" id="{{ item.food_item.id }}_delete" onclick="removeItem(this)">delete</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        <hr>
+        <div class="row">
+            <div class="col s2 offset-s8">Total</div>
+            <div class="col s2">£{{ total|floatformat:2 }}</div>
+        </div>
+        <div class="row">
+            <div class="col s2 offset-s8">Delivery</div>
+            <div class="col s2">£{{ delivery_fee|floatformat:2 }}</div>
+        </div>
+        <div class="row">
+            <div class="col s2 offset-s8">Grand Total</div>
+            <div class="col s2">£{{ grand_total|floatformat:2 }}</div>
+        </div>
+
+        <div class="order-btn-container">
+            <a href="{% url 'menu' %}?category=burgers">
+                <button>
+                    BACK TO MENU
+                </button> 
+            </a>
+            <button >
+                PROCEED TO CHECKOUT
+            </button>
+            
+        </div>
+
+        {% else %}
+        <p>There are currently no items in your order.</p>
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block postloadjs %}
+<script>
+    $(document).ready(function(){
+        updateBtnState();
+    }, {passive: true});
+    // Make event listener passive to improve performance (wheel scroll element).
+    
+
+    function updateBtnState() {
+        let items = $(".item_container").children();
+        let upperQtyLimit = 10;
+        let lowerQtyLimit = 1;
+        for(item of items) {
+            let itemQty = $(item).find('.order-qty-input');
+            if(itemQty.val()==upperQtyLimit){
+                console.log('add disabled to increase button')
+                $(item).find('.add i').addClass('disabled');
+            } else if(itemQty.val()==lowerQtyLimit){
+                console.log('add disabled to decrease button')
+                $(item).find('.remove span').addClass('disabled');
+            } 
+            // Deals with case where quantity value is moving away from the limits.
+            else { 
+                if ($(item).find('button > *').hasClass('disabled')){
+                    $(item).find('button > *').removeClass('disabled');
+                }
+            }
+        }
+    }
+
+    function increaseQuantity(selectedQuantityBtn){
+        let itemID = selectedQuantityBtn.id.split("_")[0];
+        let itemQtyId = itemID+"_qty";
+        let qtyValue = $('#'+itemQtyId).val();
+        // Apply constraints on quantities, max 10.
+        if (qtyValue<10) {
+            qtyValue = parseInt(qtyValue)+1;
+        }
+        
+        $('#'+itemQtyId).val(qtyValue);
+        updateBtnState();
+    }
+
+    function decreaseQuantity(selectedQuantityBtn){
+        let itemID = selectedQuantityBtn.id.split("_")[0];
+        let itemQtyId = itemID+"_qty";
+        let qtyValue = $('#'+itemQtyId).val();
+        // Apply constraints on quantities, min 0.
+        if (qtyValue>1) {
+            qtyValue = parseInt(qtyValue)-1;
+        }
+        $('#'+itemQtyId).val(qtyValue);
+        updateBtnState();
+    }
+
+    function removeItem(itemToRemove){
+        let itemID = itemToRemove.id.split("_")[0];
+        let rowID = 'itemrow_'+itemID;
+        $('#'+rowID).remove();
+    }
+
+
+</script>
+{% endblock %}
