@@ -32,6 +32,7 @@ def order_contents(request):
     context = {
         'order_items': order_items,
         'combo_items': combo_items,
+        'order_count': order_items_count,
         'min_delivery_threshold': settings.MIN_DELIVERY_THRESHOLD,
         'delivery_fee': settings.DELIVERY_FEE,
         'remaining_delivery_amount': remaining_delivery_amount,

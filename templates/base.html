@@ -52,7 +52,7 @@
                                 <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">MENU
                                 <i class="material-icons right">arrow_drop_down</i></a></li>
                                 <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">DEALS</a></li>
-                                <li><a href="{% url 'food_order' %}">YOUR ORDER</a></li>
+                                <li><a href="{% url 'food_order' %}">YOUR ORDER{% if order_count > 0 %}({{ order_count }}){% endif %}</a></li>
                             </ul>
                         </div>
                         <a href="#" data-target="slide-out" class="sidenav-trigger right hide-on-med-and-up"><i class="material-icons">menu</i></a>
@@ -115,6 +115,14 @@
 
 		</header>
 
+        {% if messages %}
+            <div class="message-container">
+                {% for message in messages %}
+                    {% include 'includes/toasts/message.html' %}   
+                {% endfor %}              
+            <div>
+        {% endif %}
+
         {% block content %}
         {% endblock %}
 
@@ -124,16 +132,13 @@
             $(".sidenav").sidenav({edge: "right", menuWidth: 275});
             $(".dropdown-trigger").dropdown({coverTrigger: false, closeOnClick: false});
             $(".collapsible").collapsible({accordion: true});
-            // $(".button-collapse").sideNav({
-            //     menuWidth: 275
-            // });
-            //$('.collapsible').collapsible();
-            // var elemCollapsible = document.querySelectorAll('.collapsible');
-            // var instanceCollapsible = M.Collapsible.init(elemCollapsible, {accordion: true});
         });
         </script>
         
         {% block postloadjs %}
+            <script>
+                // M.toast({html: 'I am a toast!'})
+            </script>
         {% endblock %}
 
     </body>
