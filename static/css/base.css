@@ -241,6 +241,9 @@ a.sidenav-trigger {
 .col-headers {
     font-weight: 800;
 }
+.row.col-headers {
+    display: block;
+}
 
 .order-quantity {
     text-align: center;

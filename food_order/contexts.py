@@ -23,7 +23,7 @@ def order_contents(request):
         })
 
     if total < settings.MIN_DELIVERY_THRESHOLD:
-        remaining_delivery_amount = settings.MIN_DELIVERY_THRESHOLD - total
+        remaining_delivery_amount = settings.MIN_DELIVERY_THRESHOLD - float(total)
     else:
         remaining_delivery_amount = 0
 

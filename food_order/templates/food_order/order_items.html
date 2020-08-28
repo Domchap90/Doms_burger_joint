@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load order_tools %}
 
 {% block content %}
     <div class="below-nav-container">
@@ -19,24 +20,26 @@
         {% if order_items %}
             <div class="row col-headers">
                 <div class="col s3 m2">Food Item</div>
-                <div class="col hide-on-small-and-down m6">Description</div>
+                <div class="col hide-on-small-and-down m6 l4">Description</div>
                 <div class="order-quantity col s4 m2">Quantity</div>
                 <div class="col s1 hide-on-med-and-up"></div>
-                <div class="col s2">Unit Price</div>
+                <div class="col s2 l1">Unit Price</div>
                 <div class="col s1 hide-on-med-and-up"></div>
+                <div class="col hide-on-med-and-down l1">Subtotal</div>
             </div>
             <div class="item_container">
                 {% for item in order_items %}
                 <div class="row" id="itemrow_{{ item.food_item.id }}">
                     <div class="col s3 m2">{{ item.food_item.name }}</div>
-                    <div class="col hide-on-small-and-down m6">{{ item.food_item.description }}</div>
+                    <div class="col hide-on-small-and-down m6 l4">{{ item.food_item.description }}</div>
                     <div class="order-qty col s4 m2">
                         
                         <button class="qty-btn remove" id="{{ item.food_item.id }}_remove" onclick="decreaseQuantity(this)">
                             <span class="material-icons">remove</span>
                         </button>
 
-                        <input class="order-qty-input" id="{{ item.food_item.id }}_qty" type="number" name="food-qty" value="{{ item.quantity }}" min="1" max="5">
+                        <input class="order-qty-input" id="{{ item.food_item.id }}_qty" type="number" name="food-qty" 
+                        value="{{ item.quantity }}" min="1" max="5" onchange="updateQty(this)">
                         
                         <button class="qty-btn add" id="{{ item.food_item.id }}_add" onclick="increaseQuantity(this)">
                             <i class="material-icons">add</i>
@@ -48,6 +51,7 @@
                         £{{ item.food_item.price }}
                     </div>
                     <div class="col s1 hide-on-med-and-up"></div>
+                    <div class="col hide-on-med-and-down l2">{{ item.food_item.price| get_subtotal:item.quantity }}</div>
                     <div class="col s1">
                         <span class="material-icons" id="{{ item.food_item.id }}_delete" onclick="removeItem(this)">delete</span>
                     </div>
@@ -102,10 +106,8 @@
         for(item of items) {
             let itemQty = $(item).find('.order-qty-input');
             if(itemQty.val()==upperQtyLimit){
-                console.log('add disabled to increase button')
                 $(item).find('.add i').addClass('disabled');
             } else if(itemQty.val()==lowerQtyLimit){
-                console.log('add disabled to decrease button')
                 $(item).find('.remove span').addClass('disabled');
             } 
             // Deals with case where quantity value is moving away from the limits.
@@ -124,6 +126,7 @@
         // Apply constraints on quantities, max 10.
         if (qtyValue<10) {
             qtyValue = parseInt(qtyValue)+1;
+            updateQty(itemID, qtyValue);
         }
         
         $('#'+itemQtyId).val(qtyValue);
@@ -134,18 +137,46 @@
         let itemID = selectedQuantityBtn.id.split("_")[0];
         let itemQtyId = itemID+"_qty";
         let qtyValue = $('#'+itemQtyId).val();
-        // Apply constraints on quantities, min 0.
+        // Apply constraints on quantities, min 1.
         if (qtyValue>1) {
             qtyValue = parseInt(qtyValue)-1;
+            updateQty(itemID, qtyValue);
         }
         $('#'+itemQtyId).val(qtyValue);
         updateBtnState();
     }
 
+    function updateQty(itemID, qtyVal) {
+        let csrfToken = "{{ csrf_token }}";
+        console.log('itemID is '+itemID);
+        console.log('Qty val changed to '+qtyVal);
+        let itemData = {
+                        'qtyVal': qtyVal,
+                        'csrfmiddlewaretoken': csrfToken
+                        };
+        $.ajax({
+            type: 'POST',
+            url: `edit_item/${itemID}/`,
+            data: itemData,
+            dataType: 'json',
+            success: function(response) {
+                console.log("Quantity updated for order.")
+            }
+        });
+    }
+
     function removeItem(itemToRemove){
         let itemID = itemToRemove.id.split("_")[0];
         let rowID = 'itemrow_'+itemID;
-        $('#'+rowID).remove();
+        let csrfToken = "{{ csrf_token }}"
+        // $('#'+rowID).remove();
+        let url = `/food_order/remove/${itemID}/`;
+        let data = {'csrfmiddlewaretoken': csrfToken}
+
+        $.post(url, data)
+        .done( function() {
+            location.reload();
+        });
     }
 
 
