@@ -12,7 +12,7 @@ class Order(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False)
     mobile_number = models.CharField(max_length=13, null=False, blank=False)
-    postcode = models.CharField(max_length=20, null=True, blank=True)
+    postcode = models.CharField(max_length=20, null=False, blank=False)
     address_line1 = models.CharField(max_length=80, null=False, blank=False)
     address_line2 = models.CharField(max_length=80, null=True, blank=True)
     delivery_instructions = models.CharField(max_length=200, null=True, blank=True)

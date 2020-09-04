@@ -78,10 +78,11 @@
                     BACK TO MENU
                 </button> 
             </a>
-            <button >
-                PROCEED TO CHECKOUT
-            </button>
-            
+            <a href="{% url 'checkout' %}">
+                <button >
+                    PROCEED TO CHECKOUT
+                </button>
+            </a> 
         </div>
 
         {% else %}

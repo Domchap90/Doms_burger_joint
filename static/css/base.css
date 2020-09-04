@@ -249,7 +249,7 @@ a.sidenav-trigger {
     }
 }
 
-/********************************************************* Checkout page   */
+/********************************************************* Order page   */
 
 .col-headers {
     font-weight: 800;
@@ -295,4 +295,29 @@ button.qty-btn {
     background-color: beige;
     border: none;
     color: black;
+}
+
+/********************************************************* Checkout page   */
+
+.checkout-form-container {
+    width: 95%;
+    margin: auto;
+    margin-top: 50px;
+}
+
+.form-title {
+    font-size: 1.2rem;
+}
+
+@media(min-width: 600px) {
+    .checkout-form-container {
+        width: 50%;
+        margin-top: 100px;
+    }
+}
+
+@media(min-width: 992px) {
+    .form-title {
+        font-size: 1.5rem;
+    }
 }

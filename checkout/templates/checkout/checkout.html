@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="below-nav-container">
+        <div class="checkout-form-container">
+            <h2 class="form-title">Who wants these Burgers?</h2>
+            {% for field in form %}
+                {% if field.name == 'address_line1' %}
+                    <h2 class="form-title"> Where these burgers heading?</h2>
+                {% endif %}
+                <p>{{ field.label }}</p>
+                <p>{{ field }}</p>  
+            {% endfor %}
+        </div>
+        <div class="order-btn-container">
+            
+            <button >
+                PLACE YOUR ORDER
+            </button>
+            
+        </div>
+
+{% endblock %}
+
+{% block postloadjs %}
+{% endblock %}
