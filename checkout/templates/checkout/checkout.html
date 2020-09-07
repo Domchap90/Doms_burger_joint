@@ -1,27 +1,44 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
+{% endblock %}
+
 {% block content %}
     <div class="below-nav-container">
         <div class="checkout-form-container">
-            <h2 class="form-title">Who wants these Burgers?</h2>
-            {% for field in form %}
-                {% if field.name == 'address_line1' %}
-                    <h2 class="form-title"> Where these burgers heading?</h2>
-                {% endif %}
-                <p>{{ field.label }}</p>
-                <p>{{ field }}</p>  
-            {% endfor %}
-        </div>
-        <div class="order-btn-container">
-            
-            <button >
-                PLACE YOUR ORDER
-            </button>
-            
-        </div>
+            <form action="{% url 'checkout' %}" method="POST" id="payment-form">
+                <h2 class="form-subtitle">Who wants these Burgers?</h2>
+                    {% for field in form %}
+                        {% if field.name == 'address_line1' %}
+                            <h2 class="form-subtitle"> Where these burgers heading?</h2>
+                        {% endif %}
+                        <p>{{ field.label }}</p>
+                        <p>{{ field }}</p>  
+                    {% endfor %}
+                <p>Payment</p>
+                <div id="card-element"><!--Stripe.js injects the Card Element--></div>
 
+                <p id="card-error" role="alert"></p>
+
+                <p class="result-message hidden">
+                    Payment succeeded
+                </p>
+
+                <button class="submit">
+                    PLACE YOUR ORDER (£{{ total|floatformat:2 }})
+                </button>
+
+            </form>
+        </div>
+        
+        
 {% endblock %}
 
 {% block postloadjs %}
+    {{ block.super }}
+    {{ stripe_public_key|json_script:"id_stripe_public_key" }}
+    {{ client_secret|json_script:"id_client_secret" }}
+    <script src="{% static 'checkout/js/stripe_element.js' %}"></script>
 {% endblock %}

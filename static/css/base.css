@@ -8,6 +8,9 @@ h1 {
 p, div {
     font-family: 'Montserrat', sans-serif;
 }
+span {
+    font-weight: bold;
+}
 
 .row {
     display: flex;
@@ -16,6 +19,17 @@ p, div {
 
 img {
     width: 100%;
+}
+
+input {
+    border-bottom: none !important;
+    margin-bottom: 0px !important;
+    width: 100%;
+    background-color: white !important;
+    font-family: 'Montserrat', sans-serif;
+}
+textarea:focus {
+    border-bottom: none !important;
 }
 
 button {
@@ -305,7 +319,7 @@ button.qty-btn {
     margin-top: 50px;
 }
 
-.form-title {
+.form-subtitle {
     font-size: 1.2rem;
 }
 
@@ -317,7 +331,7 @@ button.qty-btn {
 }
 
 @media(min-width: 992px) {
-    .form-title {
+    .form-subtitle {
         font-size: 1.5rem;
     }
 }

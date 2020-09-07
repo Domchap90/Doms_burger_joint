@@ -1,0 +1,73 @@
+#payment-form input {
+    padding-left: 10px;
+}
+
+result-message {
+  line-height: 22px;
+  font-size: 16px;
+}
+.result-message a {
+  color: rgb(89, 111, 214);
+  font-weight: 600;
+  text-decoration: none;
+}
+.hidden {
+  display: none;
+}
+#card-error {
+    color: red;
+    text-align: left;
+    font-size: 13px;
+    line-height: 17px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+}
+span.material-icons{
+    margin-right: 10px;
+}
+#card-element {
+  border-radius: 4px 4px 0 0 ;
+  margin: 0 0 24px 0;
+  padding: 12px;
+  border: 1px solid rgba(50, 50, 93, 0.1);
+  height: 44px;
+  width: 100%;
+  background: white;
+}
+
+.StripeElement,
+.stripe-style-input {
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif !important;
+    height: 40px;
+
+    padding: 10px 12px;
+
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: white;
+
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    -webkit-transition: box-shadow 150ms ease;
+    transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus,
+.stripe-style-input:focus,
+.stripe-style-input:active {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+
+.stripe-style-input::placeholder {
+    color: grey;
+    font-family: "Montserrat", sans-serif;
+}
