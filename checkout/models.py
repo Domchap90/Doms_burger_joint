@@ -33,11 +33,9 @@ class Order(models.Model):
         accounting for delivery costs.
         """
         self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
-        if self.order_total < settings.MIN_DELIVERY_THRESHOLD:
-            self.delivery_fee = self.order_total * settings.STANDARD_DELIVERY_PERCENTAGE / 100
-        else:
-            self.delivery_fee = 0
-        self.grand_total = self.order_total + self.delivery_fee
+        self.delivery_fee = settings.DELIVERY_FEE
+        self.grand_total = float(self.order_total) + self.delivery_fee
+        print(f'Update_total accessed. Order_total = {self.order_total}, delivery_fee = {self.delivery_fee}, grand_total = {self.grand_total}.')
         self.save()
 
     def save(self, *args, **kwargs):
@@ -47,6 +45,7 @@ class Order(models.Model):
         """
         if not self.order_number:
             self.order_number = self._generate_order_number()
+        print('save order accessed.')
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -65,8 +64,10 @@ class OrderLineItem(models.Model):
         and update the order total.
         """
         self.lineitem_total = self.food_item.price * self.quantity
+        print('save orderlineitem accessed.')
+        print(self.lineitem_total)
         super().save(*args, **kwargs)
     
     def __str__(self):
-        return f'Item Id {self.food_item.primary_key} on order '
+        return f'Item Id {self.food_item.pk} on order '
         '{self.order.order_number}'

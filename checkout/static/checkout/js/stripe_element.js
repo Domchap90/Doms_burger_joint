@@ -34,7 +34,7 @@ var form = document.getElementById('payment-form');
 
 form.addEventListener('submit', function(ev) {
   ev.preventDefault();
-  stripe.confirmCardPayment(clientSecret, {
+  stripe.confirmCardPayment(stripeClientSecret, {
     payment_method: {
       card: card
     }

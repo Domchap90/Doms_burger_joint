@@ -9,6 +9,7 @@
     <div class="below-nav-container">
         <div class="checkout-form-container">
             <form action="{% url 'checkout' %}" method="POST" id="payment-form">
+            {% csrf_token %}
                 <h2 class="form-subtitle">Who wants these Burgers?</h2>
                     {% for field in form %}
                         {% if field.name == 'address_line1' %}

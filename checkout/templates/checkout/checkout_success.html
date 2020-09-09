@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="below-nav-container">
+        <div class="checkout-form-container">
+            
+            <h2 class="form-subtitle">Your food is on its way!</h2>
+
+            <div class="confirmation-num">Confirmation Number: {{ order.order_number }}</div>
+
+            <p>
+               Thank you for completing your order. Your payment was processed successfully & an email has been sent to {{ order.email }}
+            </p>
+            
+        </div>
+    </div>   
+        
+    {% if messages %}
+    {% endif %}
+{% endblock %}

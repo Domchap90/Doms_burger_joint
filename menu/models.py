@@ -35,7 +35,7 @@ class Food_Item (models.Model):
     order_quantity = models.IntegerField()
     image = models.ImageField(null=True, blank=True)
     food_combos = models.ManyToManyField(Food_Combo, related_name='food_items')
-    
+
     def __str__(self):
         return self.name
 

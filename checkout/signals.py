@@ -1,17 +1,18 @@
 from django.db.models.signals import post_save, post_delete
-from django.dispatch import django.receiver
+from django.dispatch import receiver
 
 from .models import OrderLineItem
 
-post_save.connect(update_after_save)
-post_delete.connect(update_after_delete)
 
-
+@receiver(post_save, sender=OrderLineItem)
 def update_after_save(sender, instance, created, **kwargs):
     """ Update order total upon LineItem update """
-    instance.order.update_total
+    print('save signal received.')
+    instance.order.update_total()
 
 
+@receiver(post_delete, sender=OrderLineItem)
 def update_after_delete(sender, instance, **kwargs):
     """ Update order total upon LineItem update """
-    instance.order.update_total
+    print('delete signal received.')
+    instance.order.update_total()
