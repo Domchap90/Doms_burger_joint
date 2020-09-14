@@ -34,14 +34,18 @@ var form = document.getElementById('payment-form');
 
 form.addEventListener('submit', function(ev) {
   ev.preventDefault();
+  $('#below-nav-container').fadeToggle(100);
+  $('#loading-overlay').fadeToggle(100);
   stripe.confirmCardPayment(stripeClientSecret, {
     payment_method: {
       card: card
     }
   }).then(function(result) {
     if (result.error) {
-      // Show error to your customer (e.g., insufficient funds)
-      $('#card-error').html(`<span class="material-icons">error</span> ${result.error.message}`);
+        // Show error to your customer (e.g., insufficient funds)
+        $('#card-error').html(`<span class="material-icons">error</span> ${result.error.message}`);
+        $('#below-nav-container').fadeToggle(100);
+        $('#loading-overlay').fadeToggle(100);
       card.update({ 'disabled': false })
     } else {
       // The payment has been processed!

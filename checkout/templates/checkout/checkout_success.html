@@ -5,14 +5,69 @@
     <div class="below-nav-container">
         <div class="checkout-form-container">
             
-            <h2 class="form-subtitle">Your food is on its way!</h2>
+            <h2 class="">Your food is on its way!</h2>
 
             <div class="confirmation-num">Confirmation Number: {{ order.order_number }}</div>
 
             <p>
                Thank you for completing your order. Your payment was processed successfully & an email has been sent to {{ order.email }}
             </p>
-            
+
+        </div>
+
+        <hr >
+
+        <div class="order-container">
+            <h2>Review Your order</h2>
+            <h3 class="form-subtitle">Food ordered</h3>
+            {% for item in order.lineitems.all %}
+            <div class="row">
+                <div class="col s7">{{ item.food_item.name }}</div>
+                <div class="col s3">{{ item.quantity }} @ £{{ item.food_item.price }}</div>
+                <div class="col s2">£{{ item.lineitem_total }}</div>
+            </div>
+            {% endfor %}
+            <hr>
+            <div class="row">
+                <div class="col offset-s7 s3">Subtotal:</div>
+                <div class="col s2">£{{ order.order_total }}</div>
+            </div>
+            <div class="row">
+                <div class="col offset-s7 s3">Delivery Fee:</div>
+                <div class="col s2">£{{ order.delivery_fee }}</div>
+            </div>
+            <div class="row">
+                <div class="col offset-s7 s3">Total:</div>
+                <div class="col s2">£{{ order.grand_total }}</div>
+            </div>
+
+            <h3 class="form-subtitle">Sent to</h3>
+            <div class="row">
+                <div class="col s12">{{ order.address_line1 }}</div>
+            </div>
+            {% if order.address_line2 %}
+            <div class="row">
+                <div class="col s12">{{ order.address_line2 }}</div>
+            </div>
+            {% endif %}
+            <div class="row">
+                <div class="col s12">{{ order.postcode }}</div>
+            </div>
+            {% if order.delivery_instructions %}
+            <div class="row">
+                <div class="col s12">{{ order.delivery_instructions }}</div>
+            </div>
+            {% endif %}
+            <h3 class="form-subtitle">Your details</h3>
+            <div class="row">
+                <div class="col s12">{{ order.name }}</div>
+            </div>
+            <div class="row">
+                <div class="col s12">{{ order.mobile_number }}</div>
+            </div>
+            <div class="row">
+                <div class="col s12">{{ order.email }}</div>
+            </div>
         </div>
     </div>   
         

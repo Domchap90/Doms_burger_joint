@@ -5,6 +5,10 @@ h1 {
     color: black;
 }
 
+h2 {
+    font-size: 2rem;
+}
+
 p, div {
     font-family: 'Montserrat', sans-serif;
 }
@@ -317,16 +321,26 @@ button.qty-btn {
     width: 95%;
     margin: auto;
     margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 .form-subtitle {
     font-size: 1.2rem;
 }
 
+.order-container {
+    width: 95%;
+    margin: auto;
+}
+
 @media(min-width: 600px) {
     .checkout-form-container {
         width: 50%;
         margin-top: 100px;
+        margin-bottom: 100px;
+    }
+    .order-container {
+        width: 75%;
     }
 }
 

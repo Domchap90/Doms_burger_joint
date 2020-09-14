@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+    <div class="overlay"></div>
     <div class="below-nav-container">
         <div class="checkout-form-container">
             <form action="{% url 'checkout' %}" method="POST" id="payment-form">
@@ -33,6 +34,14 @@
 
             </form>
         </div>
+    </div>
+    <div id="loading-overlay">
+        <div class="loading-animation">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
         
         
 {% endblock %}
