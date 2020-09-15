@@ -16,6 +16,9 @@ import stripe
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
+    
+
+    
 
     if request.method == 'POST':
         food_order = request.session.get('food_order', {})
@@ -80,7 +83,7 @@ def checkout(request):
         'client_secret': intent.client_secret,
         'total': total,
     }
-
+    
     return render(request, 'checkout/checkout.html', context)
 
 
