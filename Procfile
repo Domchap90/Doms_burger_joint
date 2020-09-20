@@ -1,1 +1,1 @@
-web: gunicorn doms-burger-joint.wsgi:application
+web: gunicorn doms_burger_joint.wsgi:application
