@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.shortcuts import render, redirect, reverse, get_object_or_404, HttpResponse
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
 
@@ -8,17 +9,32 @@ from food_order.contexts import order_contents
 from .models import Order, OrderLineItem
 from menu.models import Food_Item
 
+import json
 import stripe
 
 # Create your views here.
 
 
+@require_POST
+def cached_payment_intent(request):
+    try:
+        pid = request.POST.get('client_secret').split('_secret')[0]
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe.PaymentIntent.modify(pid, metadata={
+            'food_order': json.dumps(request.session.get('food_order', {})),
+            'username': request.user,
+            'order': json.dumps(request.session.get('food_order'))
+        })
+        return HttpResponse(status=200)
+    except Exception as e:
+        messages.error(request, 'Unfortunately your payment could not be processed at this time. \
+            Please try again in a few minutes.')
+        return HttpResponse(content=e, status=400)
+
+
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
-    
-
-    
 
     if request.method == 'POST':
         food_order = request.session.get('food_order', {})
@@ -35,7 +51,10 @@ def checkout(request):
 
         order_form = OrderForm(form_data)
         if order_form.is_valid():
-            order = order_form.save()
+            order = order_form.save(commit=False)
+            pid = request.POST.get('client_secret').split('_secret')[0]
+            order.pid = pid
+            order.save()
             for order_itemid, quantity in food_order.items():
                 try:
                     food_item = Food_Item.objects.get(id=order_itemid)
