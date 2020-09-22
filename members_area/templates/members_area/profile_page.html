@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'members_area/css/members.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="below-nav-container">
+        <h1>Members Area</h1>
+    </div>       
+        
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    
+    <script src="{% static 'checkout/js/stripe_element.js' %}"></script>
+{% endblock %}

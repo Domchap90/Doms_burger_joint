@@ -5,10 +5,15 @@ from django.db.models import Sum
 from django.conf import settings
 
 from menu.models import Food_Item
+from members_area.models import MemberProfile
 
 
 class Order(models.Model):
     order_number = models.CharField(max_length=32, null=False, editable=False)
+    member_profile = models.ForeignKey(
+                     MemberProfile, on_delete=models.SET_NULL, null=True,
+                     blank=True, related_name='orders'
+                     )
     name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False)
     mobile_number = models.CharField(max_length=13, null=False, blank=False)
