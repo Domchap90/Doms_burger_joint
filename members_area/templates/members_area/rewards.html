@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'members_area/css/members.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="below-nav-container">
+        <div class="signup-container">
+            <h1>Rewards</h1>
+            <h2>BURGERS ALWAYS TASTE BETTER WHEN THEY'RE FREE!</h2>
+            <p>
+                Get your free burger after making 5 orders online. It’s that simple. Any Burger of your choosing.
+                Sign up today, and get free fries on your next order.
+                Why wait?
+                (*Delivery and Collection only. Burgers cannot be earned on cash orders)
+            </p>  
+            <div class="signup-btns-container">
+                <button id="signup-btn">SIGN UP</button>
+                <button><a href="{% url 'account_login' %}">LOGIN</a></button>
+            </div>
+        </div>
+    </div>       
+        
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    
+    <script src="{% static 'checkout/js/stripe_element.js' %}"></script>
+{% endblock %}
