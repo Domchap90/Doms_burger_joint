@@ -7,3 +7,9 @@ def members_area(request):
 
     }
     return render(request, 'members_area/profile_page.html', context)
+
+
+def rewards(request):
+    context = {}
+
+    return render(request, 'members_area/rewards.html', context)

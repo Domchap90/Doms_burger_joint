@@ -1,0 +1,12 @@
+.signup-container {
+    margin: 10% 20%;
+}
+
+.signup-btns-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#signup-btn {
+    background-color: red;
+}
