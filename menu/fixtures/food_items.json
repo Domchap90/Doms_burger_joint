@@ -1,302 +1,415 @@
 [
   {
-    "pk": 1,
     "model": "menu.food_item",
+    "pk": 1,
     "fields": {
       "name": "Burger Item 1",
       "description": "This is a description of item 1",
-      "price": 9.99,
+      "price": "9.99",
       "category": 1,
-      "order_quantity": 10,
-      "image": "burger_1.jpg"
+      "total_purchased": 10,
+      "image": "burger_1.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 2,
     "model": "menu.food_item",
+    "pk": 2,
     "fields": {
       "name": "Burger Item 2",
       "description": "This is a description of item 2",
-      "price": 9.99,
+      "price": "9.99",
       "category": 1,
-      "order_quantity": 3,
-      "image": "burger_2.jpg"
+      "total_purchased": 3,
+      "image": "burger_2.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 3,
     "model": "menu.food_item",
+    "pk": 3,
     "fields": {
       "name": "Burger Item 3",
       "description": "This is a description of item 3",
-      "price": 9.99,
+      "price": "9.99",
       "category": 1,
-      "order_quantity": 4,
-      "image": "burger_3.jpg"
+      "total_purchased": 4,
+      "image": "burger_3.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 4,
     "model": "menu.food_item",
+    "pk": 4,
     "fields": {
       "name": "Burger Item 4",
       "description": "This is a description of item 4",
-      "price": 9.99,
+      "price": "9.99",
       "category": 1,
-      "order_quantity": 5,
-      "image": "burger_4.jpg"
+      "total_purchased": 5,
+      "image": "burger_4.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 5,
     "model": "menu.food_item",
+    "pk": 5,
     "fields": {
       "name": "Burger Item 5",
       "description": "This is a description of item 5",
-      "price": 9.99,
+      "price": "9.99",
       "category": 1,
-      "order_quantity": 6,
-      "image": "burger_5.jpg"
+      "total_purchased": 6,
+      "image": "burger_5.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 6,
     "model": "menu.food_item",
+    "pk": 6,
     "fields": {
       "name": "Burger Item 6",
       "description": "This is a description of item 6",
-      "price": 9.99,
+      "price": "9.99",
       "category": 1,
-      "order_quantity": 1,
-      "image": "burger_6.jpg"
+      "total_purchased": 1,
+      "image": "burger_6.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 7,
     "model": "menu.food_item",
+    "pk": 7,
     "fields": {
       "name": "Burger Item 7",
       "description": "This is a description of item 7",
-      "price": 9.99,
+      "price": "9.99",
       "category": 1,
-      "order_quantity": 2,
-      "image": "burger_7.jpg"
+      "total_purchased": 2,
+      "image": "burger_7.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 8,
     "model": "menu.food_item",
+    "pk": 8,
     "fields": {
       "name": "Burger Item 8",
       "description": "This is a description of item 8",
-      "price": 9.99,
+      "price": "9.99",
       "category": 1,
-      "order_quantity": 9,
-      "image": "burger_8.jpg"
+      "total_purchased": 9,
+      "image": "burger_8.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 9,
     "model": "menu.food_item",
+    "pk": 9,
     "fields": {
       "name": "Burger Item 9",
       "description": "This is a description of item 9",
-      "price": 9.99,
+      "price": "9.99",
       "category": 1,
-      "order_quantity": 0,
-      "image": "burger_9.jpg"
+      "total_purchased": 0,
+      "image": "burger_9.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 10,
     "model": "menu.food_item",
+    "pk": 10,
     "fields": {
       "name": "The Beast",
       "description": "This is a description of item 10",
-      "price": 11.99,
+      "price": "11.99",
       "category": 1,
-      "order_quantity": 0,
-      "image": "burger_beast.jpg"
+      "total_purchased": 0,
+      "image": "burger_beast.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 11,
     "model": "menu.food_item",
+    "pk": 11,
     "fields": {
       "name": "Bunless",
       "description": "This is a description of item 11",
-      "price": 9.99,
+      "price": "9.99",
       "category": 1,
-      "order_quantity": 0,
-      "image": "burger_bunless.jpg"
+      "total_purchased": 0,
+      "image": "burger_bunless.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 12,
     "model": "menu.food_item",
+    "pk": 12,
     "fields": {
       "name": "Burger Deal",
       "description": "This is a description of item 12",
-      "price": 14.99,
+      "price": "14.99",
       "category": 1,
-      "order_quantity": 0,
-      "image": "burger_deal_1.jpg"
+      "total_purchased": 0,
+      "image": "burger_deal_1.jpg",
+      "food_combos": [
+        2
+      ]
     }
   },
   {
-    "pk": 13,
     "model": "menu.food_item",
+    "pk": 13,
     "fields": {
       "name": "Burger & Fries",
       "description": "This is a description of item 13",
-      "price": 14.99,
+      "price": "14.99",
       "category": 1,
-      "order_quantity": 0,
-      "image": "burger_fries_1.jpg"
+      "total_purchased": 0,
+      "image": "burger_fries_1.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 14,
     "model": "menu.food_item",
+    "pk": 14,
     "fields": {
       "name": "Burger & Fries 2",
       "description": "This is a description of item 14",
-      "price": 14.99,
+      "price": "14.99",
       "category": 1,
-      "order_quantity": 0,
-      "image": "burger_fries_2.jpg"
+      "total_purchased": 0,
+      "image": "burger_fries_2.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 15,
     "model": "menu.food_item",
+    "pk": 15,
     "fields": {
       "name": "Burger & Fries 3",
       "description": "This is a description of item 15",
-      "price": 14.99,
+      "price": "14.99",
       "category": 1,
-      "order_quantity": 0,
-      "image": "burger_fries_3.jpg"
+      "total_purchased": 0,
+      "image": "burger_fries_3.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 16,
     "model": "menu.food_item",
+    "pk": 16,
     "fields": {
       "name": "Dessert Apple Pie",
       "description": "This is a description of item 16",
-      "price": 6.99,
+      "price": "6.99",
       "category": 4,
-      "order_quantity": 0,
-      "image": "dessert_applepie.jpg"
+      "total_purchased": 0,
+      "image": "dessert_applepie.jpg",
+      "food_combos": [
+        3
+      ]
     }
   },
   {
-    "pk": 17,
     "model": "menu.food_item",
+    "pk": 17,
     "fields": {
       "name": "Cheesecake",
       "description": "This is a description of item 17",
-      "price": 6.99,
+      "price": "6.99",
       "category": 4,
-      "order_quantity": 0,
-      "image": "dessert_cheesecake.jpg"
+      "total_purchased": 0,
+      "image": "dessert_cheesecake.jpg",
+      "food_combos": [
+        3
+      ]
     }
   },
   {
-    "pk": 18,
     "model": "menu.food_item",
+    "pk": 18,
     "fields": {
       "name": "Icecream",
       "description": "This is a description of item 18",
-      "price": 6.99,
+      "price": "6.99",
       "category": 4,
-      "order_quantity": 0,
-      "image": "dessert_icecream.jpg"
+      "total_purchased": 0,
+      "image": "dessert_icecream.jpg",
+      "food_combos": [
+        3
+      ]
     }
   },
   {
-    "pk": 19,
     "model": "menu.food_item",
+    "pk": 19,
     "fields": {
       "name": "Beer",
       "description": "This is a description of item 19",
-      "price": 3.99,
+      "price": "3.99",
       "category": 3,
-      "order_quantity": 0,
-      "image": "drink_beer.jpg"
+      "total_purchased": 0,
+      "image": "drink_beer.jpg",
+      "food_combos": []
     }
   },
   {
-    "pk": 20,
     "model": "menu.food_item",
+    "pk": 20,
     "fields": {
       "name": "Cola",
       "description": "This is a description of item 20",
-      "price": 1.99,
+      "price": "1.99",
       "category": 3,
-      "order_quantity": 0,
-      "image": "drink_cola.jpeg"
+      "total_purchased": 0,
+      "image": "drink_cola.jpeg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 21,
     "model": "menu.food_item",
+    "pk": 21,
     "fields": {
       "name": "Lemonade",
       "description": "This is a description of item 21",
-      "price": 1.99,
+      "price": "1.99",
       "category": 3,
-      "order_quantity": 0,
-      "image": "drink_lemonade.jpg"
+      "total_purchased": 0,
+      "image": "drink_lemonade.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 22,
     "model": "menu.food_item",
+    "pk": 22,
     "fields": {
       "name": "Cheesey Fries",
       "description": "This is a description of item 22",
-      "price": 4.99,
+      "price": "4.99",
       "category": 2,
-      "order_quantity": 0,
-      "image": "fries_cheesey.jpg"
+      "total_purchased": 0,
+      "image": "fries_cheesey.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 23,
     "model": "menu.food_item",
+    "pk": 23,
     "fields": {
       "name": "Chunky Fries",
       "description": "This is a description of item 23",
-      "price": 4.99,
+      "price": "4.99",
       "category": 2,
-      "order_quantity": 0,
-      "image": "fries_chunky.jpg"
+      "total_purchased": 0,
+      "image": "fries_chunky.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 24,
     "model": "menu.food_item",
+    "pk": 24,
     "fields": {
       "name": "Garlic Fries",
       "description": "This is a description of item 24",
-      "price": 4.99,
+      "price": "4.99",
       "category": 2,
-      "order_quantity": 0,
-      "image": "fries_garlic_herb.jpg"
+      "total_purchased": 0,
+      "image": "fries_garlic_herb.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
-    "pk": 25,
     "model": "menu.food_item",
+    "pk": 25,
     "fields": {
       "name": "Thin Fries",
       "description": "This is a description of item 25",
-      "price": 3.99,
+      "price": "3.99",
       "category": 2,
-      "order_quantity": 0,
-      "image": "fries_thin.jpg"
+      "total_purchased": 0,
+      "image": "fries_thin.jpg",
+      "food_combos": [
+        1,
+        2,
+        3
+      ]
     }
   }
 ]

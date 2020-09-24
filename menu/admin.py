@@ -10,11 +10,11 @@ class Food_ItemAdmin(admin.ModelAdmin):
         'description',
         'price',
         'category',
-        'order_quantity',
+        'total_purchased',
         'image',
     )
 
-    ordering = ('order_quantity', 'category')
+    ordering = ('total_purchased', 'category')
 
 
 class Food_ComboAdmin(admin.ModelAdmin):

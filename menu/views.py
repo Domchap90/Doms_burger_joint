@@ -14,10 +14,10 @@ def menu(request):
 
     if 'popular' == category:
         """ Gets the most popular of 4 main categories and joins the queryset together """
-        burger_items = items.filter(category__name='burgers').order_by('-order_quantity')[:5]
-        side_items = items.filter(category__name='sides').order_by('-order_quantity')[:2]
-        drink_items = items.filter(category__name='drinks').order_by('-order_quantity')[:2]
-        dessert_items = items.filter(category__name='dessert').order_by('-order_quantity')[:1]
+        burger_items = items.filter(category__name='burgers').order_by('-total_purchased')[:5]
+        side_items = items.filter(category__name='sides').order_by('-total_purchased')[:2]
+        drink_items = items.filter(category__name='drinks').order_by('-total_purchased')[:2]
+        dessert_items = items.filter(category__name='dessert').order_by('-total_purchased')[:1]
         items = list(itertools.chain(burger_items, side_items, drink_items, dessert_items))
         print("Type of items = "+str(type(items)))
     else:
@@ -34,7 +34,7 @@ def menu(request):
     counter = 0
     for item in items:
         counter += 1
-        print('item '+str(item.name)+' : '+str(item.order_quantity))
+        print('item '+str(item.name)+' : '+str(item.total_purchased))
 
     return render(request, 'menu/menu_items.html', context)
 

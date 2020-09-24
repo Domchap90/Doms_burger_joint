@@ -63,6 +63,8 @@ def checkout(request):
                         food_item=food_item,
                         quantity=quantity,
                     )
+                    food_item.total_purchased += quantity
+                    food_item.save()
                     order_line_item.save()
 
                 except Food_Item.DoesNotExist:

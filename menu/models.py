@@ -32,7 +32,7 @@ class Food_Item (models.Model):
     price = models.DecimalField(max_digits=4, decimal_places=2)
     category = models.ForeignKey('Food_Category', null=True, blank=True, 
                                  on_delete=models.SET_NULL)
-    order_quantity = models.IntegerField()
+    total_purchased = models.IntegerField() 
     image = models.ImageField(null=True, blank=True)
     food_combos = models.ManyToManyField(Food_Combo, related_name='food_items')
 
