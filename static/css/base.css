@@ -36,6 +36,12 @@ textarea:focus {
     border-bottom: none !important;
 }
 
+a {
+    /* background-color: black; */
+    color: black;
+}
+
+
 button {
     padding: 8px 16px;
     background-color: black;
@@ -160,7 +166,7 @@ a.sidenav-trigger {
     max-width:initial;          
 }
 .hero-burger-image {
-    background: url(/media/heroimage_burger_fries.jpg);
+    background: url(/media/heroimage_burger_fries_optimized.jpg);
     height: calc(100vh - 174px);
     width: 100vw;
     margin-top: 112px;
@@ -194,6 +200,34 @@ a.sidenav-trigger {
     padding: 20px 10px;
     background-color: beige;
 }
+.menu-navigator {
+    margin: 10px 0 50px 0;
+    justify-content: center;
+}
+.menu-navigator .row {
+    display: block !important;
+}
+.menu-navigator .row div {
+    background-color: black;
+    text-align: center;
+}
+.menu-navigator .col.s4 {
+    padding: 0; 
+} 
+.menu-navigator .col.s4 a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.menu-navigator .col.s4 a:hover,
+.menu-navigator .col.m2 a:hover {
+    background-color: white;
+    color: black;
+}
+
 
 .category-title {
     text-transform: uppercase;
@@ -221,9 +255,29 @@ a.sidenav-trigger {
     text-align: right;
 }
 
+.menu-items-container {
+    margin: 0% 8.3%;
+}
+
 @media (min-width: 600px){
     .below-nav-container{
         margin-top: 147px;
+    }
+    .menu-navigator .row {
+        display: flex !important;
+        justify-content: center;
+    }
+    .menu-navigator .col.m2 {
+        margin-left: 0;
+        height: 35px;
+    } 
+    .menu-navigator .col.m2 a {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
     }
 }
 

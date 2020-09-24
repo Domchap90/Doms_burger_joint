@@ -3,83 +3,93 @@
 
 {% block content %}
     <div class="below-nav-container">
-
-        <div class="row">
-            {% for cat in selected_category %}
-            <div class="col s8">
-                <div class="category-title">{{ cat.name }}</div>
+        <div class="menu-navigator">
+            <div class="row">
+                <div class="col s4 m2 offset-m1"><a href="{% url 'menu' %}?category=burgers">BURGERS</a></div>
+                <div class="col s4 m2"><a href="{% url 'menu' %}?category=sides">SIDES</a></div>
+                <div class="col s4 m2"><a href="{% url 'menu' %}?category=drinks">DRINKS</a></div>
+                <div class="col s4 offset-s2 m2"><a href="{% url 'menu' %}?category=vegetarian">VEGETARIAN</a></div>
+                <div class="col s4 m2"><a href="{% url 'menu' %}?category=dessert">DESSERTS</a></div>
             </div>
+        </div>
+        <div class="menu-items-container">
+            <div class="row">
+                {% for cat in selected_category %}
+                <div class="col s8">
+                    <div class="category-title">{{ cat.name }}</div>
+                </div>
 
-            <div class="col s4">
-                <div class="row">
-                    <div class="">Sort by Price:</div>
-                </div>
-                <div class="row">
-                    <div class="col s6">Low to High</div>
-                    <div class="col s6 switch" id="price-low-high">
-                        
-                        <label>
-                        Off
-                        <input id="price-asc" name="price-asc" type="checkbox">
-                        <span class="lever"></span>
-                        On
-                        </label>
-                        
-                    </div>  
-                </div>
-                <div class="row">
-                    <div class="col s6">High to Low</div>
-                    <div class="col s6 switch" id="price-high-low">
-                        <label>
-                        Off
-                        <input id="price-desc" name="price-desc"  type="checkbox">
-                        <span class="lever"></span>
-                        On
-                        </label>
+                <div class="col s4">
+                    <div class="row">
+                        <div class="">Sort by Price:</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6">Low to High</div>
+                        <div class="col s6 switch" id="price-low-high">
+                            
+                            <label>
+                            Off
+                            <input id="price-asc" name="price-asc" type="checkbox">
+                            <span class="lever"></span>
+                            On
+                            </label>
+                            
+                        </div>  
+                    </div>
+                    <div class="row">
+                        <div class="col s6">High to Low</div>
+                        <div class="col s6 switch" id="price-high-low">
+                            <label>
+                            Off
+                            <input id="price-desc" name="price-desc"  type="checkbox">
+                            <span class="lever"></span>
+                            On
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row" id="filter-btn-container">
+                        <button type="submit" onclick="getFilteredResults('{{ cat.name }}')">
+                            <a href="#">Filter results</a>
+                        </button>
                     </div>
                 </div>
-                <div class="row" id="filter-btn-container">
-                    <button type="submit" onclick="getFilteredResults('{{ cat.name }}')">
-                        <a href="#">Filter results</a>
-                    </button>
+                {% endfor %}
+            </div>    
+            {% for item in items %}
+            <form action="{% url 'add_to_order' item.id %}" method="POST" >
+            {% csrf_token %}
+            <div class="row">
+                <div class="col s12" id="item-name-{{ forloop.counter }}">
+                    {{ item.name }} Order Quantity: {{ item.order_quantity }}
                 </div>
             </div>
+            <div class="row">
+                <div class="col s6 m4">
+                    <img src="/media/{{item.image}}" id="item-pic-{{ forloop.counter }}" alt="">
+                </div> 
+                <div class="col m6 hide-on-small-and-down" id="item-desc-inline-{{ forloop.counter }}">
+                    {{ item.description }}
+                </div> 
+                <div class="col s3 hide-on-med-and-up">
+                </div> 
+                <div class="col s3 m2 item-price" id="item-price-{{ forloop.counter }}">
+                    £{{ item.price }}
+                </div> 
+            </div>
+            <div class="row hide-on-med-and-up">
+                <div class="col s12" id="item-desc-block-{{ forloop.counter }}">
+                    {{ item.description }}
+                </div>
+            </div>
+            <div class="order-btn-container">
+                <button type="submit">
+                    ADD TO ORDER
+                </button>
+            </div>
+            <input type="hidden" name="redirect_url" value="{{ request.path }}{% for cat in selected_category %}?category={{ cat }}{% endfor %}">
+            </form>
             {% endfor %}
         </div>
-        {% for item in items %}
-        <form action="{% url 'add_to_order' item.id %}" method="POST" >
-        {% csrf_token %}
-        <div class="row">
-            <div class="col s12" id="item-name-{{ forloop.counter }}">
-                {{ item.name }} Order Quantity: {{ item.order_quantity }}
-            </div>
-        </div>
-		<div class="row">
-            <div class="col s6 m4">
-                <img src="/media/{{item.image}}" id="item-pic-{{ forloop.counter }}" alt="">
-            </div> 
-            <div class="col m6 hide-on-small-and-down" id="item-desc-inline-{{ forloop.counter }}">
-                {{ item.description }}
-            </div> 
-            <div class="col s3 hide-on-med-and-up">
-            </div> 
-            <div class="col s3 m2 item-price" id="item-price-{{ forloop.counter }}">
-                £{{ item.price }}
-            </div> 
-		</div>
-        <div class="row hide-on-med-and-up">
-            <div class="col s12" id="item-desc-block-{{ forloop.counter }}">
-                {{ item.description }}
-            </div>
-        </div>
-        <div class="order-btn-container">
-            <button type="submit">
-                ADD TO ORDER
-            </button>
-        </div>
-        <input type="hidden" name="redirect_url" value="{{ request.path }}{% for cat in selected_category %}?category={{ cat }}{% endfor %}">
-        </form>
-        {% endfor %}
     </div>
 
 {% endblock %}
