@@ -83,13 +83,6 @@ def combo(request):
     c3_sides = combo3.food_items.filter(category__name='sides').order_by('name')
     c3_drinks = combo3.food_items.filter(category__name='drinks').order_by('name')
     c3_dessert = combo3.food_items.filter(category__name='dessert').order_by('name')
-    # counter = 0
-    # print('combo1 options are: ')
-    
-    # for option in c1_burgers:
-    #     counter += 1
-    #     print(str(counter)+'. name= '+str(option.name))
-    # counter = 0
     
     context = {
         'combos': combos,

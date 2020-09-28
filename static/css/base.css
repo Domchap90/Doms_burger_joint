@@ -369,6 +369,15 @@ button.qty-btn {
     color: black;
 }
 
+.combo-unit-list {
+    background-color: #fafa3152;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+.combo-unit-list .row {
+    
+}
+
 /********************************************************* Checkout page   */
 
 .checkout-form-container {

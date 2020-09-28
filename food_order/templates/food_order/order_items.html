@@ -58,6 +58,70 @@
                 </div>
                 {% endfor %}
             </div>
+        {% if combo_items %}
+            <div class="row col-headers">
+                <div class="col s3 m2">Combos</div>
+                <div class="col hide-on-small-and-down m6 l4">Description</div>
+                <div class="order-quantity col s4 m2">Quantity</div>
+                <div class="col s1 hide-on-med-and-up"></div>
+                <div class="col s2 l1">Unit Price</div>
+                <div class="col s1 hide-on-med-and-up"></div>
+                <div class="col hide-on-med-and-down l1">Subtotal</div>
+            </div>
+
+            <div class="item_container">
+                {% for combo_item, combo_item_dict   in combo_items.items %}
+                <div class="row" id="comborow_{{ combo_item.id }}">
+                    <div class="col s8 m2">{{ combo_item.name }}</div>
+                    <div class="col hide-on-small-and-down m6 l4">{{ combo_item.description }}</div>
+        
+                    <div class="col s1 hide-on-med-and-up"></div>
+                    <div class="col s4 l6">
+                        £{{ combo_item.price }}
+                    </div>
+                </div>
+                    {% for combo_index, combo_index_dict in combo_item_dict.items %}
+                    <div class="row">
+                        <div class="col hide-on-small-and-down m2"></div>
+                        <div class="combo-unit-list col s6">
+                        {% for food, qty in combo_index_dict.items %}
+                            <div class="row">
+                                <div class="col s8 m4">{{ food.name }}</div>
+                                <div class="col hide-on-small-and-down m6">{{ food.description }}</div>
+                                <div class="col s4 m2">{{ qty }}</div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                        <div class="col s6 m4">
+                            <div class="order-qty col s8 m6">
+                                
+                                <button class="qty-btn remove" id="{{ item.combo_item.id }}_remove" onclick="decreaseQuantity(this)">
+                                    <span class="material-icons">remove</span>
+                                </button>
+
+                                <input class="order-qty-input" id="{{ item.combo_item.id }}_qty" type="number" name="food-qty" 
+                                value="{{ item.quantity }}" min="1" max="5" onchange="updateQty(this)">
+                                
+                                <button class="qty-btn add" id="{{ item.combo_item.id }}_add" onclick="increaseQuantity(this)">
+                                    <i class="material-icons">add</i>
+                                </button>
+                                
+                            </div>
+                            <div class="col s4 m6">
+                                <div class="col s9">
+									£{{ combo_item.price }}
+								</div>
+								<div class="col s3">
+									<span class="material-icons" id="{{ item.combo_item.id }}_delete" onclick="removeItem(this)">delete</span>
+								</div>
+                            </div>
+                        </div>
+
+                    </div>
+                        <hr>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
         <hr>
         <div class="row">
             <div class="col s2 offset-s8">Total</div>

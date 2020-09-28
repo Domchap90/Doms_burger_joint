@@ -19,7 +19,8 @@
             </div>
         </div>
         
-        <form>
+        <form action="{% url 'add_combo_to_order' combo.id %}" method="POST" >
+        {% csrf_token %}
         {% if combo.id == 1 %}
         <div class="row">
             <div class="col s12" id="">
@@ -367,6 +368,7 @@
                     ADD TO ORDER
                 </button>
             </div>
+            <input type="hidden" name="redirect_url" value="{{ request.path }}">
         </form>
 
     {% endfor %}
