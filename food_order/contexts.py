@@ -7,8 +7,9 @@ from menu.models import Food_Item, Food_Combo
 def order_contents(request):
 
     order_items = []
-    # identical_items will be a nested dictionary with outer key as combo_index taking 
-    # a dictionary of item ids (inner keys) along with their quantities as values.
+    # identical_items will be a nested dictionary for Combos with id 2,
+    #  with outer key as combo_index taking a dictionary of item objects
+    #  (inner keys) along with their quantities as values.
     identical_items = {}
     combo_items = {}
     order_items_count = 0
@@ -62,15 +63,26 @@ def order_contents(request):
 
                 combo_items[get_object_or_404(Food_Combo, pk=2)] = identical_items
 
+                combo_hash_map = {}
                 print('identical_items dict:')
                 for combo, quantity_map in identical_items.items():
                     print(f'{combo} -> {quantity_map}')
                 print('identical_items dict:')
-                for comboID in combo_items:
-                    print(f'comboID is {comboID}')
-                    for combo, quantity_map in combo_items[comboID].items():
-                        print(f'{combo} -> {quantity_map}')
+                for comboItem in combo_items:
+                    print(f'comboItem is {comboItem}')
+                    for combo, item_quantity_map in combo_items[comboItem].items():
+                        print(f'{combo} -> {item_quantity_map}')
+                        # use hash function to efficiently determine if combo already exists
+                        combo_hash = hash(str(item_quantity_map))
+                        if combo_hash in combo_hash_map:
+                            print(f'combo_items[comboItem][combo] - {combo_items[comboItem][combo]} is already in map')
+                            combo_hash_map[combo_hash][1] += 1
+                        else:
+                            combo_hash_map[combo_hash] = [comboItem, 1, item_quantity_map]
 
+                        print()
+
+                print(f'combo_hash_map = {combo_hash_map}')
     total_items_and_combos = total_items + total_combos
 
     if total_items_and_combos < settings.MIN_DELIVERY_THRESHOLD:
@@ -82,7 +94,7 @@ def order_contents(request):
 
     context = {
         'order_items': order_items,
-        'combo_items': combo_items,
+        'combo_items': combo_hash_map,
         'order_count': order_items_count,
         'min_delivery_threshold': settings.MIN_DELIVERY_THRESHOLD,
         'delivery_fee': settings.DELIVERY_FEE,
