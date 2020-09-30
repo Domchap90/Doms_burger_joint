@@ -259,6 +259,10 @@ a.sidenav-trigger {
     margin: 0% 8.3%;
 }
 
+.menu-item-form {
+    margin-bottom: 30px;
+}
+
 @media (min-width: 600px){
     .below-nav-container{
         margin-top: 147px;
@@ -322,12 +326,26 @@ a.sidenav-trigger {
 }
 
 /********************************************************* Order page   */
+.order-items-container {
+
+}
+
+.order-combo-container{
+    margin-top: 80px;
+}
 
 .col-headers {
     font-weight: 800;
 }
 .row.col-headers {
     display: block;
+}
+.bottom-row-black {
+    border-bottom: 1px solid black;
+}
+
+.bottom-row {
+    border-bottom: 1px solid lightgrey;
 }
 
 .order-quantity {
@@ -374,8 +392,43 @@ button.qty-btn {
     padding-top: 10px !important;
     padding-bottom: 10px !important;
 }
-.combo-unit-list .row {
-    
+
+.order-combo-subtotal {
+    text-align: center;
+}
+.order-combo-delete {
+    text-align: center;
+}
+.order.category-title {
+    text-align: center;
+}
+
+.order-items-container .order-btn-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.order-items-container .order-btn-container button {
+    border: 1px solid white !important;
+    font-size: 1.2rem;
+}
+
+@media(min-width: 600px) {
+    .order-items-container {
+        margin: 0 5%;
+    }
+}
+@media(min-width: 992px) {
+    .order-items-container .order-btn-container {
+        justify-content: space-between;
+    }
+}
+
+@media(min-width: 1200px) {
+    .order-items-container {
+        margin: 0 10%;
+    }
 }
 
 /********************************************************* Checkout page   */

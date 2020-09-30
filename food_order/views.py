@@ -53,23 +53,12 @@ def add_combo_to_order(request, combo_id):
             food_item = get_object_or_404(Food_Item, pk=item_id)
             combo_to_append.append(item_id)
     order[combo_key].append(combo_to_append)
+    
     request.session['food_order'] = order
     print(f'Order is {order}')
 
     return redirect(redirect_url)
 
-
-# def update_order(item_id):
-#     order = request.session.get('food_order', {})
-#     if item_id in list(order.keys()):
-#         if order[item_id] < 10:
-#             order[item_id] += 1
-#             messages.success(request, f'Added {food_item.name} to your order.')
-#         else:
-#             messages.error(request, f'You have reached your order limit for {food_item.name}.')
-#     else:
-#         order[item_id] = 1
-#         messages.success(request, f'Added {food_item.name} to your order.')
 
 def remove_from_order(request, item_id):
     """ Removes item from order effectively taking that item's quantity
