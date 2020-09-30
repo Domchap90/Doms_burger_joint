@@ -56,11 +56,11 @@
                 {% endfor %}
             </div>    
             {% for item in items %}
-            <form action="{% url 'add_to_order' item.id %}" method="POST" >
+            <form action="{% url 'add_to_order' item.id %}" method="POST" class="menu-item-form">
             {% csrf_token %}
             <div class="row">
                 <div class="col s12" id="item-name-{{ forloop.counter }}">
-                    {{ item.name }} Order Quantity: {{ item.order_quantity }}
+                    {{ item.name }} Order Quantity: {{ item.total_purchased }}
                 </div>
             </div>
             <div class="row">
