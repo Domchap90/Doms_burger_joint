@@ -17,9 +17,9 @@
                 </div>
                 {% if remaining_delivery_amount > 0 %}
                     <div class="col s12">
-                        <p>You still need to spend £{{ remaining_delivery_amount }} more to be eligible for delivery.</p>
+                        <p>You still need to spend £{{ remaining_delivery_amount|floatformat:2 }} more to be eligible for delivery.</p>
                     </div>
-            {% endif %}
+                {% endif %}
             </div>
 
             
@@ -39,14 +39,14 @@
                         <div class="col hide-on-small-and-down m4">{{ item.food_item.description }}</div>
                         <div class="order-qty col s4 m3">
                             
-                            <button class="qty-btn remove" id="{{ item.food_item.id }}_remove" onclick="decreaseQuantity(this)">
+                            <button class="qty-btn remove" id="item_{{ item.food_item.id }}_remove" onclick="decreaseQuantity(this)">
                                 <span class="material-icons">remove</span>
                             </button>
 
-                            <input class="order-qty-input" id="{{ item.food_item.id }}_qty" type="number" name="food-qty" 
-                            value="{{ item.quantity }}" min="1" max="5" onchange="updateQty(this)">
+                            <input class="order-qty-input" id="item_{{ item.food_item.id }}_qty" type="number" name="food-qty" 
+                            value="{{ item.quantity }}" min="1" max="5" >
                             
-                            <button class="qty-btn add" id="{{ item.food_item.id }}_add" onclick="increaseQuantity(this)">
+                            <button class="qty-btn add" id="item_{{ item.food_item.id }}_add" onclick="increaseQuantity(this)">
                                 <i class="material-icons">add</i>
                             </button>
                             
@@ -55,11 +55,13 @@
                             £{{ item.food_item.price| get_subtotal:item.quantity }}
                         </div>
                         <div class="col s2 m1">
-                            <span class="material-icons" id="{{ item.food_item.id }}_delete" onclick="removeItem(this)">delete</span>
+                            <span class="material-icons" id="item_{{ item.food_item.id }}_delete" onclick="removeItem(this)">delete</span>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
+            {% endif %}
+
             {% if combo_items %}
                 <div class="order-combo-container">
                     <div class="row col-headers bottom-row-black">
@@ -72,7 +74,7 @@
                     <div class="item_container">
                     {% for combo_item, combo_item_list in combo_items.items %}
                         {% with combo=combo_item_list.0 combo_qty=combo_item_list.1 combo_content=combo_item_list.2 %}
-                        <div class="row" id="comborow_{{ combo_item.id }}">
+                        <div class="row" id="comborow_{{ combo_item }}">
                             <div class="col s5 m2">{{ combo.name }}</div>
                             <div class="col hide-on-small-and-down m5">{{ combo.description }}</div>
                             <div class="col s4 m3"></div>
@@ -96,20 +98,20 @@
                             
                             <div class="order-qty col s4 m3">
                                 
-                                <button class="qty-btn remove" id="{{ combo_item }}_remove" onclick="decreaseQuantity(this)">
+                                <button class="qty-btn remove" id="combo_{{ combo.id }}_{{ combo_item }}_remove" onclick="decreaseQuantity(this)">
                                     <span class="material-icons">remove</span>
                                 </button>
 
-                                <input class="order-qty-input" id="{{ combo_item }}_qty" type="number" name="food-qty" 
+                                <input class="order-qty-input" id="combo_{{ combo.id }}_{{ combo_item }}_qty" type="number" name="food-qty" 
                                 value="{{ combo_qty }}" min="1" max="5" onchange="updateQty(this)">
                                 
-                                <button class="qty-btn add" id="{{ combo_item }}_add" onclick="increaseQuantity(this)">
+                                <button class="qty-btn add" id="combo_{{ combo.id }}_{{ combo_item }}_add" onclick="increaseQuantity(this)">
                                     <i class="material-icons">add</i>
                                 </button>
                                 
                             </div>
                             <div class="col s3 m2 order-combo-delete">
-                                <span class="material-icons" id="{{ item.combo_item.id }}_delete" onclick="removeItem(this)">delete</span>
+                                <span class="material-icons" id="combo_{{ combo.id }}_{{ combo_item }}_delete" onclick="removeItem(this)">delete</span>
                             </div>
                         </div>
                         {% endwith %}
@@ -117,7 +119,8 @@
                     </div>
                 </div>
             {% endif %}    
-            
+
+            {% if order_items or combo_items %}
             <div class="row">
                 <div class="col s3 offset-s5 m2 offset-m7">Total</div>
                 <div class="col s4 m3 center">£{{ total|floatformat:2 }}</div>
@@ -160,38 +163,70 @@
 <script>
     $(document).ready(function(){
         updateBtnState();
+        
     }, {passive: true});
     // Make event listener passive to improve performance (wheel scroll element).
-    
+    var itemUpperQtyLimit = 10;
+    var comboUpperQtyLimit = 5;
+    var comboTwoUpperQtyLimit = 3;
+    var lowerQtyLimit = 1;
 
     function updateBtnState() {
         let items = $(".item_container").children();
-        let upperQtyLimit = 10;
-        let lowerQtyLimit = 1;
+        
         for(item of items) {
-            let itemQty = $(item).find('.order-qty-input');
-            if(itemQty.val()==upperQtyLimit){
-                $(item).find('.add i').addClass('disabled');
-            } else if(itemQty.val()==lowerQtyLimit){
-                $(item).find('.remove span').addClass('disabled');
-            } 
-            // Deals with case where quantity value is moving away from the limits.
-            else { 
-                if ($(item).find('button > *').hasClass('disabled')){
-                    $(item).find('button > *').removeClass('disabled');
+            let itemQty = $(item).find('.order-qty');
+            
+            if (itemQty.length>0) {
+                let itemQtyInputId = itemQty.children('input').attr('id');
+                if (itemQtyInputId.includes("item")) {
+                    changeBtnState(itemQty, lowerQtyLimit , itemUpperQtyLimit);
+                } else if (itemQtyInputId.includes("combo_2")) {
+                    console.log('combo_2 updateBtnState accesed.')
+                    changeBtnState(itemQty, lowerQtyLimit , comboTwoUpperQtyLimit);
+                } else {
+                    changeBtnState(itemQty, lowerQtyLimit , comboUpperQtyLimit);
                 }
             }
         }
     }
 
+    function changeBtnState(quantityObj, lowerLimit , upperLimit) {
+        if (quantityObj.children('input').val()==upperLimit) {
+            $(quantityObj).find('.add i').addClass('disabled');
+        } else if(quantityObj.children('input').val()==lowerLimit){
+            $(quantityObj).find('.remove span').addClass('disabled');
+        } 
+        // Deals with case where quantity value is moving away from the limits.
+        else { 
+            console.log('between limits accesed.')
+            if ($(quantityObj).find('button > *').hasClass('disabled')){
+                $(quantityObj).find('button > *').removeClass('disabled');
+            }
+        }
+    }
+
     function increaseQuantity(selectedQuantityBtn){
-        let itemID = selectedQuantityBtn.id.split("_")[0];
-        let itemQtyId = itemID+"_qty";
+        console.log('increase quantity function accessed')
+        let typeOfItem = selectedQuantityBtn.id.split("_")[0];
+        let itemID = selectedQuantityBtn.id.split("_")[1];
+        let itemQtyId = typeOfItem+'_'+itemID+"_qty";
+        console.log('typeOfItem = '+typeOfItem+'itemID = '+itemID+'itemQtyId = '+itemQtyId)
+        if (typeOfItem == 'combo') {
+            let comboHashKey = selectedQuantityBtn.id.split("_")[2]; 
+            itemQtyId = typeOfItem+'_'+itemID+'_'+comboHashKey+"_qty";
+        }
         let qtyValue = $('#'+itemQtyId).val();
-        // Apply constraints on quantities, max 10.
-        if (qtyValue<10) {
+        // Apply constraints on quantities, depending on upper order limits as set above in global vars.
+        if (typeOfItem==='item' && qtyValue<itemUpperQtyLimit) {
             qtyValue = parseInt(qtyValue)+1;
-            updateQty(itemID, qtyValue);
+            updateQty(itemQtyId, qtyValue);
+        } else if (typeOfItem==='combo' && itemID==2 && qtyValue<comboTwoUpperQtyLimit) {
+            qtyValue = parseInt(qtyValue)+1;
+            updateQty(itemQtyId, qtyValue);
+        } else if (typeOfItem==='combo' && itemID!=2 && qtyValue<comboUpperQtyLimit){
+            qtyValue = parseInt(qtyValue)+1;
+            updateQty(itemQtyId, qtyValue);
         }
         
         $('#'+itemQtyId).val(qtyValue);
@@ -199,29 +234,39 @@
     }
 
     function decreaseQuantity(selectedQuantityBtn){
-        let itemID = selectedQuantityBtn.id.split("_")[0];
-        let itemQtyId = itemID+"_qty";
+        let typeOfItem = selectedQuantityBtn.id.split("_")[0];
+        let itemID = selectedQuantityBtn.id.split("_")[1];
+        let itemQtyId = typeOfItem+'_'+itemID+"_qty";
+        if (typeOfItem == 'combo') {
+            let comboHashKey = selectedQuantityBtn.id.split("_")[2]; 
+            itemQtyId = typeOfItem+'_'+itemID+'_'+comboHashKey+"_qty";
+        }
         let qtyValue = $('#'+itemQtyId).val();
-        // Apply constraints on quantities, min 1.
-        if (qtyValue>1) {
+        // Apply constraints on quantities, all have same lower limit of 1.
+        if (qtyValue>lowerQtyLimit) {
             qtyValue = parseInt(qtyValue)-1;
-            updateQty(itemID, qtyValue);
+            updateQty(itemQtyId, qtyValue);
         }
         $('#'+itemQtyId).val(qtyValue);
         updateBtnState();
     }
 
-    function updateQty(itemID, qtyVal) {
+    function updateQty(itemQtyId, qtyVal) {
+        // Adjusts the quantity server side via an ajax call.
         let csrfToken = "{{ csrf_token }}";
-        console.log('itemID is '+itemID);
-        console.log('Qty val changed to '+qtyVal);
+        let typeOfItem = itemQtyId.split('_')[0];
+        let itemID = itemQtyId.split('_')[1];
         let itemData = {
                         'qtyVal': qtyVal,
                         'csrfmiddlewaretoken': csrfToken
                         };
+        if (typeOfItem == 'combo') {
+            let comboHashKey = itemQtyId.split('_')[2];
+            itemData['comboHashKey'] = comboHashKey;
+        }
         $.ajax({
             type: 'POST',
-            url: `edit_item/${itemID}/`,
+            url: `edit_item/${typeOfItem}/${itemID}/`,
             data: itemData,
             dataType: 'json',
             success: function(response) {

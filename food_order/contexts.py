@@ -10,17 +10,20 @@ def order_contents(request):
     # identical_items will be a nested dictionary for Combos with id 2,
     #  with outer key as combo_index taking a dictionary of item objects
     #  (inner keys) along with their quantities as values.
-    identical_items = {}
-    combo_items = {}
+    # identical_items = {}
+    # combo_items = {}
     order_items_count = 0
+    combo_count = 0
     total_items = 0
     total_combos = 0
-    combo_count = 0
+    combo_hash_map = {}
     order = request.session.get('food_order', {})
-
+    
     for key, quantity in order.items():
         if key:
-            if 'combo' not in key:
+            if key[0] != 'c':
+                print('Not combo')
+                print(f'{key} is of type {type(key)} ')
                 food_item = get_object_or_404(Food_Item, pk=key)
                 total_items += quantity * food_item.price
                 order_items_count += quantity
@@ -30,63 +33,29 @@ def order_contents(request):
                     'quantity': quantity
                 })
             else:
-                print(f'key is {key}')
-                combo_id = int(key.split('_')[1])
-                combo_item = get_object_or_404(Food_Combo, pk=combo_id)
-                total_combos += combo_item.price * len(order[key])
-                combo_count += len(order[key]) 
-                combo_index = 0
-                for combo in order[key]:
-                    # combo_index used as reference to collect identical items in same combo item
-                    combo_index += 1
-                    for item in combo:
-                        food_item = get_object_or_404(Food_Item, pk=item)
-                        if combo_id == 2:
-                            if combo_index in identical_items:
-                                if food_item in identical_items[combo_index]:
-                                    identical_items[combo_index][food_item] += 1
-                                else:
-                                    identical_items[combo_index][food_item] = 1
-                            else:
-                                identical_items[combo_index] = {}
-                                identical_items[combo_index][food_item] = 1
-                        elif combo_item in combo_items:
-                            if combo_index in combo_items[combo_item]:
-                                combo_items[combo_item][combo_index][food_item] = 1
-                            else:
-                                combo_items[combo_item][combo_index] = {}
-                                combo_items[combo_item][combo_index][food_item] = 1
-                        else:
-                            combo_items[combo_item] = {}
-                            combo_items[combo_item][combo_index] = {}
-                            combo_items[combo_item][combo_index][food_item] = 1
+                combo_hash_map[key] = [None, None, None]
+                combo_id = order[key][0]
+                combo_hash_map[key][0] = get_object_or_404(Food_Combo, pk=combo_id)
 
-                combo_items[get_object_or_404(Food_Combo, pk=2)] = identical_items
+                # dictionary will replace current order[key][2] dict.
+                item_obj_dict = {}
+                # replace item_ids with the actual item objects so all the 
+                # information can be rendered in the order page.
+                for item_id, qty in order[key][2].items():
+                    item_obj_dict[get_object_or_404(Food_Item, pk=item_id)] = qty
 
-                combo_hash_map = {}
-                print('identical_items dict:')
-                for combo, quantity_map in identical_items.items():
-                    print(f'{combo} -> {quantity_map}')
-                print('identical_items dict:')
-                for comboItem in combo_items:
-                    print(f'comboItem is {comboItem}')
-                    for combo, item_quantity_map in combo_items[comboItem].items():
-                        print(f'{combo} -> {item_quantity_map}')
-                        # use hash function to efficiently determine if combo already exists
-                        combo_hash = hash(str(item_quantity_map))
-                        if combo_hash in combo_hash_map:
-                            print(f'combo_items[comboItem][combo] - {combo_items[comboItem][combo]} is already in map')
-                            combo_hash_map[combo_hash][1] += 1
-                        else:
-                            combo_hash_map[combo_hash] = [comboItem, 1, item_quantity_map]
+                combo_hash_map[key][2] = item_obj_dict
 
-                        print()
+                combo_quantity = order[key][1]
+                combo_hash_map[key][1] = combo_quantity
+                total_combos += combo_hash_map[key][0].price * combo_quantity
+                combo_count += combo_quantity
 
-                print(f'combo_hash_map = {combo_hash_map}')
     total_items_and_combos = total_items + total_combos
 
     if total_items_and_combos < settings.MIN_DELIVERY_THRESHOLD:
-        remaining_delivery_amount = settings.MIN_DELIVERY_THRESHOLD - float(total_items_and_combos)
+        remaining_delivery_amount = settings.MIN_DELIVERY_THRESHOLD - float(
+                                    total_items_and_combos)
     else:
         remaining_delivery_amount = 0
 
@@ -95,7 +64,7 @@ def order_contents(request):
     context = {
         'order_items': order_items,
         'combo_items': combo_hash_map,
-        'order_count': order_items_count,
+        'order_count': order_items_count + combo_count, 
         'min_delivery_threshold': settings.MIN_DELIVERY_THRESHOLD,
         'delivery_fee': settings.DELIVERY_FEE,
         'remaining_delivery_amount': remaining_delivery_amount,
