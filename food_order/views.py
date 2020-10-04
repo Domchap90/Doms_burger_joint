@@ -73,14 +73,15 @@ def add_combo_to_order(request, combo_id):
     return redirect(redirect_url)
 
 
-def remove_from_order(request, item_id):
+def remove_from_order(request, item_type, item_id):
     """ Removes item from order effectively taking that item's quantity
     to zero. """
-
     order = request.session.get('food_order', {})
-    order.pop(item_id)
+    if item_type == 'item':
+        order.pop(item_id)
+    else:
+        order.pop(request.POST.get('comboHashKey'))
     request.session['food_order'] = order
-    print(request.session.get('food_order'))
 
     return HttpResponse(status=200)
 
