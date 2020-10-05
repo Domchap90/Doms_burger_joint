@@ -6,8 +6,8 @@ from django.conf import settings
 from .forms import OrderForm
 from food_order.contexts import order_contents
 
-from .models import Order, OrderLineItem
-from menu.models import Food_Item
+from .models import Order, OrderLineItem, ComboLineItem
+from menu.models import Food_Item, Food_Combo
 
 import json
 import stripe
@@ -55,16 +55,35 @@ def checkout(request):
             pid = request.POST.get('client_secret').split('_secret')[0]
             order.pid = pid
             order.save()
-            for order_itemid, quantity in food_order.items():
+            for order_itemid, value in food_order.items():
                 try:
-                    food_item = Food_Item.objects.get(id=order_itemid)
-                    order_line_item = OrderLineItem(
-                        order=order,
-                        food_item=food_item,
-                        quantity=quantity,
-                    )
-                    food_item.total_purchased += quantity
-                    food_item.save()
+                    if order_itemid[0] != 'c':
+                        food_item = Food_Item.objects.get(id=order_itemid)
+                        order_line_item = OrderLineItem(
+                            order=order,
+                            food_item=food_item,
+                            quantity=value,
+                        )
+                        # Update the total purchased for each food in the orderline for popular deals.
+                        food_item.total_purchased += value
+                        food_item.save()
+                    # For the instance of a combo
+                    else:
+                        combo_item = Food_Combo.objects.get(id=value[0])
+                        order_line_item = OrderLineItem(
+                            order=order,
+                            combo_item=combo_item,
+                            combo_id=order_itemid,
+                            combo_quantity=value[1],
+                        )
+                        order_line_item.save()
+                        # Iterate through combo contents to add each combo line item to the combo
+                        for item, qty in value[2].items():
+                            food_item = Food_Item.objects.get(id=item)
+                            combo_line_item = ComboLineItem(combo=order_line_item, food_item=food_item, quantity=qty)
+                            combo_line_item.save()
+                            # Update the total purchased for admin and popular deals
+                            food_item.total_purchased += qty * value[1]
                     order_line_item.save()
 
                 except Food_Item.DoesNotExist:
@@ -119,7 +138,8 @@ def checkout_success(request, order_number):
     
     if 'food_order' in request.session:
         del request.session['food_order']
-
+    for item in order.lineitems.all():
+        print(item)
     context = {
         'order': order,
     }
