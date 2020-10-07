@@ -1,10 +1,25 @@
 from django.contrib import admin
-from .models import Order, OrderLineItem
+from .models import Order, OrderLineItem, ComboLineItem
+
+
+class ComboLineItemInline(admin.StackedInline):
+    model = ComboLineItem
+
+
+class OrderLineItemAdmin(admin.ModelAdmin):
+    inlines = (ComboLineItemInline,)
 
 
 class OrderLineItemAdminInline(admin.TabularInline):
+    """ Selected as an inline if the object instance is a combo """
     model = OrderLineItem
-    readonly_fields = ('lineitem_total',)
+    fields = ("changeform_link", "food_item", "quantity", "combo_id",
+              "combo_item", "combo_quantity", 'lineitem_total')
+
+    readonly_fields = ('lineitem_total', 'changeform_link')
+
+    list_display = ("changeform_link", "food_item", "quantity", "combo_id",
+                    "combo_item", "combo_quantity", 'lineitem_total')
 
 
 class OrderAdmin(admin.ModelAdmin):
@@ -28,3 +43,4 @@ class OrderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Order, OrderAdmin)
+admin.site.register(OrderLineItem, OrderLineItemAdmin)

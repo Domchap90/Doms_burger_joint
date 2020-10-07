@@ -3,6 +3,8 @@ import uuid
 from django.db import models
 from django.db.models import Sum
 from django.conf import settings
+from django.shortcuts import reverse
+from django.utils.safestring import mark_safe
 
 from menu.models import Food_Item, Food_Combo
 from members_area.models import MemberProfile
@@ -68,6 +70,26 @@ class OrderLineItem(models.Model):
     combo_quantity = models.IntegerField(null=False, blank=False, default=0)
     lineitem_total = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False, editable=False)
 
+    def changeform_link(self):
+        """
+        Link to OrderLineItems own Model page allowing
+        another inline link to be created for the ComboLineItems
+        """
+        if self.id:
+            if self.combo_item:
+                changeform_url = reverse(
+                    'admin:checkout_orderlineitem_change', args=(self.id,)
+                )
+                return mark_safe(
+                    '<a href="{link}" target="_blank">See Contents</a>'.format(
+                        link=changeform_url
+                    ))
+            else:
+                return self.food_item
+        return ''
+    changeform_link.allow_tags = True
+    changeform_link.short_description = 'Items'
+
     def save(self, *args, **kwargs):
         """
         Override the original save method to set the lineitem total
@@ -88,8 +110,8 @@ class OrderLineItem(models.Model):
             return f'Combo Id {self.combo_item.pk} on order \
         {self.order.order_number}'
         else:
-            return f'Item Id {self.food_item.pk} on order '
-        '{self.order.order_number}'
+            return f'Item Id {self.food_item.pk} on order \
+        {self.order.order_number}'
 
 
 class ComboLineItem(models.Model):
@@ -104,5 +126,5 @@ class ComboLineItem(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'Food item Id: {self.food_item.pk} added to combo '
-        '{self.orderlineitem.combo_id}'
+        return f'Food item Id: {self.food_item.pk} added to combo \
+        {self.combo.combo_id}'
