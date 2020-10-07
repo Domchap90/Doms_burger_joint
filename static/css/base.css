@@ -43,7 +43,6 @@ textarea:focus {
 }
 
 a {
-    /* background-color: black; */
     color: black;
 }
 
@@ -225,6 +224,9 @@ a.sidenav-trigger {
     background-color: black;
     text-align: center;
 }
+.menu-navigator .row .col a {
+    color: white;
+}
 .menu-navigator .col.s4 {
     padding: 0; 
 } 
@@ -234,7 +236,7 @@ a.sidenav-trigger {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    /* color: white; */
 }
 .menu-navigator .col.s4 a:hover,
 .menu-navigator .col.m2 a:hover {
@@ -300,7 +302,12 @@ a.sidenav-trigger {
 }
 
 /********************************************************* Combo Deal page   */
-
+.menu-navigator.deals {
+    margin: 0 5%;
+}
+.col-gap {
+    background-color: inherit !important;
+}
 .combo-desc {
     line-height: 325%;
     font-size: 16px;

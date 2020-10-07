@@ -3,15 +3,29 @@
 
 {% block content %}
     <div class="below-nav-container">
-        <div class="menu-navigator">
-            <div class="row">
-                <div class="col s4 m2 offset-m1"><a href="{% url 'menu' %}?category=burgers">BURGERS</a></div>
-                <div class="col s4 m2"><a href="{% url 'menu' %}?category=sides">SIDES</a></div>
-                <div class="col s4 m2"><a href="{% url 'menu' %}?category=drinks">DRINKS</a></div>
-                <div class="col s4 offset-s2 m2"><a href="{% url 'menu' %}?category=vegetarian">VEGETARIAN</a></div>
-                <div class="col s4 m2"><a href="{% url 'menu' %}?category=dessert">DESSERTS</a></div>
+        
+        {% for cat in selected_category %}
+            {% if cat.name == 'popular' %}
+            <div class="menu-navigator deals">
+                <div class="row">
+                    <div class="col s4 offset-s1 m3 offset-m2"><a href="{% url 'menu' %}?category=popular">POPULAR</a></div>
+                    <div class="col s4 offset-s2 m3 offset-m2"><a href="{% url 'combo' %}">COMBOS</a></div>
+                    <div class="col s1 m2 col-gap"></div>
+                </div>
             </div>
-        </div>
+            {% else %}
+            <div class="menu-navigator">
+                <div class="row">
+                    <div class="col s4 m2 offset-m1"><a href="{% url 'menu' %}?category=burgers">BURGERS</a></div>
+                    <div class="col s4 m2"><a href="{% url 'menu' %}?category=sides">SIDES</a></div>
+                    <div class="col s4 m2"><a href="{% url 'menu' %}?category=drinks">DRINKS</a></div>
+                    <div class="col s4 offset-s2 m2"><a href="{% url 'menu' %}?category=vegetarian">VEGETARIAN</a></div>
+                    <div class="col s4 m2"><a href="{% url 'menu' %}?category=dessert">DESSERTS</a></div>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+
         <div class="menu-items-container">
             <div class="row">
                 {% for cat in selected_category %}
