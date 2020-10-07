@@ -1,6 +1,6 @@
 $(document).ready(function(){
         updateBtnState();
-        
+        updateCheckoutBtnState();
     }, {passive: true});
 // Make event listener passive to improve performance (wheel scroll element).
 var itemUpperQtyLimit = 10;
@@ -8,9 +8,17 @@ var comboUpperQtyLimit = 5;
 var comboTwoUpperQtyLimit = 3;
 var lowerQtyLimit = 1;
 
+function updateCheckoutBtnState() {
+    if($('#spending_warning').children().length>0) {
+        $(".checkout-btn").addClass('disabled');
+    } else {
+        $(".checkout-btn").removeClass('disabled');
+    }
+}
+
 function updateBtnState() {
     let items = $(".item_container").children();
-    
+    updateCheckoutBtnState();
     for(item of items) {
         let itemQty = $(item).find('.order-qty');
         
@@ -127,5 +135,6 @@ function removeItem(itemToRemove){
     .done( function() {
         location.reload();
     });
+    updateCheckoutBtnState();
 }
 

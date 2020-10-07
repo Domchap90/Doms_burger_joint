@@ -15,11 +15,6 @@
                 <div class="col s12">
                     <p>Min delivery threshold: £{{ min_delivery_threshold|floatformat:2 }}</p>
                 </div>
-                {% if remaining_delivery_amount > 0 %}
-                    <div class="col s12">
-                        <p>You still need to spend £{{ remaining_delivery_amount|floatformat:2 }} more to be eligible for delivery.</p>
-                    </div>
-                {% endif %}
             </div>
 
             
@@ -134,6 +129,12 @@
                 <div class="col s4 m3 center">£{{ grand_total|floatformat:2 }}</div>
             </div>
 
+            <div class="col s12" id="spending_warning">
+                {% if remaining_delivery_amount > 0 %}
+                <p>You still need to spend £{{ remaining_delivery_amount|floatformat:2 }} more to be eligible for delivery.</p>
+                {% endif %}
+            </div>
+
             <div class="row">
                 <div class="order-btn-container col s12 l5 offset-l7">
                     <a href="{% url 'menu' %}?category=burgers">
@@ -141,11 +142,17 @@
                             BACK TO MENU
                         </button> 
                     </a>
+                    {% if remaining_delivery_amount == 0 %}
                     <a href="{% url 'checkout' %}">
-                        <button >
+                        <button class="checkout-btn">
                             PROCEED TO CHECKOUT
                         </button>
-                    </a> 
+                    </a>
+                    {% else %}
+                    <button class="checkout-btn">
+                        PROCEED TO CHECKOUT
+                    </button>
+                    {% endif %}
                 </div>
             </div>
             {% else %}

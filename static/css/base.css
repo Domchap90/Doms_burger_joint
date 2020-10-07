@@ -57,9 +57,16 @@ button {
     color: white;
 }
 
-button:hover {
+button:hover,
+button:focus {
     background-color: #ffff00;
     color: #000;
+}
+
+button:hover.disabled,
+button:focus.disabled {
+    background-color: #000;
+    color: grey;
 }
 button:hover a {
     color: black;
@@ -409,6 +416,10 @@ button.qty-btn {
 .order.category-title {
     margin: 20px 10px;
     text-align: center;
+}
+
+#spending_warning {
+    color: red;
 }
 
 .order-items-container .order-btn-container {
