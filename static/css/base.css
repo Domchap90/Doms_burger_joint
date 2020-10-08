@@ -150,7 +150,7 @@ a.sidenav-trigger {
     }
 }
 
-@media (min-width: 600px){
+@media (min-width: 601px){
     .navbar-fixed nav {
         height: 210px;
     }
@@ -273,13 +273,17 @@ a.sidenav-trigger {
 
 .menu-items-container {
     margin: 0% 8.3%;
+    padding-bottom: 70px;
+}
+.menu-items-container h2 {
+    margin: 1.0rem 0 1.424rem 0;
 }
 
 .menu-item-form {
     margin-bottom: 30px;
 }
 
-@media (min-width: 600px){
+@media (min-width: 601px){
     .below-nav-container{
         margin-top: 147px;
     }
@@ -305,12 +309,34 @@ a.sidenav-trigger {
 .menu-navigator.deals {
     margin: 0 5%;
 }
+.category-title.combo {
+    text-align: center;
+}
+.row.collapsible-header {
+    display: block;
+    text-align: center;
+    margin-bottom: 0px;
+}
+.collapsible-header h3 {
+    font-size: 1.92rem;
+}
+.collapsible-body .row {
+    display: block;
+}
 .col-gap {
     background-color: inherit !important;
 }
+.combo-info {
+    margin-bottom: 10px;
+}
+.combo-info .select-wrapper input.select-dropdown {
+    text-align: center;
+}
 .combo-desc {
-    line-height: 325%;
     font-size: 16px;
+}
+.combo-desc p {
+    margin-block-start: 0;
 }
 .combo-img-container {
     display: flex;
@@ -327,10 +353,10 @@ a.sidenav-trigger {
 }
 
 .order-btn-container {
-    text-align: right;
+    text-align: center;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 601px) {
     .combo-desc {
         margin: 1.9466666667rem 0 1.168rem 0;
         font-size: 18px;
@@ -339,10 +365,19 @@ a.sidenav-trigger {
         width: 150px;
         height: 150px;
     }
+    .order-btn-container {
+        text-align: right;
+    }
+    .row.collapsible-header {
+        text-align: left;
+    }
+    .row.collapsible-header h3 {
+        text-align: center;
+    }
 }
-@media (min-width: 992px) {
-    .combo-desc-container {
-        justify-content: start;
+@media (min-width: 993px) {
+    .row.collapsible-header {
+        text-align: center;
     }
 }
 
