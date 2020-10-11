@@ -351,7 +351,9 @@ a.sidenav-trigger {
     width: 120px;
     height: 120px;
 }
-
+.form-error {
+    color: red;
+}
 .order-btn-container {
     text-align: center;
 }
