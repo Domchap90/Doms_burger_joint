@@ -383,7 +383,8 @@ a.sidenav-trigger {
 
 /********************************************************* Order page   */
 .order-items-container {
-    height: 79vh;
+    min-height: 79vh;
+    padding-bottom: 20px;
 }
 
 .order-combo-container{
@@ -478,7 +479,7 @@ button.qty-btn {
 @media(min-width: 600px) {
     .order-items-container {
         margin: 0 5%;
-        height: 75vh;
+        min-height: 75vh;
     }
 }
 @media(min-width: 992px) {

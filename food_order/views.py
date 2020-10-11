@@ -18,14 +18,14 @@ def add_to_order(request, item_id):
     redirect_url = request.POST.get('redirect_url')
 
     order = request.session.get('food_order', {})
-    print(order.keys())
 
     if item_id in list(order.keys()):
         if order[item_id] < 10:
             order[item_id] += 1
             messages.success(request, f'Added {food_item.name} to your order.')
         else:
-            messages.error(request, f'You have reached your order limit for {food_item.name}.')
+            messages.error(request, f'You have reached your order limit for \
+                           {food_item.name}.')
     else:
         order[item_id] = 1
         messages.success(request, f'Added {food_item.name} to your order.')
@@ -41,34 +41,43 @@ def add_combo_to_order(request, combo_id):
     form = request.POST.dict()
     order = request.session.get('food_order', {})
     redirect_url = request.POST.get('redirect_url')
-    # combo_item = get_object_or_404(Food_Combo, pk=combo_id)
-    # combo_key = 'combo_'+str(combo_id)
-    # if combo_key not in list(order.keys()):
-    #     order[combo_key] = []
-    # combo_to_append = []
+    combo_counter = 0
+    combo_id = int(combo_id)
+    combo_item = get_object_or_404(Food_Combo, pk=combo_id)
+
+    for key, value in order.items():
+        if key[0] == 'c':
+            combo_key = key
+            if order[combo_key][0] == combo_id:
+                combo_counter += order[combo_key][1]
 
     combo_to_append = {}
 
-    for field in form:
-        print(field)
-        if field != 'redirect_url' and field != 'csrfmiddlewaretoken':
-            item_id = form[field]
-            # food_item = get_object_or_404(Food_Item, pk=item_id)
-            # combo as dict below
-            if item_id in combo_to_append:
-                combo_to_append[item_id] += 1
-            else:
-                combo_to_append[item_id] = 1
+    # combo limits set in quantity_buttons.js
+    if (combo_id == 2 and combo_counter < 3) or (
+            combo_id != 2 and combo_counter < 5):
+        for field in form:
+            if field != 'redirect_url' and field != 'csrfmiddlewaretoken':
+                item_id = form[field]
+                # combo as dict below
+                if item_id in combo_to_append:
+                    combo_to_append[item_id] += 1
+                else:
+                    combo_to_append[item_id] = 1
 
-    combo_hash = hash(str(combo_to_append))
-    combo_key = 'c' + str(combo_hash)
-    if combo_key in list(order.keys()):
-        order[combo_key][1] += 1
+        combo_hash = hash(str(combo_to_append))
+        combo_key = 'c' + str(combo_hash)
+        if combo_key in list(order.keys()):
+            order[combo_key][1] += 1
+        else:
+            order[combo_key] = [combo_id, 1, combo_to_append]
+
+        messages.success(request, f'Added {combo_item.name} to your order.')
+        combo_counter += 1
+
     else:
-        order[combo_key] = [combo_id, 1, combo_to_append] 
-
+        messages.error(request, f'You have reached your order limit for {combo_item.name}.')
     request.session['food_order'] = order
-    print(f'Order is {order}')
 
     return redirect(redirect_url)
 
@@ -94,10 +103,8 @@ def edit_order(request, item_type, item_id):
     if item_type == 'item':
         order[item_id] = changed_quantity_value
     else:
-        print(f'order object is {order}')
         order[request.POST.get('comboHashKey')][1] = changed_quantity_value
 
     request.session['food_order'] = order
-    print(request.session.get('food_order'))
 
     return HttpResponse(status=204)
