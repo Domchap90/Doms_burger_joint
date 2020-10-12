@@ -22,12 +22,16 @@ class Order(models.Model):
     postcode = models.CharField(max_length=20, null=False, blank=False)
     address_line1 = models.CharField(max_length=80, null=False, blank=False)
     address_line2 = models.CharField(max_length=80, null=True, blank=True)
-    delivery_instructions = models.CharField(max_length=200, null=True, blank=True)
+    delivery_instructions = models.CharField(max_length=200, null=True,
+                                             blank=True)
     date = models.DateTimeField(auto_now_add=True)
-    delivery_fee = models.DecimalField(max_digits=6, decimal_places=2, null=False, default=0)
+    delivery_fee = models.DecimalField(max_digits=6, decimal_places=2,
+                                       null=False, default=0)
     # discount = models.DecimalField(max_digits=6, decimal_places=2, null=False, default=0)
-    order_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
-    grand_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    order_total = models.DecimalField(max_digits=10, decimal_places=2,
+                                      null=False, default=0)
+    grand_total = models.DecimalField(max_digits=10, decimal_places=2, 
+                                      null=False, default=0)
     pid = models.CharField(max_length=254, null=False, blank=False, default='')
 
     def _generate_order_number(self):
@@ -44,7 +48,6 @@ class Order(models.Model):
         self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
         self.delivery_fee = settings.DELIVERY_FEE
         self.grand_total = float(self.order_total) + self.delivery_fee
-        print(f'Update_total accessed. Order_total = {self.order_total}, delivery_fee = {self.delivery_fee}, grand_total = {self.grand_total}.')
         self.save()
 
     def save(self, *args, **kwargs):
@@ -62,13 +65,19 @@ class Order(models.Model):
 
 
 class OrderLineItem(models.Model):
-    order = models.ForeignKey(Order, null=False, blank=False, on_delete=models.CASCADE, related_name='lineitems')
-    food_item = models.ForeignKey(Food_Item, null=True, blank=True, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, null=False, blank=False,
+                              on_delete=models.CASCADE,
+                              related_name='lineitems')
+    food_item = models.ForeignKey(Food_Item, null=True, blank=True,
+                                  on_delete=models.CASCADE)
     quantity = models.IntegerField(null=False, blank=False, default=0)
-    combo_item = models.ForeignKey(Food_Combo, null=True, blank=True, on_delete=models.CASCADE)
+    combo_item = models.ForeignKey(Food_Combo, null=True, blank=True,
+                                   on_delete=models.CASCADE)
     combo_id = models.CharField(max_length=256, null=True, blank=True)
     combo_quantity = models.IntegerField(null=False, blank=False, default=0)
-    lineitem_total = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False, editable=False)
+    lineitem_total = models.DecimalField(
+        max_digits=6, decimal_places=2, null=False,
+        blank=False, editable=False)
 
     def changeform_link(self):
         """

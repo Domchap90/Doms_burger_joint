@@ -1,5 +1,10 @@
 .signup-container {
     margin: 10% 20%;
+    padding: 20px 10px;
+}
+
+.signup-container h1 {
+    margin: 0;
 }
 
 .signup-btns-container {
@@ -9,4 +14,9 @@
 
 #signup-btn {
     background-color: red;
+}
+@media (min-width: 1200px) {
+    .signup-container {
+        margin: 8% 22%;
+    }
 }

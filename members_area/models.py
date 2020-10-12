@@ -18,7 +18,8 @@ class MemberProfile(models.Model):
 
 
 @receiver(post_save, sender=User)
-def create_or_update_member_info(sender, instance, new_member, **kwargs):
-    if new_member:
-        MemberProfile.objects.create(user=instance)
-    instance.memberprofile.save()
+def create_or_update_member_info(sender, instance, created, **kwargs):
+    if created:
+        MemberProfile.objects.create(member=instance)
+    if not instance.is_staff:
+        instance.memberprofile.save()

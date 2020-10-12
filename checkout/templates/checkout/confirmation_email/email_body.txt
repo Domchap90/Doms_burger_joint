@@ -1,0 +1,26 @@
+Hey {{ order.name }},
+
+Your food is on its way! Your order was successfully placed on {{ order.date }}.
+
+    Confirmation Number: {{ order.order_number }}
+   
+    Sent to:
+        {{ order.address_line1 }} 
+        {{ order.address_line2}}
+        {{ order.postcode }} 
+     
+    Amount paid:
+        Delivery Fee:   {{ order.delivery_fee }}  
+        Food Total:     {{ order.order_total }}
+        Grand Total:    {{ order.grand_total }} 
+
+Any further questions, please reply on {{ from_email }}.
+
+Thank you for your custom.
+
+Enjoy your burgers! :D
+
+Kind regards,
+
+Dom
+                

@@ -30,12 +30,20 @@ hr {
 img {
     width: 100%;
 }
+.checkout-form-container input,
+.checkout-form-container input:focus {
+    border-bottom: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important; 
+}
+.checkout-form-container input:focus {
+    box-shadow: 0 1px 0 0 #000 !important;
+}
 
 input {
-    border-bottom: none !important;
     margin-bottom: 0px !important;
     width: 100%;
-    background-color: white !important;
+    /* background-color: red; */
     font-family: 'Montserrat', sans-serif;
 }
 textarea:focus {
@@ -52,6 +60,7 @@ button {
     background-color: black;
     border-color: black !important;
     font-family: 'Abel', sans-serif;
+    text-transform: uppercase;
     font-size: 1.4rem;
     color: white;
 }
@@ -85,7 +94,9 @@ a:hover {
     color: #fff;
     text-decoration: none;
 }
-
+/* .bottom-page {
+    margin-bottom: 20px !important;
+} */
 /********************************************************* Navbar   */
 
 .navbar-fixed nav {
@@ -532,8 +543,8 @@ button.qty-btn {
 }
 
 /********************************************************* Checkout Success page   */
-.below-nav-container {
-    padding: 0px;
+.below-nav-container#checkout-success {
+   padding: 0px 0px 40px 0px;
 }
 
 .receipt-area {
@@ -544,4 +555,71 @@ button.qty-btn {
 
 .clear-10 {
     margin: 10px 0 !important;
+}
+
+/********************************************************* Allauth pages   */
+
+.allauth-container {
+    padding: 15% 0;
+    height: 70vh;
+}
+
+.allauth-container h1 {
+    margin: 0px; 
+    text-transform: uppercase;
+}
+.allauth-container #login-form p:nth-child(4) {
+    display: flex;
+    align-items: center;
+}
+.allauth-container p a:hover {
+    text-decoration: underline;
+    color: black;
+}
+.allauth-container form label {
+    font-size: 14px;
+    color: black;
+    margin: 14px 0;
+    font-family: 'Montserrat', sans-serif;
+}
+.allauth-container input[type=text],
+.allauth-container input[type=password],
+.allauth-container p input#id_login {
+    margin-top: 14px;
+    padding-left: 10px;
+    background-color: white !important;
+    border: 1px solid black;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 16px;
+}
+.allauth-container [type="checkbox"] {
+    opacity: 1;
+    width: 10px;
+    position: relative;
+    pointer-events: visiblepainted;
+}
+.allauth-container p label[for=id_remember] {
+    width: 120px;
+}
+
+@media (min-width: 601px) {
+    .allauth-container {
+        padding: 30px 20%;
+    }
+}
+@media (min-width: 993px) {
+    .allauth-container {
+        padding: 40px 30%;
+    }
+}
+/********************************************************* Logout page   */
+
+.logout-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: 5%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
 }
