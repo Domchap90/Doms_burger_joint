@@ -8,6 +8,7 @@ from food_order.contexts import order_contents
 
 from .models import Order, OrderLineItem, ComboLineItem
 from menu.models import Food_Item, Food_Combo
+from members_area.models import MemberProfile
 
 import json
 import stripe
@@ -113,6 +114,22 @@ def checkout(request):
 
         order_form = OrderForm()
 
+        if request.user.is_authenticated:
+            try:
+                member_profile = MemberProfile.objects.get(member=request.user)
+                order_form = OrderForm(initial={
+                    'name': member_profile.member.get_username(),
+                    'email': member_profile.saved_email,
+                    'mobile_number': member_profile.saved_mobile_number,
+                    'postcode': member_profile.saved_postcode,
+                    'address_line1': member_profile.saved_address_line1,
+                    'address_line2': member_profile.saved_address_line2,
+                })
+            except MemberProfile.DoesNotExist:
+                order_form = OrderForm()
+        else:
+            order_form = OrderForm()
+
     if not stripe_public_key:
         messages.warning(request, 'Stripe public key is missing. Please ensure \
              that it is set in the environment variables.')
@@ -123,7 +140,7 @@ def checkout(request):
         'client_secret': intent.client_secret,
         'total': total,
     }
-    
+
     return render(request, 'checkout/checkout.html', context)
 
 
@@ -131,6 +148,13 @@ def checkout_success(request, order_number):
     """ Directs to this page if checkout was successful """
     # save_info = request.session.get('save_info')
     order = get_object_or_404(Order, order_number=order_number)
+    if request.user.is_authenticated:
+        member = MemberProfile.objects.get(member=request.user)
+        order.member_profile = member
+        print(f'Member is {member}.')
+    order.save()
+    
+
     messages.success(request, f'Thank you for completing your order. \
         You will shortly receive an email to confirm it has been placed. \
         Order Number: {order.order_number} \
@@ -138,8 +162,7 @@ def checkout_success(request, order_number):
     
     if 'food_order' in request.session:
         del request.session['food_order']
-    for item in order.lineitems.all():
-        print(item)
+
     context = {
         'order': order,
     }

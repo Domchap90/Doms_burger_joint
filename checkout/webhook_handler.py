@@ -5,6 +5,7 @@ from django.conf import settings
 
 from .models import Order, OrderLineItem
 from menu.models import Food_Item
+from members_area.models import MemberProfile
 
 import json
 import time
@@ -17,17 +18,17 @@ class StripeWH_Handler:
         self.request = request
 
     def _send_confirmation_email(self, order):
-        user_email = order.email
+        cust_email = order.email
         subject = render_to_string(
             'checkout/confirmation_email/email_subject.txt',
             {'order': order}
         )
         body = render_to_string(
             'checkout/confirmation_email/email_body.txt',
-            {'order': order, 'from_email': settings.COMPANY_EMAIL}
+            {'order': order, 'from_email': settings.DEFAULT_FROM_EMAIL}
         )
 
-        send_mail(subject, body, settings.COMPANY_EMAIL, [user_email])
+        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email], fail_silently=False)
 
     def handle_event(self, event):
         """ Handles generic Webhooks """
@@ -38,10 +39,16 @@ class StripeWH_Handler:
 
     def handle_successful_payment_intent(self, event):
         """ handles payment_intent.succeeded """
+        print('This is triggered')
         intent = event.data.object
         pid = intent.id
         food_order = intent.metadata.food_order
-
+        username = intent.metadata.username
+        if username != 'AnonymousUser':
+            memberprofile = MemberProfile.objects.get(member__username=username)
+        else:
+            memberprofile = None
+        print(memberprofile)
         billing_details = intent.charges.data[0].billing_details
         shipping_details = intent.shipping
         grand_total = round(intent.charges.data[0].amount / 100, 2)
@@ -66,7 +73,7 @@ class StripeWH_Handler:
                     pid=pid
                 )
                 order_exists = True
-
+                break
             except Order.DoesNotExist:
                 iterations += 1
                 time.sleep(1)
@@ -81,6 +88,7 @@ class StripeWH_Handler:
             try:
                 order = Order.object.create(
                     name=shipping_details.name,
+                    
                     mobile_number=billing_details.phone,
                     email=billing_details.email,
                     address_line1=shipping_details.address.line1,
@@ -105,6 +113,7 @@ class StripeWH_Handler:
                             ERROR: {e}",
                         status=500
                     )
+        print('Do we reach this point?')
         self._send_confirmation_email(order)
         return HttpResponse(
                     content=f"Webhook received: {event['type']} \
