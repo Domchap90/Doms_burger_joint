@@ -25,6 +25,9 @@ class Order(models.Model):
     delivery_instructions = models.CharField(max_length=200, null=True,
                                              blank=True)
     date = models.DateTimeField(auto_now_add=True)
+    quantity_count = models.IntegerField(null=False, blank=False, default=0)
+    combo_quantity_count = models.IntegerField(null=False, blank=False, default=0)
+    order_count = models.IntegerField(null=False, blank=False, default=0)
     delivery_fee = models.DecimalField(max_digits=6, decimal_places=2,
                                        null=False, default=0)
     # discount = models.DecimalField(max_digits=6, decimal_places=2, null=False, default=0)
@@ -46,6 +49,9 @@ class Order(models.Model):
         accounting for delivery costs.
         """
         self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
+        self.quantity_count = self.lineitems.aggregate(Sum('quantity'))['quantity__sum']
+        self.combo_quantity_count = self.lineitems.aggregate(Sum('combo_quantity'))['combo_quantity__sum']
+        self.order_count = self.quantity_count + self.combo_quantity_count
         self.delivery_fee = settings.DELIVERY_FEE
         self.grand_total = float(self.order_total) + self.delivery_fee
         self.save()
