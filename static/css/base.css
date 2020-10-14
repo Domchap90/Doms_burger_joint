@@ -1,8 +1,12 @@
 h1 {
     font-family: 'Abel', sans-serif;
+    text-transform: uppercase;
     margin: auto 20px;
     font-size: 1.8rem;
     color: black;
+}
+.hide {
+    display: none !important;
 }
 
 h2 {
@@ -561,7 +565,8 @@ button.qty-btn {
 
 .allauth-container {
     padding: 15% 0;
-    height: 70vh;
+    /* height: 70vh; */
+    height: 80vh;
 }
 
 .allauth-container h1 {
@@ -621,5 +626,26 @@ button.qty-btn {
     margin-top: 5%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/********************************************************* MemberProfile page   */
+thead, .general-order-row {
+    background-color: black;
+    color: white;
+}
+.general-order-row:hover {
+    background-color: white;
+    color: black;
+}
+table {
+    border: 0.5px solid black;
+}
+tr:not(:last-child), thead tr {
+    border-bottom: 0.5px solid white;
+}
+
+.general-order-row td,
+tr th {
     text-align: center;
 }

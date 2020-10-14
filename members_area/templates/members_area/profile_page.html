@@ -7,13 +7,97 @@
 
 {% block content %}
     <div class="below-nav-container">
-        <h1>Members Area</h1>
+        <div class="signup-container">
+            <h1>Members Area</h1>
+
+            <p>Hey {{ member }}!</p>
+
+            <h2>Details on record</h2>
+            <form method="POST" action="{% url 'members_area' %}">
+                {% csrf_token %}
+                {{ memberform.as_p }}
+
+                <button class="submit">Update Info</button>
+            </form>
+
+            <h2>Order History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Order no.</th>
+                        <th>Number of items</th>
+                        <th>Total charged</th>
+                    </tr>
+                </thead>
+            
+                <tbody>
+                {% for order in order_history %}
+                    <tr class="general-order-row">
+                        <td>{{ order.date }}</td>
+                        <td>{{ order.order_number|truncatechars:8 }}</td>
+                        <td>{{ order.order_count }} items</td>
+                        <td>£{{ order.grand_total }}</td>
+                    </tr>
+                    <tr class="detail-order-row">
+                        <td colspan="4">
+                            <table>
+                                {% if order.quantity_count > 0 %}
+                                    <h3 class="form-subtitle">Food ordered</h3>
+                                {% endif %}
+
+                                {% for item in order.lineitems.all %}
+                                    {% if not item.combo_id %}
+                                    <div class="row">
+                                        <div class="col s5 m7">{{ item.food_item.name }}</div>
+                                        <div class="col s5 m3">{{ item.quantity }} @ £{{ item.food_item.price }}</div>
+                                        <div class="col s2">£{{ item.lineitem_total }}</div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if order.combo_quantity_count > 0 %}
+                                <h3 class="form-subtitle">Combos ordered</h3>
+                                {% endif %}
+
+                                {% for item in order.lineitems.all %}
+                                    {% if item.combo_id %}
+                                    <div class="row clear-10 ">
+                                        <div class="col s5 m7">{{ item.combo_item.name }}</div>
+                                        <div class="col s5 m3">{{ item.combo_quantity }} @ £{{ item.combo_item.price }}</div>
+                                        <div class="col s2">£{{ item.lineitem_total }}</div>
+                                    </div>
+                                    
+                                    <div class="combo-unit-list">
+                                    {% for line in item.combocontents.all %}
+                                        <div class="row">
+                                            <div class="col s5 m5 offset-m2">{{ line.food_item.name }}</div>
+                                            <div class="col s7 m5">{{ line.quantity }}</div>
+                                        </div>
+                                    {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </table>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>       
         
 {% endblock %}
 
 {% block postloadjs %}
     {{ block.super }}
-    
-    <script src="{% static 'checkout/js/stripe_element.js' %}"></script>
+    <script>
+		$(document).ready(function() {
+            $('.detail-order-row').hide();
+		    $('.general-order-row').click(function(){
+		        $(this).next().toggle();
+		    });
+		});
+    </script>
+    <!-- <script src="{% static 'checkout/js/stripe_element.js' %}"></script> -->
 {% endblock %}

@@ -11,7 +11,10 @@ class MemberProfile(models.Model):
     saved_mobile_number = models.CharField(max_length=13, null=True, blank=True)
     saved_postcode = models.CharField(max_length=20, null=True, blank=True)
     saved_address_line1 = models.CharField(max_length=80, null=True, blank=True)
-    saved_address_line2 = models.CharField(max_length=80, null=True, blank=True)
+    saved_address_line2 = models.CharField(max_length=80, null=True,
+                                           blank=True)
+    saved_delivery_instructions = models.CharField(max_length=200, null=True,
+                                             blank=True)
 
     def __str__(self):
         return self.member.username
@@ -19,7 +22,7 @@ class MemberProfile(models.Model):
 
 @receiver(post_save, sender=User)
 def create_or_update_member_info(sender, instance, created, **kwargs):
-    if created:
-        MemberProfile.objects.create(member=instance)
-    if not instance.is_staff:
-        instance.memberprofile.save()
+    # if created:
+    MemberProfile.objects.create(member=instance)
+    # if not instance.is_staff:
+    instance.memberprofile.save()
