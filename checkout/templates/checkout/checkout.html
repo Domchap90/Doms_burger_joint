@@ -9,6 +9,9 @@
     <div class="overlay"></div>
     <div class="below-nav-container">
         <div class="checkout-form-container">
+            {% if not request.user.is_authenticated %}
+            <p>You are not currently logged in to your account. To be eligible for rewards, please sign in <a href="{% url 'account_login' %}?next={{request.path}}">here</a>.</p>
+            {% endif %}
             <form action="{% url 'checkout' %}" method="POST" id="payment-form">
             {% csrf_token %}
                 <h2 class="form-subtitle">Who wants these Burgers?</h2>

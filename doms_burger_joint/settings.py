@@ -99,7 +99,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/members_area/'
 
 WSGI_APPLICATION = 'doms_burger_joint.wsgi.application'
 
@@ -171,4 +171,4 @@ STRIPE_CURRENCY = 'gbp'
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
-COMPANY_EMAIL = 'customerservice@domsburgerjoint.co.uk'
+DEFAULT_FROM_EMAIL = 'customerservice@domsburgerjoint.co.uk'
