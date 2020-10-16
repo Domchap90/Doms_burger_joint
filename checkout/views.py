@@ -57,6 +57,20 @@ def checkout(request):
             order = order_form.save(commit=False)
             pid = request.POST.get('client_secret').split('_secret')[0]
             order.pid = pid
+            if request.user.is_authenticated:
+                member_profile = MemberProfile.objects.get(member=request.user)
+                if request.POST.get('discount'):
+                    # if hidden discount input exists rendered by non-POST 
+                    # checkout view it means there is a discount to be 
+                    # applied as well as resetting the reward status for 
+                    # that member.
+                    order.discount = request.POST.get('discount')
+                    member_profile.reward_status -= 5
+                else:
+                    # no discount means progress reward status
+                    member_profile.reward_status += 1
+                MemberProfile.save(member_profile)
+
             order.save()
             for order_itemid, value in food_order.items():
                 try:

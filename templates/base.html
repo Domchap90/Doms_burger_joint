@@ -53,7 +53,7 @@
                                 <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">MENU
                                 <i class="material-icons right">arrow_drop_down</i></a></li>
                                 <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">DEALS</a></li>
-                                <li><a href="{% url 'rewards' %}">MY BURGER</a></li>
+                                <li><a href="{% if request.user.is_authenticated %}{% url 'members_area' %}{% else %}{% url 'rewards' %}{% endif %}">MY BURGER</a></li>
                                 <li><a href="{% url 'food_order' %}">YOUR ORDER{% if order_count > 0 %}({{ order_count }}){% endif %}</a></li>
                             </ul>
                         </div>
@@ -113,7 +113,7 @@
                         </li>
                     </ul>
                 </li>
-                <li><a href="{% url 'rewards' %}">MY BURGER</a></li>
+                <li><a href="{% if request.user.is_authenticated %}{% url 'members_area' %}{% else %}{% url 'rewards' %}{% endif %}">MY BURGER</a></li>
                 <li><a href="{% url 'food_order' %}">YOUR ORDER</a></li>
 			</ul>
 

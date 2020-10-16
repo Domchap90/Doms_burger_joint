@@ -9,16 +9,18 @@
     <div class="overlay"></div>
     <div class="below-nav-container">
         <div class="checkout-form-container">
+
             {% if not request.user.is_authenticated %}
-            <p>You are not currently logged in to your account. To be eligible for rewards, please sign in <a href="{% url 'account_login' %}?next={{request.path}}">here</a>.</p>
+                <p>You are not currently logged in to your account. To be eligible for rewards, please sign in <a href="{% url 'account_login' %}?next={{request.path}}">here</a>.</p>
             {% elif reward_notification %}
-            <div id="rewards-notification">
-            {{ reward_notification }} 
-            <button><a href="{% url 'menu' %}?category=burgers">Get free burger</a></button>
-            </div>
+                <div class="rewards-notification">
+                {{ reward_notification }} 
+                <button><a href="{% url 'menu' %}?category=burgers">Get free burger</a></button>
+                </div>
             {% elif discount %}
-            <div id="rewards-notification">Congratulations you've earned a free burger! Saving yourself £{{ discount }}.</div>
+                <div class="rewards-notification">Congratulations you've earned a free burger! Saving yourself £{{ discount }}.</div>
             {% endif %}
+
             <form action="{% url 'checkout' %}" method="POST" id="payment-form">
             {% csrf_token %}
                 <h2 class="form-subtitle">Who wants these Burgers?</h2>
@@ -34,6 +36,9 @@
 
                 <p id="card-error" role="alert"></p>
                 <input type="hidden" value="{{ client_secret }}" name="client_secret">
+                {% if discount %}
+                    <input type="hidden" value="{{ discount }}" name="discount">
+                {% endif %}
                 <p class="result-message hidden">
                     Payment succeeded
                 </p>
