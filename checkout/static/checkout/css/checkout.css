@@ -5,6 +5,10 @@
 .checkout-form-container p a:hover {
     text-decoration: underline;
 }
+#rewards-notification button {
+    background-color: red;
+    color: yellow;
+}
 
 #payment-form input {
     padding-left: 10px;

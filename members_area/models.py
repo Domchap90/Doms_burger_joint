@@ -7,6 +7,7 @@ from django.dispatch.dispatcher import receiver
 # Create your models here.
 class MemberProfile(models.Model):
     member = models.OneToOneField(User, on_delete=models.CASCADE)
+    reward_status = models.IntegerField(default=0, editable=True)
     saved_email = models.EmailField(max_length=254, null=True, blank=True)
     saved_mobile_number = models.CharField(max_length=13, null=True, blank=True)
     saved_postcode = models.CharField(max_length=20, null=True, blank=True)

@@ -11,6 +11,13 @@
         <div class="checkout-form-container">
             {% if not request.user.is_authenticated %}
             <p>You are not currently logged in to your account. To be eligible for rewards, please sign in <a href="{% url 'account_login' %}?next={{request.path}}">here</a>.</p>
+            {% elif reward_notification %}
+            <div id="rewards-notification">
+            {{ reward_notification }} 
+            <button><a href="{% url 'menu' %}?category=burgers">Get free burger</a></button>
+            </div>
+            {% elif discount %}
+            <div id="rewards-notification">Congratulations you've earned a free burger! Saving yourself £{{ discount }}.</div>
             {% endif %}
             <form action="{% url 'checkout' %}" method="POST" id="payment-form">
             {% csrf_token %}

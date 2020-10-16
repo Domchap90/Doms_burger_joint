@@ -30,7 +30,7 @@ class Order(models.Model):
     order_count = models.IntegerField(null=False, blank=False, default=0)
     delivery_fee = models.DecimalField(max_digits=6, decimal_places=2,
                                        null=False, default=0)
-    # discount = models.DecimalField(max_digits=6, decimal_places=2, null=False, default=0)
+    discount = models.DecimalField(max_digits=6, decimal_places=2, null=False, default=0.00)
     order_total = models.DecimalField(max_digits=10, decimal_places=2,
                                       null=False, default=0)
     grand_total = models.DecimalField(max_digits=10, decimal_places=2, 
@@ -53,7 +53,7 @@ class Order(models.Model):
         self.combo_quantity_count = self.lineitems.aggregate(Sum('combo_quantity'))['combo_quantity__sum']
         self.order_count = self.quantity_count + self.combo_quantity_count
         self.delivery_fee = settings.DELIVERY_FEE
-        self.grand_total = float(self.order_total) + self.delivery_fee
+        self.grand_total = float(self.order_total) + self.delivery_fee - float(self.discount)
         self.save()
 
     def save(self, *args, **kwargs):

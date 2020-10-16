@@ -12,6 +12,10 @@
 
             <p>Hey {{ member }}!</p>
 
+            <h2>Reward Status</h2>
+
+            <p>{{ member.reward_status }}</p>
+
             <h2>Details on record</h2>
             <form method="POST" action="{% url 'members_area' %}">
                 {% csrf_token %}

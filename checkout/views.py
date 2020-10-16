@@ -36,9 +36,11 @@ def cached_payment_intent(request):
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
+    food_order = request.session.get('food_order', {})
+    reward_notification = None
+    discount_result = None
 
     if request.method == 'POST':
-        food_order = request.session.get('food_order', {})
 
         form_data = {
             'name': request.POST['name'],
@@ -65,6 +67,7 @@ def checkout(request):
                             food_item=food_item,
                             quantity=value,
                         )
+                        
                         # Update the total purchased for each food in the orderline for popular deals.
                         food_item.total_purchased += value
                         food_item.save()
@@ -94,7 +97,7 @@ def checkout(request):
                     order.delete()
                     return redirect(reverse('food_order'))
 
-            request.session['save_info'] = 'save-info' in request.POST
+            # request.session['save_info'] = 'save-info' in request.POST
 
             return redirect(reverse('checkout_success', args=[order.order_number] ))    
         else:
@@ -102,16 +105,6 @@ def checkout(request):
 
     else:
         total = order_contents(request)['grand_total']
-        stripe_total = round(total*100)
-        stripe.api_key = stripe_secret_key
-
-        intent = stripe.PaymentIntent.create(
-            amount=stripe_total,
-            currency=settings.STRIPE_CURRENCY,
-            # Verify your integration in this guide by including this parameter
-            metadata={'integration_check': 'accept_a_payment'},
-        )
-
         order_form = OrderForm()
 
         if request.user.is_authenticated:
@@ -125,11 +118,34 @@ def checkout(request):
                     'address_line1': member_profile.saved_address_line1,
                     'address_line2': member_profile.saved_address_line2,
                 })
+                print(f"Member's reward status = {member_profile.reward_status}")
+                if member_profile.reward_status == 5:
+                    discount = get_discount(food_order)
+                    if isinstance(discount, str):
+                        print('Is instance of string accessed.')
+                        reward_notification = discount
+                    else:
+                        print('Is NOT instance of string accessed.')
+                        discount_result = discount
+                        total -= discount_result
+                        # member_profile.reward_status -= 5
+                # else:
+                #     member_profile.reward_status += 1
+
             except MemberProfile.DoesNotExist:
                 order_form = OrderForm()
         else:
             order_form = OrderForm()
 
+        stripe_total = round(total*100)
+        stripe.api_key = stripe_secret_key
+
+        intent = stripe.PaymentIntent.create(
+            amount=stripe_total,
+            currency=settings.STRIPE_CURRENCY,
+            # Verify your integration in this guide by including this parameter
+            metadata={'integration_check': 'accept_a_payment'},
+        )
     if not stripe_public_key:
         messages.warning(request, 'Stripe public key is missing. Please ensure \
              that it is set in the environment variables.')
@@ -138,15 +154,33 @@ def checkout(request):
         'form': order_form,
         'stripe_public_key': stripe_public_key,
         'client_secret': intent.client_secret,
+        'reward_notification': reward_notification,
+        'discount': discount_result,
         'total': total,
     }
 
     return render(request, 'checkout/checkout.html', context)
 
 
+def get_discount(order):
+    # Find cheapest burger for potential discount
+    discount = 100.00
+
+    for order_id, value in order.items():
+        if order_id[0] != 'c':
+            print(f"order_id[0] != 'c' accessed. order_id = {order_id}")
+            food_item = Food_Item.objects.get(id=order_id)
+            if food_item.category.id == 1:
+                if food_item.price < discount:
+                    discount = food_item.price
+
+    if discount < 100.00:
+        return discount
+    else:
+        return "You haven't selected your free burger yet! Remember this can't be part of a combo."
+
 def checkout_success(request, order_number):
     """ Directs to this page if checkout was successful """
-    # save_info = request.session.get('save_info')
     order = get_object_or_404(Order, order_number=order_number)
     if request.user.is_authenticated:
         member = MemberProfile.objects.get(member=request.user)
