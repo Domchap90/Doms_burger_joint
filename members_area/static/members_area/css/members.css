@@ -20,3 +20,17 @@
         margin: 8% 22%;
     }
 }
+
+/*********************************************************** Profile page */
+
+.reward-status-container img {
+    width: 100px;
+    height: 100px;
+}
+p.reward-qualification-msg {
+    font-weight: bold;
+}
+span {
+    font-style: italic;
+    font-weight: normal;
+}

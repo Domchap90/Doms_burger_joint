@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load member_tools %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'members_area/css/members.css' %}">
@@ -14,7 +15,28 @@
 
             <h2>Reward Status</h2>
 
-            <p>{{ member.reward_status }}</p>
+            {% with ''|center:5 as range %}
+            <div class="reward-status-container row">
+            {% for burger in range %}
+                <div class="col s2">
+                {% if forloop.counter0 < member.reward_status %}
+                    <img src="{% static '/images/burger_reward_gold_icon.png' %}" alt="">
+                {% else %}
+                    <img src="{% static '/images/burger_reward_grey_icon.png' %}" alt="">
+                {% endif %}
+                </div>
+            {% endfor %}
+            </div>
+            {% endwith %}
+
+            {% with orders_remaining=5|subtract:member.reward_status %}
+            {% if orders_remaining > 0 %}
+            <p>You need {{ orders_remaining }} more order{% if orders_remaining > 1 %}s{% endif %} to qualify for your Free burger.</p>
+            {% else %}
+            <p class="reward-qualification-msg">Congratulations! On your next order you are eligible for a free burger.</p>
+            <span>Cheapest burger selected will be discounted from the total charge. Doesn't apply to combos.</span>
+            {% endif %}
+            {% endwith %}
 
             <h2>Details on record</h2>
             <form method="POST" action="{% url 'members_area' %}">
