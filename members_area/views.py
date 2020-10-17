@@ -15,7 +15,7 @@ def members_area(request):
             messages.success(request, f'Saved information updated for \
                              {member_profile}')
 
-    orders = member_profile.orders.all()
+    orders = member_profile.orders.all().order_by('-date')
 
     context = {
         'member': member_profile,

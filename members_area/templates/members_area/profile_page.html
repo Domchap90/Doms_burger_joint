@@ -104,6 +104,24 @@
                                     </div>
                                     {% endif %}
                                 {% endfor %}
+                                <hr>
+            
+                                <div class="row">
+                                    <div class="col offset-s5 s4 offset-m7 m3">Subtotal:</div>
+                                    <div class="col s3 m2">£{{ order.order_total }}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col offset-s5 s4 offset-m7 m3">Delivery Fee:</div>
+                                    <div class="col s3 m2">£{{ order.delivery_fee }}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col offset-s5 s4 offset-m7 m3">Discount:</div>
+                                    <div class="col s3 m2">{% if order.discount > 0.00 %}-{% endif %}£{{ order.discount }}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col offset-s5 s4 offset-m7 m3">Total:</div>
+                                    <div class="col s3 m2">£{{ order.grand_total }}</div>
+                                </div>
                             </table>
                         </td>
                     </tr>
