@@ -3,6 +3,8 @@ Hey {{ order.name }},
 Your food is on its way! Your order was successfully placed on {{ order.date }}.
 
     Confirmation Number: {{ order.order_number }}
+
+    Reward Status: {{ reward_msg }}
    
     Sent to:
         {{ order.address_line1 }} 
@@ -10,9 +12,10 @@ Your food is on its way! Your order was successfully placed on {{ order.date }}.
         {{ order.postcode }} 
      
     Amount paid:
-        Delivery Fee:   {{ order.delivery_fee }}  
-        Food Total:     {{ order.order_total }}
-        Grand Total:    {{ order.grand_total }} 
+        Delivery Fee:   £{{ order.delivery_fee }}  
+        Food Total:     £{{ order.order_total }}
+        Discount:      -£{{ order.discount }}
+        Grand Total:    £{{ order.grand_total }} 
 
 Any further questions, please reply on {{ from_email }}.
 

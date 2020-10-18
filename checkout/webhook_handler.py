@@ -17,15 +17,33 @@ class StripeWH_Handler:
     def __init__(self, request):
         self.request = request
 
-    def _send_confirmation_email(self, order):
+    def _send_confirmation_email_to_nonmember(self, order):
         cust_email = order.email
         subject = render_to_string(
             'checkout/confirmation_email/email_subject.txt',
             {'order': order}
         )
         body = render_to_string(
-            'checkout/confirmation_email/email_body.txt',
+            'checkout/confirmation_email/email_body_nonmember.txt',
             {'order': order, 'from_email': settings.DEFAULT_FROM_EMAIL}
+        )
+
+        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email], fail_silently=False)
+
+    def _send_confirmation_email_to_member(self, order, member):
+        cust_email = order.email
+        subject = render_to_string(
+            'checkout/confirmation_email/email_subject.txt',
+            {'order': order}
+        )
+        if member.reward_status == 0:
+            reward_msg = "Congratulations, you earned a free burger on this order."
+        else:
+            reward_msg = f"Just {5-member.reward_status} more order(s) needed to grab your free burger."
+            
+        body = render_to_string(
+            'checkout/confirmation_email/email_body_member.txt',
+            {'order': order, 'reward_msg': reward_msg, 'from_email': settings.DEFAULT_FROM_EMAIL}
         )
 
         send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email], fail_silently=False)
@@ -78,7 +96,10 @@ class StripeWH_Handler:
                 iterations += 1
                 time.sleep(1)
         if order_exists:
-            self._send_confirmation_email(order)
+            if memberprofile is None:
+                self._send_confirmation_email_to_nonmember(order)
+            else:
+                self._send_confirmation_email_to_member(order, memberprofile)
             return HttpResponse(
                     content=f"Webhook received: {event['type']} | SUCCESS: Database already contains this order.",
                     status=200
