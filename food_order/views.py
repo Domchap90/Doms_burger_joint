@@ -50,7 +50,7 @@ def add_combo_to_order(request, combo_id):
             combo_key = key
             if order[combo_key][0] == combo_id:
                 combo_counter += order[combo_key][1]
-    print(f'The combo_counter for id {combo_id} = {combo_counter}')
+
     combo_to_append = {}
 
     # combo limits set in quantity_buttons.js

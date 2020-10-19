@@ -7,23 +7,16 @@ from menu.models import Food_Item, Food_Combo
 def order_contents(request):
 
     order_items = []
-    # identical_items will be a nested dictionary for Combos with id 2,
-    #  with outer key as combo_index taking a dictionary of item objects
-    #  (inner keys) along with their quantities as values.
-    # identical_items = {}
-    # combo_items = {}
     order_items_count = 0
     combo_count = 0
     total_items = 0
     total_combos = 0
     combo_hash_map = {}
     order = request.session.get('food_order', {})
-    
+
     for key, quantity in order.items():
         if key:
             if key[0] != 'c':
-                print('Not combo')
-                print(f'{key} is of type {type(key)} ')
                 food_item = get_object_or_404(Food_Item, pk=key)
                 total_items += quantity * food_item.price
                 order_items_count += quantity
@@ -35,12 +28,13 @@ def order_contents(request):
             else:
                 combo_hash_map[key] = [None, None, None]
                 combo_id = order[key][0]
-                combo_hash_map[key][0] = get_object_or_404(Food_Combo, pk=combo_id)
+                combo_hash_map[key][0] = get_object_or_404(Food_Combo,
+                                                           pk=combo_id)
 
                 # dictionary will replace current order[key][2] dict.
                 item_obj_dict = {}
-                # replace item_ids with the actual item objects so all the 
-                # information can be rendered in the order page.
+                # replace item_ids with the actual item objects so all the
+                # information can be rendered on the order page.
                 for item_id, qty in order[key][2].items():
                     item_obj_dict[get_object_or_404(Food_Item, pk=item_id)] = qty
 
@@ -64,7 +58,7 @@ def order_contents(request):
     context = {
         'order_items': order_items,
         'combo_items': combo_hash_map,
-        'order_count': order_items_count + combo_count, 
+        'order_count': order_items_count + combo_count,
         'min_delivery_threshold': settings.MIN_DELIVERY_THRESHOLD,
         'delivery_fee': settings.DELIVERY_FEE,
         'remaining_delivery_amount': remaining_delivery_amount,

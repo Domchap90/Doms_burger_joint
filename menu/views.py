@@ -19,7 +19,6 @@ def menu(request):
         drink_items = items.filter(category__name='drinks').order_by('-total_purchased')[:2]
         dessert_items = items.filter(category__name='dessert').order_by('-total_purchased')[:1]
         items = list(itertools.chain(burger_items, side_items, drink_items, dessert_items))
-        print("Type of items = "+str(type(items)))
     else:
         if 'category' in request.GET:
             items = items.filter(category__name__in=categories)
@@ -30,11 +29,9 @@ def menu(request):
         'items': items,
         'selected_category': categories,
     }
-    print(categories)
     counter = 0
     for item in items:
         counter += 1
-        print('item '+str(item.name)+' : '+str(item.total_purchased))
 
     return render(request, 'menu/menu_items.html', context)
 
@@ -61,7 +58,6 @@ def sort_items(request):
 
 def combo(request):
     """ A view to reveal the menu items """
-    print("combo view accessed.")
 
     combos = Food_Combo.objects.all()
     # Create an instance of each combo
@@ -102,12 +98,8 @@ def combo(request):
 
 
 def get_item(request):
-    print("get_item accessed.")
     item_id = request.GET.get('food_id')
-    item = Food_Item.objects.filter(pk=item_id)
-    print("Item is of type "+str(type(item)))
+    item = Food_Item.objects.filter(pk=item_id) 
     item_ser = serializers.serialize('json', item)
-    print("Item is of type "+str(type(item_ser)))
-    print('item_id is '+str(item_id)+'item is '+str(item))
 
     return JsonResponse(item_ser, status=200, safe=False)
