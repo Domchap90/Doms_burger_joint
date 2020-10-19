@@ -28,7 +28,8 @@ class StripeWH_Handler:
             {'order': order, 'from_email': settings.DEFAULT_FROM_EMAIL}
         )
 
-        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email], fail_silently=False)
+        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email],
+                  fail_silently=False)
 
     def _send_confirmation_email_to_member(self, order, member):
         cust_email = order.email
@@ -37,16 +38,20 @@ class StripeWH_Handler:
             {'order': order}
         )
         if member.reward_status == 0:
-            reward_msg = "Congratulations, you earned a free burger on this order."
+            reward_msg = "Congratulations, you earned a free burger on this \
+                          order."
         else:
-            reward_msg = f"Just {5-member.reward_status} more order(s) needed to grab your free burger."
-            
+            reward_msg = f"Just {5-member.reward_status} more order(s) \
+                          needed to grab your free burger."
+
         body = render_to_string(
             'checkout/confirmation_email/email_body_member.txt',
-            {'order': order, 'reward_msg': reward_msg, 'from_email': settings.DEFAULT_FROM_EMAIL}
+            {'order': order, 'reward_msg': reward_msg, 'from_email':
+             settings.DEFAULT_FROM_EMAIL}
         )
 
-        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email], fail_silently=False)
+        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email],
+                  fail_silently=False)
 
     def handle_event(self, event):
         """ Handles generic Webhooks """
@@ -57,16 +62,18 @@ class StripeWH_Handler:
 
     def handle_successful_payment_intent(self, event):
         """ handles payment_intent.succeeded """
-        print('This is triggered')
+
         intent = event.data.object
         pid = intent.id
         food_order = intent.metadata.food_order
         username = intent.metadata.username
+
         if username != 'AnonymousUser':
-            memberprofile = MemberProfile.objects.get(member__username=username)
+            memberprofile = MemberProfile.objects.get(
+                            member__username=username)
         else:
             memberprofile = None
-        print(memberprofile)
+
         billing_details = intent.charges.data[0].billing_details
         shipping_details = intent.shipping
         grand_total = round(intent.charges.data[0].amount / 100, 2)
@@ -75,7 +82,7 @@ class StripeWH_Handler:
         for field, value in shipping_details.address.items():
             if value == "":
                 shipping_details.address[field] = None
-        
+
         order_exists = False
         iterations = 1
         while iterations <= 5:
@@ -109,7 +116,6 @@ class StripeWH_Handler:
             try:
                 order = Order.object.create(
                     name=shipping_details.name,
-                    
                     mobile_number=billing_details.phone,
                     email=billing_details.email,
                     address_line1=shipping_details.address.line1,
@@ -134,7 +140,7 @@ class StripeWH_Handler:
                             ERROR: {e}",
                         status=500
                     )
-        print('Do we reach this point?')
+
         self._send_confirmation_email(order)
         return HttpResponse(
                     content=f"Webhook received: {event['type']} \

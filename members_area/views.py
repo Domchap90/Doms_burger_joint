@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse
 
 from .models import MemberProfile
+from checkout.models import Order
 from .forms import MemberProfileForm
 from django.contrib import messages
 
@@ -29,3 +30,30 @@ def rewards(request):
     context = {}
 
     return render(request, 'members_area/rewards.html', context)
+
+
+def repeat_order(request):
+    """ Clears any current order items and replaces them ALL with the order
+    selected to be repeated. """
+
+    order = {}
+    order_id = request.POST.get('order_id')
+    repeat_order = get_object_or_404(Order, order_number=order_id)
+
+    for item in repeat_order.lineitems.all():
+        if not item.combo_id:
+            item_id = item.food_item.id
+            quantity = item.quantity
+            order[item_id] = quantity
+    for item in repeat_order.lineitems.all():
+        if item.combo_id:
+            combo_id = item.combo_id
+            combo_quantity = item.combo_quantity
+            order[combo_id] = [item.combo_item.id, combo_quantity, {}]
+            for combo_item in item.combocontents.all():
+                order[combo_id][2][combo_item.food_item.id] = combo_item.quantity
+    
+    request.session['food_order'] = order
+
+    return HttpResponseRedirect(reverse('checkout'))
+

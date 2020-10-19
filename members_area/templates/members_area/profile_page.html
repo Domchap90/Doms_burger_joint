@@ -68,10 +68,11 @@
                     <tr class="detail-order-row">
                         <td colspan="4">
                             <table>
+                                
                                 {% if order.quantity_count > 0 %}
                                     <h3 class="form-subtitle">Food ordered</h3>
                                 {% endif %}
-
+                                
                                 {% for item in order.lineitems.all %}
                                     {% if not item.combo_id %}
                                     <div class="row">
@@ -88,7 +89,7 @@
 
                                 {% for item in order.lineitems.all %}
                                     {% if item.combo_id %}
-                                    <div class="row clear-10 ">
+                                    <div class="row clear-10">
                                         <div class="col s5 m7">{{ item.combo_item.name }}</div>
                                         <div class="col s5 m3">{{ item.combo_quantity }} @ £{{ item.combo_item.price }}</div>
                                         <div class="col s2">£{{ item.lineitem_total }}</div>
@@ -122,6 +123,11 @@
                                     <div class="col offset-s5 s4 offset-m7 m3">Total:</div>
                                     <div class="col s3 m2">£{{ order.grand_total }}</div>
                                 </div>
+                                <form action="{% url 'repeat_order' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="order_id" value="{{ order.order_number }}">
+                                    <button id="btn_{{ order.order_number }}" type="submit">ORDER AGAIN</button>
+                                </form>
                             </table>
                         </td>
                     </tr>
@@ -143,5 +149,4 @@
 		    });
 		});
     </script>
-    <!-- <script src="{% static 'checkout/js/stripe_element.js' %}"></script> -->
 {% endblock %}

@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect, reverse, get_object_or_404, HttpResponse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.shortcuts import HttpResponse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
@@ -12,8 +13,6 @@ from members_area.models import MemberProfile
 
 import json
 import stripe
-
-# Create your views here.
 
 
 @require_POST
@@ -41,7 +40,6 @@ def checkout(request):
     discount_result = None
 
     if request.method == 'POST':
-
         form_data = {
             'name': request.POST['name'],
             'mobile_number': request.POST['mobile_number'],
@@ -60,9 +58,9 @@ def checkout(request):
             if request.user.is_authenticated:
                 member_profile = MemberProfile.objects.get(member=request.user)
                 if request.POST.get('discount'):
-                    # if hidden discount input exists rendered by non-POST 
-                    # checkout view it means there is a discount to be 
-                    # applied as well as resetting the reward status for 
+                    # if hidden discount input exists rendered by non-POST
+                    # checkout view it means there is a discount to be
+                    # applied as well as resetting the reward status for
                     # that member.
                     order.discount = request.POST.get('discount')
                     member_profile.reward_status -= 5
@@ -81,8 +79,9 @@ def checkout(request):
                             food_item=food_item,
                             quantity=value,
                         )
-                        
-                        # Update the total purchased for each food in the orderline for popular deals.
+
+                        # Update the total purchased for each food in the
+                        # orderline for popular deals.
                         food_item.total_purchased += value
                         food_item.save()
                     # For the instance of a combo
@@ -95,25 +94,30 @@ def checkout(request):
                             combo_quantity=value[1],
                         )
                         order_line_item.save()
-                        # Iterate through combo contents to add each combo line item to the combo
+                        # Iterate through combo contents to add each combo
+                        # line item to the combo
                         for item, qty in value[2].items():
                             food_item = Food_Item.objects.get(id=item)
-                            combo_line_item = ComboLineItem(combo=order_line_item, food_item=food_item, quantity=qty)
+                            combo_line_item = ComboLineItem(
+                                                combo=order_line_item,
+                                                food_item=food_item,
+                                                quantity=qty)
                             combo_line_item.save()
-                            # Update the total purchased for admin and popular deals
+                            # Update the total purchased for admin and popular
+                            # deals
                             food_item.total_purchased += qty * value[1]
                     order_line_item.save()
 
                 except Food_Item.DoesNotExist:
                     messages.error(request, (
-                        "Unfortunately our database was unable to detect an item selected in your order."
+                        "Unfortunately our database was unable to detect an \
+                         item selected in your order."
                     ))
                     order.delete()
                     return redirect(reverse('food_order'))
 
-            # request.session['save_info'] = 'save-info' in request.POST
-
-            return redirect(reverse('checkout_success', args=[order.order_number] ))    
+            return redirect(reverse('checkout_success',
+                                    args=[order.order_number]))
         else:
             messages.error(request, "Form could not be submitted.")
 
@@ -132,19 +136,13 @@ def checkout(request):
                     'address_line1': member_profile.saved_address_line1,
                     'address_line2': member_profile.saved_address_line2,
                 })
-                print(f"Member's reward status = {member_profile.reward_status}")
                 if member_profile.reward_status == 5:
                     discount = get_discount(food_order)
                     if isinstance(discount, str):
-                        print('Is instance of string accessed.')
                         reward_notification = discount
                     else:
-                        print('Is NOT instance of string accessed.')
                         discount_result = discount
                         total -= discount_result
-                        # member_profile.reward_status -= 5
-                # else:
-                #     member_profile.reward_status += 1
 
             except MemberProfile.DoesNotExist:
                 order_form = OrderForm()
@@ -182,7 +180,6 @@ def get_discount(order):
 
     for order_id, value in order.items():
         if order_id[0] != 'c':
-            print(f"order_id[0] != 'c' accessed. order_id = {order_id}")
             food_item = Food_Item.objects.get(id=order_id)
             if food_item.category.id == 1:
                 if food_item.price < discount:
@@ -191,7 +188,9 @@ def get_discount(order):
     if discount < 100.00:
         return discount
     else:
-        return "You haven't selected your free burger yet! Remember this can't be part of a combo."
+        return "You haven't selected your free burger yet! Remember this can't \
+                be part of a combo."
+
 
 def checkout_success(request, order_number):
     """ Directs to this page if checkout was successful """
@@ -199,15 +198,14 @@ def checkout_success(request, order_number):
     if request.user.is_authenticated:
         member = MemberProfile.objects.get(member=request.user)
         order.member_profile = member
-        print(f'Member is {member}.')
+
     order.save()
-    
 
     messages.success(request, f'Thank you for completing your order. \
         You will shortly receive an email to confirm it has been placed. \
         Order Number: {order.order_number} \
         Confirmation email sent to {order.email}.')
-    
+
     if 'food_order' in request.session:
         del request.session['food_order']
 
