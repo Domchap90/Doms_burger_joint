@@ -109,7 +109,28 @@ a:hover {
 }
 
 .nav-wrapper{
-    display: block;
+    display: flex;
+}
+.logo-container {
+    display: flex;
+}
+.login-status-container {
+    display: flex;
+    align-items: center; 
+    color: black;
+    height: 56px;
+    line-height: 56px;
+    margin-left: 18px;
+}
+a .login-status-container {
+    color: black;
+}
+a[data-target="account-options"] {
+    width: fit-content;
+    height: fit-content;
+}
+.hide-very-small-and-down {
+    display: none;
 }
 
 .menu-container {
@@ -124,7 +145,8 @@ a:hover {
     font-family: 'Abel', sans-serif;
 }
 
-#dropdown1 {
+
+#menu-options {
     width: 150px !important;
 }
 
@@ -165,12 +187,21 @@ a.sidenav-trigger {
     }
 }
 
+@media (min-width: 500px){
+    .hide-very-small-and-down {
+        display: block;
+    }
+}
+
 @media (min-width: 601px){
+    .nav-wrapper{
+        display: block;
+    }
     .navbar-fixed nav {
         height: 210px;
     }
     .menu-container {
-        padding-top: 150px;
+        padding-top: 90px;
     }
 }
 
