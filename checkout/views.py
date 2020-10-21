@@ -135,6 +135,7 @@ def checkout(request):
                     'postcode': member_profile.saved_postcode,
                     'address_line1': member_profile.saved_address_line1,
                     'address_line2': member_profile.saved_address_line2,
+                    'delivery_instructions': member_profile.saved_delivery_instructions,
                 })
                 if member_profile.reward_status == 5:
                     discount = get_discount(food_order)

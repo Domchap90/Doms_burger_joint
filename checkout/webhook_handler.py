@@ -2,10 +2,13 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
+from decimal import Decimal
 
-from .models import Order, OrderLineItem
-from menu.models import Food_Item
+from .models import Order, OrderLineItem, ComboLineItem
+from menu.models import Food_Item, Food_Combo
 from members_area.models import MemberProfile
+
+from .views import get_discount
 
 import json
 import time
@@ -39,10 +42,13 @@ class StripeWH_Handler:
         )
         if member.reward_status == 0:
             reward_msg = "Congratulations, you earned a free burger on this \
-                          order."
+order."
+        elif member.reward_status == 5:
+            reward_msg = "Almost there, you will receive a free burger on your \
+next order."
         else:
             reward_msg = f"Just {5-member.reward_status} more order(s) \
-                          needed to grab your free burger."
+needed to grab your free burger."
 
         body = render_to_string(
             'checkout/confirmation_email/email_body_member.txt',
@@ -62,15 +68,20 @@ class StripeWH_Handler:
 
     def handle_successful_payment_intent(self, event):
         """ handles payment_intent.succeeded """
-
         intent = event.data.object
         pid = intent.id
         food_order = intent.metadata.food_order
         username = intent.metadata.username
+        discount_result = None
 
         if username != 'AnonymousUser':
             memberprofile = MemberProfile.objects.get(
                             member__username=username)
+            if memberprofile.reward_status == 5:
+                discount = get_discount(json.loads(food_order))
+                if not isinstance(discount, str):
+                    discount_result = discount
+
         else:
             memberprofile = None
 
@@ -114,7 +125,7 @@ class StripeWH_Handler:
         else:
             order = None
             try:
-                order = Order.object.create(
+                order = Order.objects.create(
                     name=shipping_details.name,
                     mobile_number=billing_details.phone,
                     email=billing_details.email,
@@ -123,14 +134,36 @@ class StripeWH_Handler:
                     postcode=shipping_details.address.postal_code,
                     pid=pid
                 )
-                for order_itemid, quantity in json.loads(food_order).items():
-                    food_item = Food_Item.objects.get(id=order_itemid)
-                    order_line_item = OrderLineItem(
-                        order=order,
-                        food_item=food_item,
-                        quantity=quantity,
-                    )
+
+                for order_itemid, value in json.loads(food_order).items():
+                    if order_itemid[0] != 'c':
+                        food_item = Food_Item.objects.get(id=order_itemid)
+                        order_line_item = OrderLineItem(
+                            order=order,
+                            food_item=food_item,
+                            quantity=value,
+                        )
+                    else:
+                        combo_item = Food_Combo.objects.get(id=value[0])
+                        order_line_item = OrderLineItem(
+                            order=order,
+                            combo_item=combo_item,
+                            combo_id=order_itemid,
+                            combo_quantity=value[1],
+                        )
+                        order_line_item.save()
+                        # Iterate through combo contents to add each combo
+                        # line item to the combo
+                        for item, qty in value[2].items():
+                            food_item = Food_Item.objects.get(id=item)
+                            combo_line_item = ComboLineItem(
+                                                combo=order_line_item,
+                                                food_item=food_item,
+                                                quantity=qty)
+                            combo_line_item.save()
+
                     order_line_item.save()
+
             except Exception as e:
                 if order:
                     order.delete()
@@ -141,7 +174,24 @@ class StripeWH_Handler:
                         status=500
                     )
 
-        self._send_confirmation_email(order)
+        if memberprofile is None:
+            self._send_confirmation_email_to_nonmember(order)
+        else:
+            if discount_result:
+                # if discount exists, apply it and reset the reward status for
+                # that member.
+                order.discount = discount_result
+                order.grand_total = round(Decimal(order.grand_total) - order.discount, 2)
+                memberprofile.reward_status -= 5
+            else:
+                # no discount means progress reward status
+                memberprofile.reward_status += 1
+            MemberProfile.save(memberprofile)
+            order.member_profile = memberprofile
+            self._send_confirmation_email_to_member(order, memberprofile)
+
+        order.save()
+
         return HttpResponse(
                     content=f"Webhook received: {event['type']} \
                         | SUCCESS: order created in webhook.",
@@ -150,6 +200,7 @@ class StripeWH_Handler:
 
     def handles_failed_payment_intent(self, event):
         """ handles payment_intent.payment_failed """
+
         return HttpResponse(
             content=f"Webhook received (Payment Failed): {event['type']}.",
             status=200
