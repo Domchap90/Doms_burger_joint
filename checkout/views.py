@@ -72,41 +72,7 @@ def checkout(request):
             order.save()
             for order_itemid, value in food_order.items():
                 try:
-                    if order_itemid[0] != 'c':
-                        food_item = Food_Item.objects.get(id=order_itemid)
-                        order_line_item = OrderLineItem(
-                            order=order,
-                            food_item=food_item,
-                            quantity=value,
-                        )
-
-                        # Update the total purchased for each food in the
-                        # orderline for popular deals.
-                        food_item.total_purchased += value
-                        food_item.save()
-                    # For the instance of a combo
-                    else:
-                        combo_item = Food_Combo.objects.get(id=value[0])
-                        order_line_item = OrderLineItem(
-                            order=order,
-                            combo_item=combo_item,
-                            combo_id=order_itemid,
-                            combo_quantity=value[1],
-                        )
-                        order_line_item.save()
-                        # Iterate through combo contents to add each combo
-                        # line item to the combo
-                        for item, qty in value[2].items():
-                            food_item = Food_Item.objects.get(id=item)
-                            combo_line_item = ComboLineItem(
-                                                combo=order_line_item,
-                                                food_item=food_item,
-                                                quantity=qty)
-                            combo_line_item.save()
-                            # Update the total purchased for admin and popular
-                            # deals
-                            food_item.total_purchased += qty * value[1]
-                    order_line_item.save()
+                    save_to_orderlineitem(order_itemid, value, order)
 
                 except Food_Item.DoesNotExist:
                     messages.error(request, (
@@ -173,6 +139,45 @@ def checkout(request):
     }
 
     return render(request, 'checkout/checkout.html', context)
+
+
+def save_to_orderlineitem(order_itemid, value, order):
+    if order_itemid[0] != 'c':
+        food_item = Food_Item.objects.get(id=order_itemid)
+        order_line_item = OrderLineItem(
+            order=order,
+            food_item=food_item,
+            quantity=value,
+        )
+
+        # Update the total purchased for each food in the
+        # orderline for popular deals.
+        food_item.total_purchased += value
+        food_item.save()
+    # For the instance of a combo
+    else:
+        combo_item = Food_Combo.objects.get(id=value[0])
+        order_line_item = OrderLineItem(
+            order=order,
+            combo_item=combo_item,
+            combo_id=order_itemid,
+            combo_quantity=value[1],
+        )
+        order_line_item.save()
+        # Iterate through combo contents to add each combo
+        # line item to the combo
+        for item, qty in value[2].items():
+            food_item = Food_Item.objects.get(id=item)
+            combo_line_item = ComboLineItem(
+                                combo=order_line_item,
+                                food_item=food_item,
+                                quantity=qty)
+            combo_line_item.save()
+            # Update the total purchased for admin and popular
+            # deals
+            food_item.total_purchased += qty * value[1]
+            food_item.save()
+    order_line_item.save()
 
 
 def get_discount(order):

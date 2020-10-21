@@ -4,11 +4,10 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from decimal import Decimal
 
-from .models import Order, OrderLineItem, ComboLineItem
-from menu.models import Food_Item, Food_Combo
+from .models import Order
 from members_area.models import MemberProfile
 
-from .views import get_discount
+from .views import get_discount, save_to_orderlineitem
 
 import json
 import time
@@ -136,33 +135,7 @@ needed to grab your free burger."
                 )
 
                 for order_itemid, value in json.loads(food_order).items():
-                    if order_itemid[0] != 'c':
-                        food_item = Food_Item.objects.get(id=order_itemid)
-                        order_line_item = OrderLineItem(
-                            order=order,
-                            food_item=food_item,
-                            quantity=value,
-                        )
-                    else:
-                        combo_item = Food_Combo.objects.get(id=value[0])
-                        order_line_item = OrderLineItem(
-                            order=order,
-                            combo_item=combo_item,
-                            combo_id=order_itemid,
-                            combo_quantity=value[1],
-                        )
-                        order_line_item.save()
-                        # Iterate through combo contents to add each combo
-                        # line item to the combo
-                        for item, qty in value[2].items():
-                            food_item = Food_Item.objects.get(id=item)
-                            combo_line_item = ComboLineItem(
-                                                combo=order_line_item,
-                                                food_item=food_item,
-                                                quantity=qty)
-                            combo_line_item.save()
-
-                    order_line_item.save()
+                    save_to_orderlineitem(order_itemid, value, order)
 
             except Exception as e:
                 if order:
