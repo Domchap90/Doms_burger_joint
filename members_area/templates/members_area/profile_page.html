@@ -47,6 +47,41 @@
             </form>
 
             <h2>Order History</h2>
+
+            {% if order_history.has_other_pages %}
+			<ul class="pagination">
+				{% if order_history.has_previous %}
+				<li>
+                    <a href="?page={{ order_history.previous_page_number }}">
+                        <span class="material-icons">navigate_before</span>
+                    </a>
+                </li>
+				{% else %}
+				<li class="disabled">
+                    <span class="material-icons">navigate_before</span>
+                </li>
+				{% endif %}
+				{% for page in order_history.paginator.page_range %}
+				{% if order_history.number == page %}
+				<li class="active">{{ page }}</li>
+				{% else %}
+				<li><a href="?pagenum={{ page }}">{{ page }}</a></li>
+				{% endif %}
+				{% endfor %}
+				{% if order_history.has_next %}
+				<li>
+                    <a href="?pagenum={{ order_history.next_page_number }}">
+                        <span class="material-icons">navigate_next</span>
+                    </a>
+                </li>
+				{% else %}
+				<li class="disabled">
+                    <span class="material-icons">navigate_next</span>
+                </li>
+				{% endif %}
+			</ul>
+            {% endif %}
+
             <table>
                 <thead>
                     <tr>

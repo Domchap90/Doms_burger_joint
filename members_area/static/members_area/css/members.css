@@ -34,3 +34,29 @@ span {
     font-style: italic;
     font-weight: normal;
 }
+
+.pagination {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.pagination li.active {
+    background-color: black;
+    color: #fff;
+    font-weight: bold;
+}
+.pagination li,
+.pagination li a {
+    display: flex;
+    align-items: center;
+}
+.pagination li {
+    font-size: 1.2rem;
+    padding: 0 10px;
+    line-height: 30px;
+}
+.pagination li a {
+    padding: 0px;
+    color: #000;
+}

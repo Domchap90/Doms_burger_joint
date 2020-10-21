@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import MemberProfile
 from checkout.models import Order
@@ -18,10 +19,21 @@ def members_area(request):
 
     orders = member_profile.orders.all().order_by('-date')
 
+    pagenum = request.GET.get('pagenum', 1)
+
+    orders_list = list(orders)
+    orders_paginated = Paginator(orders_list, 5)
+    try:
+        orders_page_objects = orders_paginated.page(pagenum)
+    except PageNotAnInteger:
+        orders_page_objects = orders_paginated.page(1)
+    except EmptyPage:
+        orders_page_objects = orders_paginated.page(orders_paginated.num_pages)
+
     context = {
         'member': member_profile,
         'memberform': form,
-        'order_history': orders,
+        'order_history': orders_page_objects,
     }
     return render(request, 'members_area/profile_page.html', context)
 
