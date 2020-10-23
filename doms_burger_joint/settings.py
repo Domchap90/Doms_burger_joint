@@ -80,6 +80,7 @@ TEMPLATES = [
 ]
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -163,6 +164,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+GOOGLEMAPS_API_KEY = os.getenv('GOOGLEMAPS_API_KEY', '')
 
 # Stripe
 MIN_DELIVERY_THRESHOLD = 15.00

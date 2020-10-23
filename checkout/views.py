@@ -13,6 +13,9 @@ from members_area.models import MemberProfile
 
 import json
 import stripe
+import re
+# import googlemaps
+import requests
 
 
 @require_POST
@@ -49,7 +52,7 @@ def checkout(request):
             'postcode': request.POST['postcode'],
             'delivery_instructions': request.POST['delivery_instructions'],
         }
-
+        check_postcode(request.POST['postcode'])
         order_form = OrderForm(form_data)
         if order_form.is_valid():
             order = order_form.save(commit=False)
@@ -196,6 +199,83 @@ def get_discount(order):
     else:
         return "You haven't selected your free burger yet! Remember this can't \
                 be part of a combo."
+
+
+def check_postcode(request):
+    """
+    Determines whether able to deliver to address
+    or if they must collect.
+    """
+    print('check_postcode accessed.')
+    postcode = request.POST.get('postcode')
+    # Check if post code valid
+    postcode_valid = False
+    if len(postcode) > 4 and len(postcode) < 9:
+        print('Postcode length is okay')
+        if re.match("^[a-zA-Z][a-zA-Z0-9\\s]+[a-zA-Z]$", postcode) is not None:
+            print("regex expressions matches")
+            postcode_valid = True
+
+    if postcode_valid:
+        print('postcode valid')
+        formatted_postcode = []
+        # format postcode so all entries are standardized with no spaces or lower
+        # case characters
+        for char in postcode:
+            if char != " ":
+                formatted_postcode.append(char.upper())
+        postcode_string = "".join(formatted_postcode)
+        print(f'postcode string is {postcode_string}')
+        accepted_prefixes = ['WC1', 'WC2', 'W1', 'SW1']
+        # Check it's in listed postcode region
+        for prefix in accepted_prefixes:
+            if re.match("^"+prefix, postcode_string) is None:
+                postcode_valid = False
+            else:
+                postcode_valid = True
+                break
+
+    if postcode_valid:
+        # API convert postcode to geocode
+        # gmap_key = googlemaps.Client(key=settings.GOOGLEMAPS_API_KEY)
+        geocode_url = "https://maps.googleapis.com/maps/api/geocode/json?address=components=postal_code:\
+        "+postcode_string+"|country:GB&key="+settings.GOOGLEMAPS_API_KEY
+        try:
+            geocode_response = requests.get(geocode_url).json()
+        except requests.exceptions.Timeout:
+            "We were unable to process the postcode at this time sorry, please try again later."
+
+        # coordinates for user's address
+        user_lat = str(geocode_response['results'][0]['geometry']['location']['lat'])
+        user_lng = str(geocode_response['results'][0]['geometry']['location']['lng'])
+
+        store_lat = '51.512647'
+        store_lng = '-0.13375'
+
+        # API check distance (using imperial units to get miles)
+        distance_url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=\
+            "+user_lat+","+user_lng+"&destinations="+store_lat+","+store_lng+"&key="+settings.GOOGLEMAPS_API_KEY
+        try:
+            distance_response = requests.get(distance_url).json()
+        except requests.exceptions.Timeout:
+            "We were unable to process the postcode at this time sorry, please try again later." 
+
+        # extract value from JSON response object & split the string to get the value only.
+        distance_miles = float(distance_response['rows'][0]['elements'][0]['distance']['text'].split(' ')[0])
+
+        if distance_miles > 1.5:
+            postcode_valid = False
+
+    msg = "Sorry it looks like you are not eligible for delivery. However \
+    please feel free to make an order for collection."
+    if postcode_valid:
+        msg = "Good news! You are eligible for delivery."
+
+    request.session['delivery_eligibility'] = {}
+    request.session['delivery_eligibility']['message'] = msg
+    request.session['delivery_eligibility']['postcode'] = postcode
+
+    return redirect(reverse('home'))
 
 
 def checkout_success(request, order_number):

@@ -10,5 +10,25 @@
                 </button>
             </div>
 		</div>
+
+        <div class="postcode-checker-container">
+            <div class="postcode-checker">
+                <h2 id="postcode-checker-title">See if we deliver to you</h2>
+                <form method="POST" action="{% url 'check_postcode' %}" id="delivery-eligibility-form">
+                    {% csrf_token %}
+                    <input type="text" name="postcode" id="home-postcode-entry"
+                    {% if request.session.delivery_eligibility %} value="{{ request.session.delivery_eligibility.postcode }}"{% endif %}>
+                    <div class="postcode-button-area">
+                        <button type="submit">Check delivery eligibility</button>
+                    </div>
+                    {% if request.session.delivery_eligibility %}
+                        <p id="delivery-eligibility-message">{{ request.session.delivery_eligibility.message }}</p>
+                    {% endif %}
+                </form>
+                <!-- {% if request.session.delivery_eligibility %}
+                <p id="delivery-eligibility-message">{{ request.session.delivery_eligibility.message }}</p>
+                {% endif %} -->
+            </div>
+        </div>
     </div>
 {% endblock %}

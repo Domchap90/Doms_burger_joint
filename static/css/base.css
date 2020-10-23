@@ -105,7 +105,7 @@ a:hover {
 
 .navbar-fixed nav {
     height: 174px;
-    background-color: white;
+    background-color: #e5e5e5;
 }
 
 .nav-wrapper{
@@ -228,7 +228,9 @@ a.sidenav-trigger {
 }
 .hero-burger-image {
     background: url(/media/heroimage_burger_fries_optimized.jpg);
-    height: calc(100vh - 174px);
+    background-color: red;
+    height: 66.684vw;
+    max-height: calc(100vh - 174px);
     width: 100vw;
     margin-top: 112px;
     background-size: contain;
@@ -246,11 +248,71 @@ a.sidenav-trigger {
 #menu-button {
     
 }
-
+.postcode-checker-container {
+    background-color: #5d5d5d;
+    display: flex;
+    justify-content: center;
+}
+.postcode-checker {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    /* border: 1px black solid; */
+    background-color: #e4e4e4;
+    width: 253px;
+    max-width: 500px;
+}
+#postcode-checker-title {
+    margin: 0px;
+    padding-bottom: 10px;
+    background-color: #5d5d5d;
+    font-size: 1.2rem;
+    color: white;
+}
+#delivery-eligibility-form {
+    border: black 1px solid;
+}
+#delivery-eligibility-form > input,
+#delivery-eligibility-form > div,
+.postcode-checker > p {
+    margin-bottom: 10px !important;
+}
+#delivery-eligibility-form > input {
+    background-color: white;
+} 
+#home-postcode-entry {
+    box-sizing: border-box;
+    padding-left: 10px;
+    text-align: center;
+}
+#delivery-eligibility-message {
+    padding-left: 10px;
+    text-align: center;
+}
+.postcode-button-area {
+    display: flex;
+    justify-content: center;
+}
 @media (min-width: 450px){
+    .postcode-checker {
+        width: 60%;
+    }
+}
+@media (min-width: 601px) {
+    .postcode-checker {
+        width: 50%;
+    }
+    /* .postcode-button-area {
+    justify-content: flex-end;
+    } */
+}
+@media (min-width: 885px){
     .hero-burger-image {
-        height: calc(100vh - 174px);
-        margin-top: 110px;
+        background-color: white;
+    }
+}
+@media (min-width: 992px) {
+    #postcode-checker-title {
+        font-size: 1.5rem;
     }
 }
 
