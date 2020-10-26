@@ -14,7 +14,7 @@
         <div class="postcode-checker-container">
             <div class="postcode-checker">
                 <h2 id="postcode-checker-title">See if we deliver to you</h2>
-                <form method="POST" action="{% url 'check_postcode' %}" id="delivery-eligibility-form">
+                <form method="POST" action="{% url 'check_postcode_home' %}" id="delivery-eligibility-form">
                     {% csrf_token %}
                     <input type="text" name="postcode" id="home-postcode-entry"
                     {% if request.session.delivery_eligibility %} value="{{ request.session.delivery_eligibility.postcode }}"{% endif %}>

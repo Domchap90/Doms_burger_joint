@@ -25,11 +25,18 @@
             {% csrf_token %}
                 <h2 class="form-subtitle">Who wants these Burgers?</h2>
                     {% for field in form %}
-                        {% if field.name == 'address_line1' %}
+                        {% if field.name == 'address_line1' and form.for_collection.value == False %}
                             <h2 class="form-subtitle"> Where these burgers heading?</h2>
                         {% endif %}
+                        {% if field.name == 'for_collection' %}
+                            <input type="hidden" value="{{ field.value }}" name="{{ field.name }}">
+                        {% else %}
                         <p>{{ field.label }}</p>
-                        <p>{{ field }}</p>  
+                        <p>{{ field }}</p>
+                        {% endif %}
+                        {% if field.name == 'postcode' and request.session.delivery_eligibility %}
+                        <p>{{ request.session.delivery_eligibility }}</p>
+                        {% endif %}
                     {% endfor %}
                 <p>Payment</p>
                 <div id="card-element"><!--Stripe.js injects the Card Element--></div>
@@ -66,4 +73,39 @@
     {{ stripe_public_key|json_script:"id_stripe_public_key" }}
     {{ client_secret|json_script:"id_client_secret" }}
     <script src="{% static 'checkout/js/stripe_element.js' %}"></script>
+    <script>
+    var csrfToken = {{ csrf_token }}
+    $(document).ready(function(){
+        $( "#id_for_collection" ).bind("click", function() {
+            console.log('For collection event listener entered.')
+            var forCollection = $( "#id_for_collection" ).val();
+            forCollection = (forCollection == 'on')? true: false;
+            console.log('forCollection is '+forCollection)
+
+            var dataToSend = {
+                'csrf_token': csrfToken,
+                'for_collection': forCollection,
+                'name': $('#id_name').val(),
+                'mobile_number': $('#id_mobile_number').val(),
+                'email': $('#id_email').val(),
+            }
+            if (!forCollection) {
+                dataToSend['address_line1'] = $('#id_address_line1').val();
+                dataToSend['address_line2'] = $('#id_address_line2').val();
+                dataToSend['postcode'] = $('#id_postcode').val();
+                dataToSend['delivery_instructions'] = $('#id_delivery_instructions').val();
+            }
+            $.ajax({
+                type: 'POST',
+                url: "collect_or_delivery/",
+                data: dataToSend,
+                dataType: 'json',
+                success: function(response) {
+                    console.log('Ajax call worked. response is '+response)
+                }
+            });
+        
+        });
+    });
+    </script>
 {% endblock %}

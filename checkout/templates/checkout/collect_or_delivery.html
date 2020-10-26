@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'members_area/css/members.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="below-nav-container">
+        <div class="signup-container">  
+            <div class="signup-btns-container">
+                <button id="signup-btn"><a href="{% url 'checkout' %}">DELIVERY</a></button>
+                <button><a href="{% url 'checkout' %}?is_collect=True">COLLECT</a></button>
+            </div>
+            <p class="center">
+                You must be within a 1.5 mile radius of our Joint to be eligible for delivery
+            </p>
+        </div>
+    </div>       
+        
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+{% endblock %}

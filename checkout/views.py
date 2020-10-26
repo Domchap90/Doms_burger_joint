@@ -4,7 +4,7 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
 
-from .forms import OrderForm
+from .forms import OrderFormDelivery, OrderFormCollection
 from food_order.contexts import order_contents
 
 from .models import Order, OrderLineItem, ComboLineItem
@@ -39,6 +39,8 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
     food_order = request.session.get('food_order', {})
+
+    delivery_eligibility = request.session.get('delivery_eligibility', None)
     reward_notification = None
     discount_result = None
 
@@ -47,13 +49,24 @@ def checkout(request):
             'name': request.POST['name'],
             'mobile_number': request.POST['mobile_number'],
             'email': request.POST['email'],
+            'for_collection': request.POST['for_collection'],
             'address_line1': request.POST['address_line1'],
             'address_line2': request.POST['address_line2'],
             'postcode': request.POST['postcode'],
             'delivery_instructions': request.POST['delivery_instructions'],
         }
-        check_postcode(request.POST['postcode'])
-        order_form = OrderForm(form_data)
+        postcode_is_valid = check_postcode_checkout(request.POST['postcode'])
+        if not postcode_is_valid:
+            # disable button js
+            msg = "Sorry it looks like you are not eligible for delivery. However \
+            please feel free to make an order for collection."
+            delivery_eligibility = msg
+            request.session['delivery_eligibility'] = delivery_eligibility
+            # request.session['delivery_eligibility']['postcode'] = postcode
+            
+            return redirect(reverse('checkout'))
+
+        order_form = set_order_form(form_data, request.POST['for_collection'])
         if order_form.is_valid():
             order = order_form.save(commit=False)
             pid = request.POST.get('client_secret').split('_secret')[0]
@@ -91,21 +104,31 @@ def checkout(request):
             messages.error(request, "Form could not be submitted.")
 
     else:
+        is_collect = request.GET.get('is_collect', None)
         total = order_contents(request)['grand_total']
-        order_form = OrderForm()
+        order_form = set_order_form({}, is_collect)
 
         if request.user.is_authenticated:
             try:
                 member_profile = MemberProfile.objects.get(member=request.user)
-                order_form = OrderForm(initial={
-                    'name': member_profile.member.get_username(),
-                    'email': member_profile.saved_email,
-                    'mobile_number': member_profile.saved_mobile_number,
-                    'postcode': member_profile.saved_postcode,
-                    'address_line1': member_profile.saved_address_line1,
-                    'address_line2': member_profile.saved_address_line2,
-                    'delivery_instructions': member_profile.saved_delivery_instructions,
-                })
+                if is_collect:
+                    order_form = OrderFormCollection(initial={
+                        'name': member_profile.member.get_username(),
+                        'email': member_profile.saved_email,
+                        'mobile_number': member_profile.saved_mobile_number,
+                        'for_collection': True,
+                    })
+                else:
+                    order_form = OrderFormDelivery(initial={
+                        'name': member_profile.member.get_username(),
+                        'email': member_profile.saved_email,
+                        'mobile_number': member_profile.saved_mobile_number,
+                        'for_collection': False,
+                        'postcode': member_profile.saved_postcode,
+                        'address_line1': member_profile.saved_address_line1,
+                        'address_line2': member_profile.saved_address_line2,
+                        'delivery_instructions': member_profile.saved_delivery_instructions,
+                    })
                 if member_profile.reward_status == 5:
                     discount = get_discount(food_order)
                     if isinstance(discount, str):
@@ -115,9 +138,9 @@ def checkout(request):
                         total -= discount_result
 
             except MemberProfile.DoesNotExist:
-                order_form = OrderForm()
+                order_form = set_order_form({}, is_collect)
         else:
-            order_form = OrderForm()
+            order_form = set_order_form({}, is_collect)
 
         stripe_total = round(total*100)
         stripe.api_key = stripe_secret_key
@@ -201,23 +224,55 @@ def get_discount(order):
                 be part of a combo."
 
 
-def check_postcode(request):
+def set_order_form(form_data, is_collection):
+    order_form = OrderFormDelivery(form_data)
+    if is_collection:
+        order_form = OrderFormCollection(form_data)
+
+    return order_form
+
+def check_postcode_home(request):
     """
     Determines whether able to deliver to address
     or if they must collect.
     """
-    print('check_postcode accessed.')
-    postcode = request.POST.get('postcode')
+
+    postcode_valid = False
+    if request.method == 'POST':
+        postcode = request.POST.get('postcode')
+
+        postcode_valid = is_postcode_valid(postcode)
+
+        msg = "Sorry it looks like you are not eligible for delivery. However \
+        please feel free to make an order for collection."
+        if postcode_valid:
+            msg = "Good news! You are eligible for delivery."
+
+        request.session['delivery_eligibility'] = {}
+        request.session['delivery_eligibility']['message'] = msg
+        request.session['delivery_eligibility']['postcode'] = postcode
+
+    return redirect(reverse('home'))
+
+
+def check_postcode_checkout(postcode):
+    """ Used for form validation to check delivery eligibility """
+    postcode_valid = is_postcode_valid(postcode)
+
+    if postcode_valid:
+        return True
+
+    return False
+
+
+def is_postcode_valid(postcode):
     # Check if post code valid
     postcode_valid = False
     if len(postcode) > 4 and len(postcode) < 9:
-        print('Postcode length is okay')
         if re.match("^[a-zA-Z][a-zA-Z0-9\\s]+[a-zA-Z]$", postcode) is not None:
-            print("regex expressions matches")
             postcode_valid = True
 
     if postcode_valid:
-        print('postcode valid')
         formatted_postcode = []
         # format postcode so all entries are standardized with no spaces or lower
         # case characters
@@ -225,7 +280,6 @@ def check_postcode(request):
             if char != " ":
                 formatted_postcode.append(char.upper())
         postcode_string = "".join(formatted_postcode)
-        print(f'postcode string is {postcode_string}')
         accepted_prefixes = ['WC1', 'WC2', 'W1', 'SW1']
         # Check it's in listed postcode region
         for prefix in accepted_prefixes:
@@ -258,7 +312,7 @@ def check_postcode(request):
         try:
             distance_response = requests.get(distance_url).json()
         except requests.exceptions.Timeout:
-            "We were unable to process the postcode at this time sorry, please try again later." 
+            "We were unable to process the postcode at this time sorry, please try again later."
 
         # extract value from JSON response object & split the string to get the value only.
         distance_miles = float(distance_response['rows'][0]['elements'][0]['distance']['text'].split(' ')[0])
@@ -266,16 +320,14 @@ def check_postcode(request):
         if distance_miles > 1.5:
             postcode_valid = False
 
-    msg = "Sorry it looks like you are not eligible for delivery. However \
-    please feel free to make an order for collection."
-    if postcode_valid:
-        msg = "Good news! You are eligible for delivery."
+        return postcode_valid
 
-    request.session['delivery_eligibility'] = {}
-    request.session['delivery_eligibility']['message'] = msg
-    request.session['delivery_eligibility']['postcode'] = postcode
 
-    return redirect(reverse('home'))
+def collect_or_delivery(request):
+    """ Renders page where user makes decision how they want to receive
+    their food """
+
+    return render(request, 'checkout/collect_or_delivery.html')
 
 
 def checkout_success(request, order_number):
