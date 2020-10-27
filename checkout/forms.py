@@ -1,5 +1,6 @@
 from django import forms
 from .models import Order
+from home.views import is_postcode_valid
 
 
 class OrderFormDelivery(forms.ModelForm):
@@ -10,8 +11,17 @@ class OrderFormDelivery(forms.ModelForm):
                   'address_line1', 'address_line2', 'postcode',
                   'delivery_instructions')
 
+    def clean_postcode(self):
+        postcode = self.cleaned_data.get('postcode')
+
+        if not is_postcode_valid(postcode):
+            raise forms.ValidationError('Sorry it looks like you are not eligible for delivery.\
+            However please feel free to make an order for collection.')
+        
+        return postcode
+
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(OrderFormDelivery, self).__init__(*args, **kwargs)
 
         labels = {
             'name': 'Name',
@@ -73,19 +83,20 @@ class OrderFormCollection(forms.ModelForm):
             'email': 'To send your confirmation',
         }
 
-
         self.fields['name'].widget.attrs['autofocus'] = True
         self.fields['for_collection'].default = True
 
         delivery_fields = ['address_line1', 'address_line2', 'postcode', 'delivery_instructions']
+
         for field in self.fields:
             if not self.fields['for_collection'] and self.fields[field].name not in delivery_fields:
+
                 if self.fields[field].required:
                     self.fields[field].label = f'{labels[field]}*'
                     placeholder = f'{placeholders[field]} (required)'
                 else:
                     self.fields[field].label = labels[field]
                     placeholder = placeholders[field]
-                print(f"In Collection:\nField is {self.fields[field].name}")
+
                 self.fields[field].widget.attrs['placeholder'] = placeholder
                 self.fields[field].widget.attrs['class'] = 'stripe-style-input'

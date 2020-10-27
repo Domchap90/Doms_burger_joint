@@ -37,6 +37,11 @@ result-message {
 .hidden {
   display: none;
 }
+.field-error {
+    color: red;
+    text-align: left;
+    font-size: 13px;
+}
 #card-error {
     color: red;
     text-align: left;

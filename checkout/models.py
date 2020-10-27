@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.core.validators import validate_email
 from django.db.models import Sum
 from django.conf import settings
 from django.shortcuts import reverse
@@ -17,7 +18,7 @@ class Order(models.Model):
                      blank=True, related_name='orders'
                      )
     name = models.CharField(max_length=50, null=False, blank=False)
-    email = models.EmailField(max_length=254, null=False, blank=False)
+    email = models.EmailField(max_length=254, null=False, blank=False, validators=[validate_email])
     mobile_number = models.CharField(max_length=13, null=False, blank=False)
     for_collection = models.BooleanField(default=False, null=True, blank=True, editable=True)
     postcode = models.CharField(max_length=20, null=True, blank=True)
@@ -64,7 +65,7 @@ class Order(models.Model):
         """
         if not self.order_number:
             self.order_number = self._generate_order_number()
-        print('save order accessed.')
+
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -112,13 +113,10 @@ class OrderLineItem(models.Model):
         and update the order total.
         """
         if self.combo_item:
-            print(f'self.combo_item.price = {self.combo_item.price} is of type {type(self.combo_item.price)} \
-                and self.combo_quantity = {self.combo_quantity} is of type {type(self.combo_quantity)}')
             self.lineitem_total = self.combo_item.price * self.combo_quantity
         else:
             self.lineitem_total = self.food_item.price * self.quantity
-        print('save orderlineitem accessed.')
-        print(self.lineitem_total)
+        
         super().save(*args, **kwargs)
 
     def __str__(self):

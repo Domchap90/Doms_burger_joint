@@ -21,22 +21,30 @@
                 <div class="rewards-notification">Congratulations you've earned a free burger! Saving yourself £{{ discount }}.</div>
             {% endif %}
 
+            <h1>
+            {% if is_collect %}Collection{% else %}Delivery{% endif %} Details
+            </h1>
             <form action="{% url 'checkout' %}" method="POST" id="payment-form">
             {% csrf_token %}
                 <h2 class="form-subtitle">Who wants these Burgers?</h2>
                     {% for field in form %}
-                        {% if field.name == 'address_line1' and form.for_collection.value == False %}
+                        {% if field.name == 'address_line1' %}
                             <h2 class="form-subtitle"> Where these burgers heading?</h2>
                         {% endif %}
+
                         {% if field.name == 'for_collection' %}
                             <input type="hidden" value="{{ field.value }}" name="{{ field.name }}">
                         {% else %}
-                        <p>{{ field.label }}</p>
-                        <p>{{ field }}</p>
+                            <p>{{ field.label }}</p>
+                            <p>{{ field }}</p>
+                            {% if field.name == 'postcode' %}
+                                {% for error in form.postcode.errors %}
+                                    <p class="field-error">{{ error }}</p>
+                                    <button><a href="{% url 'checkout' %}?is_collect=True">COLLECT</a></button>
+                                {% endfor %}
+                            {% endif %}
                         {% endif %}
-                        {% if field.name == 'postcode' and request.session.delivery_eligibility %}
-                        <p>{{ request.session.delivery_eligibility }}</p>
-                        {% endif %}
+
                     {% endfor %}
                 <p>Payment</p>
                 <div id="card-element"><!--Stripe.js injects the Card Element--></div>
