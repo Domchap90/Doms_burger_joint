@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
+from django.core import serializers
 
 from menu.models import Food_Item, Food_Combo
 # Create your views here.
@@ -99,12 +100,20 @@ def edit_order(request, item_type, item_id):
     """ Edits quantity of the specified product to the food order """
 
     order = request.session.get('food_order', {})
-    changed_quantity_value = int(request.POST.get('qtyVal'))
+    # combo_value = order[request.POST.get('comboHashKey')]
+    changed_quantity_value = int(request.POST.get('newQtyVal'))
+    original_quantity_value = int(request.POST.get('oldQtyVal'))
     if item_type == 'item':
         order[item_id] = changed_quantity_value
+        item = get_object_or_404(Food_Item, pk=item_id)
     else:
         order[request.POST.get('comboHashKey')][1] = changed_quantity_value
+        item = get_object_or_404(Food_Combo, pk=order[request.POST.get('comboHashKey')][0])
+
+    subtotal = item.price * changed_quantity_value
+    subtotal_change = (changed_quantity_value - original_quantity_value) * item.price
 
     request.session['food_order'] = order
+    data = {"subtotal": subtotal, "subtotal_change": subtotal_change}
 
-    return HttpResponse(status=204)
+    return JsonResponse(data, status=200)

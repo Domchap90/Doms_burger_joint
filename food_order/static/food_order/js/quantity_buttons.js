@@ -127,8 +127,9 @@ function increaseQuantity(selectedQuantityBtn){
     let qtyValue = $('#'+itemQtyId).val();
     // Only allow quantity to be increased when the button is not disabled (from updateBtnState).
     if (!$(selectedQuantityBtn).children().hasClass('disabled')) {
+        let oldQtyValue = qtyValue;
         qtyValue = parseInt(qtyValue)+1;
-        updateQty(itemQtyId, qtyValue);
+        updateQty(itemQtyId, qtyValue, oldQtyValue);
     }
     
     $('#'+itemQtyId).val(qtyValue);
@@ -147,34 +148,60 @@ function decreaseQuantity(selectedQuantityBtn){
     let qtyValue = $('#'+itemQtyId).val();
     // Apply constraints on quantities, all have same lower limit of 1.
     if (qtyValue>lowerQtyLimit) {
+        let oldQtyValue = qtyValue;
         qtyValue = parseInt(qtyValue)-1;
-        updateQty(itemQtyId, qtyValue);
+        updateQty(itemQtyId, qtyValue, oldQtyValue);
     }
     $('#'+itemQtyId).val(qtyValue);
     updateBtnState();
 }
 
-function updateQty(itemQtyId, qtyVal) {
+function updateQty(itemQtyId, newQtyVal, oldQtyVal) {
     // Adjusts the quantity server side via an ajax call.
     let typeOfItem = itemQtyId.split('_')[0];
     let itemID = itemQtyId.split('_')[1];
+    let comboHashKey = '';
     let itemData = {
-                    'qtyVal': qtyVal,
+                    'newQtyVal': newQtyVal,
+                    'oldQtyVal': oldQtyVal,
                     'csrfmiddlewaretoken': csrfToken
                     };
     if (typeOfItem == 'combo') {
-        let comboHashKey = itemQtyId.split('_')[2];
+        comboHashKey = itemQtyId.split('_')[2];
         itemData['comboHashKey'] = comboHashKey;
     }
+    var subtotal_change = 0;
     $.ajax({
         type: 'POST',
         url: `edit_item/${typeOfItem}/${itemID}/`,
         data: itemData,
         dataType: 'json',
         success: function(response) {
-            console.log("Quantity updated for order.")
+            // receives subtotal from backend and updates total values
+            let subtotal = JSON.parse(response['subtotal']);
+            subtotal_change = JSON.parse(response['subtotal_change']);
+            // console.log('subtotal is '+subtotal)
+            if (typeOfItem == 'combo') {
+                $('#comborow_'+comboHashKey+' .order-combo-subtotal').html('£'+subtotal);
+            } else {
+                $('#itemrow_'+itemID+' div:nth-child(4)').html('£'+subtotal);
+            }
+            updateTotals(subtotal_change);
         }
     });
+    
+}
+
+function updateTotals(changedByAmount) {
+    let updateTotal = parseFloat($('#total').html().slice(1))+changedByAmount;
+    let deliveryFee = parseFloat($('#delivery_fee').html().slice(1));
+    // $('.subtotal').each(function() {
+    //     updateTotal += Number($(this).html().slice(1));
+    // });
+    
+    $('#total').html('£'+updateTotal.toFixed(2));
+    let grandTotal = updateTotal+deliveryFee;
+    $('#grand_total').html('£'+grandTotal.toFixed(2));
 }
 
 function removeItem(itemToRemove){

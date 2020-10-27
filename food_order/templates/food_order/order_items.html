@@ -44,7 +44,7 @@
                         </button>
                         
                     </div>
-                    <div class="col s3 m2">
+                    <div class="col s3 m2 subtotal" onblur="updateTotals()">
                         £{{ item.food_item.price| get_subtotal:item.quantity }}
                     </div>
                     <div class="col s2 m1">
@@ -71,7 +71,7 @@
                         <div class="col s5 m2">{{ combo.name }}</div>
                         <div class="col hide-on-small-and-down m5">{{ combo.description }}</div>
                         <div class="col s4 m3"></div>
-                        <div class="col s3 m2 order-combo-subtotal">£{{ combo.price| get_subtotal:combo_qty }}</div>
+                        <div class="col s3 m2 order-combo-subtotal subtotal">£{{ combo.price| get_subtotal:combo_qty }}</div>
                     </div>
                     
                     <div class="row {% if forloop.last %}bottom-row-black{% else %}bottom-row{% endif %}">
@@ -113,15 +113,15 @@
         {% if order_items or combo_items %}
             <div class="row">
                 <div class="col s3 offset-s5 m2 offset-m7">Total</div>
-                <div class="col s4 m3 center">£{{ total|floatformat:2 }}</div>
+                <div class="col s4 m3 center" id="total">£{{ total|floatformat:2 }}</div>
             </div>
             <div class="row">
                 <div class="col s3 offset-s5 m2 offset-m7">Delivery</div>
-                <div class="col s4 m3 center">£{{ delivery_fee|floatformat:2 }}</div>
+                <div class="col s4 m3 center" id="delivery_fee">£{{ delivery_fee|floatformat:2 }}</div>
             </div>
             <div class="row">
                 <div class="col s3 offset-s5 m2 offset-m7">Grand Total</div>
-                <div class="col s4 m3 center">£{{ grand_total|floatformat:2 }}</div>
+                <div class="col s4 m3 center" id="grand_total">£{{ grand_total|floatformat:2 }}</div>
             </div>
             <div class="row">
                 <div class="col s12" id="spending_warning">
