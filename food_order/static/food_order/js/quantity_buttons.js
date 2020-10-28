@@ -1,4 +1,16 @@
 $(document).ready(function(){
+        window.addEventListener( "pageshow", function ( event ) {
+            // Determines if page was reloaded using bf cache and
+            // reloads from server to retrieve correct context data.
+		    var loadedFromCache = event.persisted ||
+		    ( typeof window.performance != "undefined" && 
+              window.performance.navigation.type === 2 );
+
+            if ( loadedFromCache ) {
+                // Handle page restore.
+                window.location.reload();
+            }
+		});
         updateBtnState();
         updateCheckoutBtnState();
     }, {passive: true});
@@ -17,6 +29,7 @@ function updateCheckoutBtnState() {
 }
 
 function updateBtnState() {
+    activateAllButtons();
     let items = $(".item_container").children();
     sum_combo_items_1 = 0;
     sum_combo_items_2 = 0;
@@ -116,6 +129,7 @@ function changeBtnState(quantityObj, sum_combo_items, lowerLimit , upperLimit) {
 }
 
 function increaseQuantity(selectedQuantityBtn){
+    deactivateAllButtons();
     let typeOfItem = selectedQuantityBtn.id.split("_")[0];
     let itemID = selectedQuantityBtn.id.split("_")[1];
     let itemQtyId = typeOfItem+'_'+itemID+"_qty";
@@ -132,11 +146,12 @@ function increaseQuantity(selectedQuantityBtn){
         updateQty(itemQtyId, qtyValue, oldQtyValue);
     }
     
-    $('#'+itemQtyId).val(qtyValue);
-    updateBtnState();
+    // $('#'+itemQtyId).val(qtyValue);
+    // updateBtnState();
 }
 
 function decreaseQuantity(selectedQuantityBtn){
+    deactivateAllButtons();
     let typeOfItem = selectedQuantityBtn.id.split("_")[0];
     let itemID = selectedQuantityBtn.id.split("_")[1];
     let itemQtyId = typeOfItem+'_'+itemID+"_qty";
@@ -152,8 +167,8 @@ function decreaseQuantity(selectedQuantityBtn){
         qtyValue = parseInt(qtyValue)-1;
         updateQty(itemQtyId, qtyValue, oldQtyValue);
     }
-    $('#'+itemQtyId).val(qtyValue);
-    updateBtnState();
+    // $('#'+itemQtyId).val(qtyValue);
+    // updateBtnState();
 }
 
 function updateQty(itemQtyId, newQtyVal, oldQtyVal) {
@@ -186,6 +201,8 @@ function updateQty(itemQtyId, newQtyVal, oldQtyVal) {
             } else {
                 $('#itemrow_'+itemID+' div:nth-child(4)').html('£'+subtotal);
             }
+            $('#'+itemQtyId).val(newQtyVal);
+            // updateBtnState();
             updateTotals(subtotal_change);
         }
     });
@@ -195,13 +212,37 @@ function updateQty(itemQtyId, newQtyVal, oldQtyVal) {
 function updateTotals(changedByAmount) {
     let updateTotal = parseFloat($('#total').html().slice(1))+changedByAmount;
     let deliveryFee = parseFloat($('#delivery_fee').html().slice(1));
-    // $('.subtotal').each(function() {
-    //     updateTotal += Number($(this).html().slice(1));
-    // });
-    
     $('#total').html('£'+updateTotal.toFixed(2));
+
     let grandTotal = updateTotal+deliveryFee;
     $('#grand_total').html('£'+grandTotal.toFixed(2));
+    updateBtnState();
+    updateRemainingSpend(updateTotal);
+}
+
+function updateRemainingSpend(newTotal) {
+    // Updates the warning about how much the user needs to spend in order to qualify for delivery
+    $('#spending_warning').empty();
+    $.ajax({
+        type: 'GET',
+        url: `recalculate_remaining_delivery_amount/`,
+        data: {'total': newTotal},
+        dataType: 'json',
+        success: function(response) {
+            let remaining_spend = JSON.parse(response['remaining_delivery_amount']);
+            if (remaining_spend > 0) {
+                $('#spending_warning').html(`<p>You still need to spend £`+remaining_spend+` more to be eligible for delivery.</p>`);
+                document.getElementById('proceed-checkout-link').removeAttribute("href");
+                $('.checkout-btn').addClass('disabled');
+            } else {
+                $('.checkout-btn').prop('disabled', false);
+                let proceedBtn = document.getElementById('proceed-checkout-link');
+                proceedBtn.setAttribute("href", "/checkout/collect_or_delivery/");
+            }
+        }
+    });
+    $('.checkout-btn').prop('disabled', true);
+    updateCheckoutBtnState();
 }
 
 function removeItem(itemToRemove){
@@ -222,3 +263,17 @@ function removeItem(itemToRemove){
     updateCheckoutBtnState();
 }
 
+function deactivateAllButtons() {
+    let buttons = document.getElementsByTagName('button');
+    Array.from(buttons).forEach( button => {
+        $(button).prop('disabled', true);
+    });
+}
+
+function activateAllButtons() {
+    let buttons = document.getElementsByTagName('button');
+
+    Array.from(buttons).forEach( button => {
+        $(button).prop('disabled', false);
+    });
+}

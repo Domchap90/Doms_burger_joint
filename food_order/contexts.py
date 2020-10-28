@@ -67,3 +67,4 @@ def order_contents(request):
     }
 
     return context
+

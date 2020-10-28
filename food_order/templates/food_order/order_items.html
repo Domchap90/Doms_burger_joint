@@ -138,17 +138,13 @@
                             BACK TO MENU
                         </button> 
                     </a>
-                    {% if remaining_delivery_amount == 0 %}
-                    <a href="{% url 'collect_or_delivery' %}">
+                    
+                    <a {% if remaining_delivery_amount == 0 %} href="{% url 'collect_or_delivery' %}" {% endif %} id="proceed-checkout-link">
                         <button class="checkout-btn">
                             PROCEED TO CHECKOUT
                         </button>
                     </a>
-                    {% else %}
-                    <button class="checkout-btn">
-                        PROCEED TO CHECKOUT
-                    </button>
-                    {% endif %}
+                    
                 </div>
             </div>
         {% else %}
