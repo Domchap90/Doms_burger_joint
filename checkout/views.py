@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.shortcuts import HttpResponse
+from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
@@ -13,20 +14,27 @@ from members_area.models import MemberProfile
 
 import json
 import stripe
+import re
 
 
 @require_POST
 def cached_payment_intent(request):
     try:
         pid = request.POST.get('client_secret').split('_secret')[0]
+        is_collection = request.POST.get('is_collection')
         stripe.api_key = settings.STRIPE_SECRET_KEY
+
         stripe.PaymentIntent.modify(pid, metadata={
             'food_order': json.dumps(request.session.get('food_order', {})),
             'username': request.user,
-            'order': json.dumps(request.session.get('food_order'))
+            'order': json.dumps(request.session.get('food_order')),
+            'is_collection': is_collection,
         })
+
         return HttpResponse(status=200)
+
     except Exception as e:
+        print(f'Exception is {e}')
         messages.error(request, 'Unfortunately your payment could not be processed at this time. \
             Please try again in a few minutes.')
         return HttpResponse(content=e, status=400)
@@ -40,28 +48,32 @@ def checkout(request):
     intent = None
 
     is_collect = request.GET.get('is_collect', None)
-    delivery_eligibility = request.session.get('delivery_eligibility', None)
     reward_notification = None
     discount_result = None
 
     if request.method == 'POST':
+        for_collection = True
+        if request.POST['for_collection'] == "False":
+            for_collection = False
+
         form_data = {
             'name': request.POST['name'],
             'mobile_number': request.POST['mobile_number'],
             'email': request.POST['email'],
             'for_collection': request.POST['for_collection'],
-            'address_line1': request.POST['address_line1'],
-            'address_line2': request.POST['address_line2'],
-            'postcode': request.POST['postcode'],
-            'delivery_instructions': request.POST['delivery_instructions'],
         }
-        for_collection = True
-        if request.POST['for_collection'] == "False":
-            for_collection = False
+        if not for_collection:
+            # Adds extra data for delivery ONLY
+            form_data['address_line1'] = request.POST['address_line1']
+            form_data['address_line2'] = request.POST['address_line2']
+            form_data['postcode'] = request.POST['postcode']
+            form_data['delivery_instructions'] = request.POST['delivery_instructions']
 
         order_form = set_order_form(form_data, for_collection)
 
         if order_form.is_valid():
+            # Commit false allows the information obtained from the form to be
+            # saved whilst not fully creating the order object just yet
             order = order_form.save(commit=False)
             pid = request.POST.get('client_secret').split('_secret')[0]
             order.pid = pid
@@ -161,7 +173,46 @@ def checkout(request):
     return render(request, 'checkout/checkout.html', context)
 
 
+def is_form_valid(request, is_collect):
+    """ Get's called asynchronously from stripe_element.js to ensure form is
+    valid before submitting """
+
+    # convert javascript boolean to python boolean
+    is_collect = False if 'false' else True
+
+    # Retrieves each key, value pair as a list of tuples
+    post_data = request.POST.lists()
+    form_data = {}
+    for pair in post_data:
+        # Format the pair data so they can be added to form_data dict
+        key = pair[0]
+        # Eliminates special characters except for those required in emails &
+        # spaces
+        value = re.sub("[^a-zA-Z0-9\\s@.]", "", str(pair[1]))
+        if key != 'csrfmiddlewaretoken':
+            form_data[key] = value
+ 
+    form = set_order_form(form_data, is_collect)
+
+    if form.is_valid():
+        return JsonResponse({'valid': True}, status=200)
+
+    # Create errors dictionary to populate the form with appropriate messages
+    # in event that it isn't valid.
+    err_dict = {}
+
+    for field in form:
+        for error in field.errors:
+            err_dict[field.name] = error
+
+    return JsonResponse(err_dict, status=200)
+
+
 def save_to_orderlineitem(order_itemid, value, order):
+    """ Used in both checkout (POST) and the webhook handler for successful
+    payments which happen independently of each other."""
+
+    # Items id doesn't begin with c, that only applies to combos.
     if order_itemid[0] != 'c':
         food_item = Food_Item.objects.get(id=order_itemid)
         order_line_item = OrderLineItem(
@@ -219,10 +270,13 @@ def get_discount(order):
 
 
 def set_order_form(form_data, is_collection):
-    eval_is_collection = True if is_collection else False
+    """ Determines whether form is for collection or delivery and returns
+    correct form"""
+
     order_form = OrderFormDelivery(form_data)
 
     if is_collection:
+        print('collection form is accessed')
         order_form = OrderFormCollection(form_data)
 
     return order_form
@@ -237,6 +291,7 @@ def collect_or_delivery(request):
 
 def checkout_success(request, order_number):
     """ Directs to this page if checkout was successful """
+
     order = get_object_or_404(Order, order_number=order_number)
     if request.user.is_authenticated:
         member = MemberProfile.objects.get(member=request.user)

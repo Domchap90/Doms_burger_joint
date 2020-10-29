@@ -1,13 +1,17 @@
-var stripePublicKey = $("#id_stripe_public_key").text().slice(1,-1);
-var stripeClientSecret = $("#id_client_secret").text().slice(1,-1);
-var stripe = Stripe(stripePublicKey);
-var elements = stripe.elements();
-var card = elements.create("card", { style: style });
-// Stripe injects an iframe into the DOM
-card.mount("#card-element");
+$(document).ready(function() {
+    updateSubmitBtnState();
+});
 
-var style = {
-      base: {
+const stripePublicKey = $("#id_stripe_public_key").text().slice(1,-1);
+const stripeClientSecret = $("#id_client_secret").text().slice(1,-1);
+const stripe = Stripe(stripePublicKey);
+var elements = stripe.elements();
+const form = document.getElementById('payment-form');
+const isCollection = ($('input[name="for_collection"]').val() == 'True') ? true : false;
+const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+
+let style = {
+    base: {
         color: "#32325d",
         fontFamily: "'Montseratt', sans-serif",
         fontSmoothing: "antialiased",
@@ -16,12 +20,25 @@ var style = {
             color: '#aab7c4',
             fontFamily: 'Montserrat, sans-serif',
         }
-      },
-      invalid: {
+    },
+    invalid: {
         fontFamily: "'Montseratt', sans-serif",
         color: "#fa755a",
-      }
-    };
+    }
+};
+const card = elements.create("card", { style: style });
+// Stripe injects an iframe into the DOM
+card.mount("#card-element");
+
+function updateSubmitBtnState() {
+    if($('#spending_warning').children().length>0) {
+        $("#place-order-btn").addClass('disabled');
+        $('#place-order-btn').prop('disabled', true);
+    } else {
+        $("#place-order-btn").removeClass('disabled');
+        $('#place-order-btn').prop('disabled', false);
+    }
+}
 
 card.addEventListener('change', function(event){
     $('#card-error').empty();
@@ -30,47 +47,103 @@ card.addEventListener('change', function(event){
     } 
 })
 
-var form = document.getElementById('payment-form');
+form.addEventListener('submit', validateForm)
 
-form.addEventListener('submit', function(ev) {
-    ev.preventDefault();
+function validateForm(event) {
+    // First stop form being submitted immediately to allow control of form submission
+    event.preventDefault();
     card.update({ 'disabled': true});
     $('#submit-button').attr('disabled', true);
     $('#below-nav-container').fadeToggle(100);
     $('#loading-overlay').fadeToggle(100);
-    var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();  
-    var url = '/checkout/cached_payment_intent/'  
-    var data = {
+    let isValid = false;
+
+    // Initiate with form fields shared amongst Collection and Delivery forms
+    dataToValidate = {
+        'name': $.trim(form.name.value),
+        'mobile_number': $.trim(form.mobile_number.value),
+        'email': $.trim(form.email.value),
+        'csrfmiddlewaretoken': form.csrfmiddlewaretoken.value,
+    }
+    // Add delivery form field information if applicable
+    if (!isCollection) {
+        dataToValidate['address_line1'] = $.trim(form.address_line1.value);
+        dataToValidate['address_line2'] = $.trim(form.address_line2.value);
+        dataToValidate['postcode'] = $.trim(form.postcode.value);
+        dataToValidate['delivery_instructions'] = $.trim(form.delivery_instructions.value);
+    }
+
+    try {
+        isValid = isFormValid(dataToValidate);
+    } catch(error) {
+        console.log(error)
+    }
+    if (isValid == false) {
+        $('#loading-overlay').fadeToggle(100);
+        $('#below-nav-container').fadeToggle(100);
+        card.update({ 'disabled': false});
+        $('#submit-button').attr('disabled', false);
+    } else {
+        submitToStripe();
+    }
+}
+ 
+async function isFormValid(formData){
+    let result = false;
+    $('.field-error').empty();
+    result = await $.ajax({
+        type: 'POST',
+        url: `is_form_valid/${isCollection}/`,
+        data: formData,
+        dataType: 'json',
+        success: function(response) {
+            if (response['valid']) {
+                result = JSON.parse(response['valid']);
+            } else {
+                for (err in response) {
+                    $('#'+err+'-error').append(`<p>`+response[err]+`</p>`);
+                }
+            }
+        }
+    });
+    return result;
+}
+
+
+function submitToStripe() { 
+    let url = '/checkout/cached_payment_intent/'  
+    const data = {
         'csrfmiddlewaretoken': csrfToken,
         'client_secret': stripeClientSecret,
-
+        'is_collection': isCollection,
     }
-    // Send form data to the server before calling Stripe. To ensure info is not lost if user cancels
-    // whilst loading the success page.
-    $.post(url, data).done(function() {
-        stripe.confirmCardPayment(stripeClientSecret, {
-            payment_method: {
-                card: card,
-                billing_details: {
-                    name: $.trim(form.name.value),
-                    phone: $.trim(form.mobile_number.value),
-                    email: $.trim(form.email.value),
-                    address: {
-                        line1: $.trim(form.address_line1.value),
-                        line2: $.trim(form.address_line2.value),
-                        postal_code: $.trim(form.postcode.value),
-                    }
-                }
-            },
-            shipping: {
+    let cardPaymentData = {
+        payment_method: {
+            card: card,
+            billing_details: {
                 name: $.trim(form.name.value),
-                address: {
+                phone: $.trim(form.mobile_number.value),
+                email: $.trim(form.email.value),
+            }
+        },
+        shipping: {name: $.trim(form.name.value)}
+    }
+    if (isCollection == false) {
+        cardPaymentData['payment_method']['billing_details']['address'] = {
                     line1: $.trim(form.address_line1.value),
                     line2: $.trim(form.address_line2.value),
                     postal_code: $.trim(form.postcode.value),
-                }
-            }
-        }).then(function(result) {
+        }
+        cardPaymentData['shipping']['address'] = {
+                    line1: $.trim(form.address_line1.value),
+                    line2: $.trim(form.address_line2.value),
+                    postal_code: $.trim(form.postcode.value),
+        }
+    }
+    // Send form data to the server before calling Stripe. To ensure info is not lost if user exits
+    // whilst loading the success page.
+    $.post(url, data).done(function() {
+        stripe.confirmCardPayment(stripeClientSecret, cardPaymentData).then(function(result) {
             if (result.error) {
                 // Show error to your customer (e.g., insufficient funds)
                 $('#card-error').html(`<span class="material-icons">error</span> ${result.error.message}`);
@@ -79,15 +152,15 @@ form.addEventListener('submit', function(ev) {
                 card.update({ 'disabled': false});
                 $('#submit-button').attr('disabled', false);
             } else {
-            // The payment has been processed!
-            if (result.paymentIntent.status === 'succeeded') {
-                    form.submit();
-            }
+                // The payment has been processed!
+                if (result.paymentIntent.status === 'succeeded') {
+                        form.submit();
+                }
             }
         });
     }).fail( function() {
         // main checkout window reloads with appropriate messages from django.
         location.reload();
     })
-});
+}
 

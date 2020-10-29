@@ -15,9 +15,10 @@ class OrderFormDelivery(forms.ModelForm):
         postcode = self.cleaned_data.get('postcode')
 
         if not is_postcode_valid(postcode):
-            raise forms.ValidationError('Sorry it looks like you are not eligible for delivery.\
-            However please feel free to make an order for collection.')
-        
+            raise forms.ValidationError(
+                "Sorry it looks like you are not eligible for delivery" +
+                ". However please feel free to make an order for collection.")
+
         return postcode
 
     def __init__(self, *args, **kwargs):

@@ -195,14 +195,13 @@ function updateQty(itemQtyId, newQtyVal, oldQtyVal) {
             // receives subtotal from backend and updates total values
             let subtotal = JSON.parse(response['subtotal']);
             subtotal_change = JSON.parse(response['subtotal_change']);
-            // console.log('subtotal is '+subtotal)
             if (typeOfItem == 'combo') {
                 $('#comborow_'+comboHashKey+' .order-combo-subtotal').html('£'+subtotal);
             } else {
                 $('#itemrow_'+itemID+' div:nth-child(4)').html('£'+subtotal);
             }
             $('#'+itemQtyId).val(newQtyVal);
-            // updateBtnState();
+
             updateTotals(subtotal_change);
         }
     });

@@ -71,6 +71,7 @@ needed to grab your free burger."
         pid = intent.id
         food_order = intent.metadata.food_order
         username = intent.metadata.username
+        is_collection = intent.metadata.is_collection
         discount_result = None
 
         if username != 'AnonymousUser':
@@ -89,24 +90,35 @@ needed to grab your free burger."
         grand_total = round(intent.charges.data[0].amount / 100, 2)
 
         # Empty fields become None, to be consistent with billing details
-        for field, value in shipping_details.address.items():
-            if value == "":
-                shipping_details.address[field] = None
+        if not is_collection:
+            for field, value in shipping_details.address.items():
+                if value == "":
+                    shipping_details.address[field] = None
 
         order_exists = False
         iterations = 1
         while iterations <= 5:
             try:
-                order = Order.objects.get(
-                    name__iexact=shipping_details.name,
-                    mobile_number__iexact=billing_details.phone,
-                    email__iexact=billing_details.email,
-                    address_line1__iexact=shipping_details.address.line1,
-                    address_line2__iexact=shipping_details.address.line2,
-                    postcode__iexact=shipping_details.address.postal_code,
-                    grand_total=grand_total,
-                    pid=pid
-                )
+                if is_collection:
+                    order = Order.objects.get(
+                        name__iexact=shipping_details.name,
+                        mobile_number__iexact=billing_details.phone,
+                        email__iexact=billing_details.email,
+                        grand_total=grand_total,
+                        pid=pid
+                    )
+                else:
+                    order = Order.objects.get(
+                        name__iexact=shipping_details.name,
+                        mobile_number__iexact=billing_details.phone,
+                        email__iexact=billing_details.email,
+                        address_line1__iexact=shipping_details.address.line1,
+                        address_line2__iexact=shipping_details.address.line2,
+                        postcode__iexact=shipping_details.address.postal_code,
+                        grand_total=grand_total,
+                        pid=pid
+                    )
+
                 order_exists = True
                 break
             except Order.DoesNotExist:
@@ -124,15 +136,23 @@ needed to grab your free burger."
         else:
             order = None
             try:
-                order = Order.objects.create(
-                    name=shipping_details.name,
-                    mobile_number=billing_details.phone,
-                    email=billing_details.email,
-                    address_line1=shipping_details.address.line1,
-                    address_line2=shipping_details.address.line2,
-                    postcode=shipping_details.address.postal_code,
-                    pid=pid
-                )
+                if is_collection:
+                    order = Order.objects.create(
+                        name=shipping_details.name,
+                        mobile_number=billing_details.phone,
+                        email=billing_details.email,
+                        pid=pid
+                    )
+                else:
+                    order = Order.objects.create(
+                        name=shipping_details.name,
+                        mobile_number=billing_details.phone,
+                        email=billing_details.email,
+                        address_line1=shipping_details.address.line1,
+                        address_line2=shipping_details.address.line2,
+                        postcode=shipping_details.address.postal_code,
+                        pid=pid
+                    )
 
                 for order_itemid, value in json.loads(food_order).items():
                     save_to_orderlineitem(order_itemid, value, order)
