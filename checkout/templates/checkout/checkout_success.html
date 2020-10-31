@@ -31,6 +31,9 @@
                 </div>
                 {% endif %}
             {% endfor %}
+            {% if order_items_count == 0 %}
+            <p>There are no individual items in this order.</p>
+            {% endif %}
 
             <h3 class="form-subtitle">Combos ordered</h3>
             
@@ -52,6 +55,9 @@
                 </div>
                 {% endif %}
             {% endfor %}
+            {% if combo_count == 0 %}
+                <p>There are no combos in this order.</p>
+            {% endif %}
             <hr>
             
             <div class="row">
@@ -108,4 +114,21 @@
         
     {% if messages %}
     {% endif %}
+{% endblock %}
+
+{% block postloadjs %}
+    <script>
+        
+		// window.addEventListener('unload', function(event) {
+        //     event.preventDefault();
+        //     console.log('unload eventlistener accessed.')
+		//     preventBack();
+		// });
+
+        // function preventBack() {
+        //     console.log('preventBack accessed.')
+        //     window.history.forward();
+        // }
+        
+    </script>
 {% endblock %}

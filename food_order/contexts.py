@@ -58,6 +58,8 @@ def order_contents(request):
     context = {
         'order_items': order_items,
         'combo_items': combo_hash_map,
+        'order_items_count': order_items_count,
+        'combo_count': combo_count,
         'order_count': order_items_count + combo_count,
         'min_delivery_threshold': settings.MIN_DELIVERY_THRESHOLD,
         'delivery_fee': settings.DELIVERY_FEE,
