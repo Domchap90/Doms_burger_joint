@@ -64,28 +64,28 @@ def is_postcode_valid(postcode):
         "+postcode_string+"|country:GB&key="+settings.GOOGLEMAPS_API_KEY
         try:
             geocode_response = requests.get(geocode_url).json()
-        except requests.exceptions.Timeout:
-            "We were unable to process the postcode at this time sorry, please try again later."
 
-        # coordinates for user's address
-        user_lat = str(geocode_response['results'][0]['geometry']['location']['lat'])
-        user_lng = str(geocode_response['results'][0]['geometry']['location']['lng'])
+            # coordinates for user's address
+            user_lat = str(geocode_response['results'][0]['geometry']['location']['lat'])
+            user_lng = str(geocode_response['results'][0]['geometry']['location']['lng'])
 
-        store_lat = '51.512647'
-        store_lng = '-0.13375'
+            store_lat = '51.512647'
+            store_lng = '-0.13375'
 
-        # API check distance (using imperial units to get miles)
-        distance_url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=\
-            "+user_lat+","+user_lng+"&destinations="+store_lat+","+store_lng+"&key="+settings.GOOGLEMAPS_API_KEY
-        try:
+            # API check distance (using imperial units to get miles)
+            distance_url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=\
+                "+user_lat+","+user_lng+"&destinations="+store_lat+","+store_lng+"&key="+settings.GOOGLEMAPS_API_KEY
+
             distance_response = requests.get(distance_url).json()
-        except requests.exceptions.Timeout:
-            "We were unable to process the postcode at this time sorry, please try again later."
 
-        # extract value from JSON response object & split the string to get the value only.
-        distance_miles = float(distance_response['rows'][0]['elements'][0]['distance']['text'].split(' ')[0])
+            # extract value from JSON response object & split the string to get the value only.
+            distance_miles = float(distance_response['rows'][0]['elements'][0]['distance']['text'].split(' ')[0])
 
-        if distance_miles > 1.5:
+            if distance_miles > 1.5:
+                postcode_valid = False
+
+        except Exception as e:
+            print(f"Exception: {e}")
             postcode_valid = False
 
     return postcode_valid

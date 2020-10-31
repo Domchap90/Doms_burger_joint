@@ -67,11 +67,13 @@ needed to grab your free burger."
 
     def handle_successful_payment_intent(self, event):
         """ handles payment_intent.succeeded """
+
         intent = event.data.object
         pid = intent.id
         food_order = intent.metadata.food_order
         username = intent.metadata.username
         is_collection = intent.metadata.is_collection
+        is_collection = False if 'false' else True
         discount_result = None
 
         if username != 'AnonymousUser':

@@ -49,7 +49,7 @@ card.addEventListener('change', function(event){
 
 form.addEventListener('submit', validateForm)
 
-function validateForm(event) {
+async function validateForm(event) {
     // First stop form being submitted immediately to allow control of form submission
     event.preventDefault();
     card.update({ 'disabled': true});
@@ -74,9 +74,9 @@ function validateForm(event) {
     }
 
     try {
-        isValid = isFormValid(dataToValidate);
+        isValid = await isFormValid(dataToValidate);
     } catch(error) {
-        console.log(error)
+        console.log('validateForm error: '+error)
     }
     if (isValid == false) {
         $('#loading-overlay').fadeToggle(100);
@@ -84,14 +84,14 @@ function validateForm(event) {
         card.update({ 'disabled': false});
         $('#submit-button').attr('disabled', false);
     } else {
-        submitToStripe();
+        submitToStripe(dataToValidate);
     }
 }
  
 async function isFormValid(formData){
     let result = false;
     $('.field-error').empty();
-    result = await $.ajax({
+    await $.ajax({
         type: 'POST',
         url: `is_form_valid/${isCollection}/`,
         data: formData,
@@ -104,13 +104,14 @@ async function isFormValid(formData){
                     $('#'+err+'-error').append(`<p>`+response[err]+`</p>`);
                 }
             }
+
         }
     });
     return result;
 }
 
 
-function submitToStripe() { 
+function submitToStripe(dataToSubmit) {
     let url = '/checkout/cached_payment_intent/'  
     const data = {
         'csrfmiddlewaretoken': csrfToken,
@@ -121,25 +122,26 @@ function submitToStripe() {
         payment_method: {
             card: card,
             billing_details: {
-                name: $.trim(form.name.value),
-                phone: $.trim(form.mobile_number.value),
-                email: $.trim(form.email.value),
+                name: dataToSubmit['name'],
+                phone: dataToSubmit['mobile_number'],
+                email: dataToSubmit['email'],
             }
         },
         shipping: {name: $.trim(form.name.value)}
     }
     if (isCollection == false) {
         cardPaymentData['payment_method']['billing_details']['address'] = {
-                    line1: $.trim(form.address_line1.value),
-                    line2: $.trim(form.address_line2.value),
-                    postal_code: $.trim(form.postcode.value),
+                    line1: dataToSubmit['address_line1'],
+                    line2: dataToSubmit['address_line2'],
+                    postal_code: dataToSubmit['postcode'],
         }
         cardPaymentData['shipping']['address'] = {
-                    line1: $.trim(form.address_line1.value),
-                    line2: $.trim(form.address_line2.value),
-                    postal_code: $.trim(form.postcode.value),
+                    line1: dataToSubmit['address_line1'],
+                    line2: dataToSubmit['address_line2'],
+                    postal_code: dataToSubmit['postcode'],
         }
     }
+
     // Send form data to the server before calling Stripe. To ensure info is not lost if user exits
     // whilst loading the success page.
     $.post(url, data).done(function() {

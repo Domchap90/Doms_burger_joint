@@ -19,11 +19,12 @@ import re
 
 @require_POST
 def cached_payment_intent(request):
+    """ Complete remainder of payment intent based upon successful form
+    validation """
     try:
         pid = request.POST.get('client_secret').split('_secret')[0]
         is_collection = request.POST.get('is_collection')
         stripe.api_key = settings.STRIPE_SECRET_KEY
-
         stripe.PaymentIntent.modify(pid, metadata={
             'food_order': json.dumps(request.session.get('food_order', {})),
             'username': request.user,
@@ -177,6 +178,8 @@ def is_form_valid(request, is_collect):
     """ Get's called asynchronously from stripe_element.js to ensure form is
     valid before submitting """
 
+    remaining_spend = order_contents(request)['remaining_delivery_amount']
+
     # convert javascript boolean to python boolean
     is_collect = False if 'false' else True
 
@@ -194,7 +197,7 @@ def is_form_valid(request, is_collect):
  
     form = set_order_form(form_data, is_collect)
 
-    if form.is_valid():
+    if form.is_valid() and remaining_spend == 0:
         return JsonResponse({'valid': True}, status=200)
 
     # Create errors dictionary to populate the form with appropriate messages
@@ -276,7 +279,6 @@ def set_order_form(form_data, is_collection):
     order_form = OrderFormDelivery(form_data)
 
     if is_collection:
-        print('collection form is accessed')
         order_form = OrderFormCollection(form_data)
 
     return order_form
