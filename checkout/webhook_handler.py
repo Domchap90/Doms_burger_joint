@@ -7,7 +7,7 @@ from decimal import Decimal
 from .models import Order
 from members_area.models import MemberProfile
 
-from .views import get_discount, save_to_orderlineitem
+from .views import get_discount, save_to_orderlineitem, get_sent_info
 
 import json
 import time
@@ -19,22 +19,26 @@ class StripeWH_Handler:
     def __init__(self, request):
         self.request = request
 
-    def _send_confirmation_email_to_nonmember(self, order):
+    def _send_confirmation_email_to_nonmember(self, order, is_collection):
         cust_email = order.email
+        sent_info = get_sent_info(order, is_collection)
+
         subject = render_to_string(
             'checkout/confirmation_email/email_subject.txt',
             {'order': order}
         )
         body = render_to_string(
             'checkout/confirmation_email/email_body_nonmember.txt',
-            {'order': order, 'from_email': settings.DEFAULT_FROM_EMAIL}
+            {'order': order, 'from_email': settings.DEFAULT_FROM_EMAIL, 'sent_info': sent_info}
         )
 
         send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email],
                   fail_silently=False)
 
-    def _send_confirmation_email_to_member(self, order, member):
+    def _send_confirmation_email_to_member(self, order, is_collection, member):
         cust_email = order.email
+        sent_info = get_sent_info(order, is_collection)
+
         subject = render_to_string(
             'checkout/confirmation_email/email_subject.txt',
             {'order': order}
@@ -52,11 +56,12 @@ needed to grab your free burger."
         body = render_to_string(
             'checkout/confirmation_email/email_body_member.txt',
             {'order': order, 'reward_msg': reward_msg, 'from_email':
-             settings.DEFAULT_FROM_EMAIL}
+             settings.DEFAULT_FROM_EMAIL, 'sent_info': sent_info}
         )
 
         send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email],
                   fail_silently=False)
+
 
     def handle_event(self, event):
         """ Handles generic Webhooks """
@@ -73,7 +78,10 @@ needed to grab your free burger."
         food_order = intent.metadata.food_order
         username = intent.metadata.username
         is_collection = intent.metadata.is_collection
-        is_collection = False if 'false' else True
+        if is_collection == 'false':
+            is_collection = False
+        else:
+            is_collection = True
         discount_result = None
 
         if username != 'AnonymousUser':
@@ -88,11 +96,12 @@ needed to grab your free burger."
             memberprofile = None
 
         billing_details = intent.charges.data[0].billing_details
-        shipping_details = intent.shipping
+        # shipping_details = None
         grand_total = round(intent.charges.data[0].amount / 100, 2)
 
         # Empty fields become None, to be consistent with billing details
         if not is_collection:
+            shipping_details = intent.shipping
             for field, value in shipping_details.address.items():
                 if value == "":
                     shipping_details.address[field] = None
@@ -103,12 +112,13 @@ needed to grab your free burger."
             try:
                 if is_collection:
                     order = Order.objects.get(
-                        name__iexact=shipping_details.name,
+                        name__iexact=billing_details.name,
                         mobile_number__iexact=billing_details.phone,
                         email__iexact=billing_details.email,
                         grand_total=grand_total,
                         pid=pid
                     )
+
                 else:
                     order = Order.objects.get(
                         name__iexact=shipping_details.name,
@@ -128,9 +138,9 @@ needed to grab your free burger."
                 time.sleep(1)
         if order_exists:
             if memberprofile is None:
-                self._send_confirmation_email_to_nonmember(order)
+                self._send_confirmation_email_to_nonmember(order, is_collection)
             else:
-                self._send_confirmation_email_to_member(order, memberprofile)
+                self._send_confirmation_email_to_member(order, is_collection, memberprofile)
             return HttpResponse(
                     content=f"Webhook received: {event['type']} | SUCCESS: Database already contains this order.",
                     status=200
@@ -140,7 +150,7 @@ needed to grab your free burger."
             try:
                 if is_collection:
                     order = Order.objects.create(
-                        name=shipping_details.name,
+                        name=billing_details.name,
                         mobile_number=billing_details.phone,
                         email=billing_details.email,
                         pid=pid
@@ -170,7 +180,7 @@ needed to grab your free burger."
                     )
 
         if memberprofile is None:
-            self._send_confirmation_email_to_nonmember(order)
+            self._send_confirmation_email_to_nonmember(order, is_collection)
         else:
             if discount_result:
                 # if discount exists, apply it and reset the reward status for
@@ -183,7 +193,7 @@ needed to grab your free burger."
                 memberprofile.reward_status += 1
             MemberProfile.save(memberprofile)
             order.member_profile = memberprofile
-            self._send_confirmation_email_to_member(order, memberprofile)
+            self._send_confirmation_email_to_member(order, is_collection, memberprofile)
 
         order.save()
 

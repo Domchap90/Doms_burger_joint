@@ -83,7 +83,7 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Keeps session variables for upto 10 minutes
-SESSION_COOKIE_AGE = 600
+# SESSION_COOKIE_AGE = 600
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`

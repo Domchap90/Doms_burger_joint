@@ -9,6 +9,7 @@ def index(request):
     """ Main index page view """
     return render(request, 'home/index.html')
 
+
 def check_postcode_home(request):
     """
     Determines whether able to deliver to address

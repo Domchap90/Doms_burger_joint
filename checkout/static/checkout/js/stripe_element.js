@@ -107,6 +107,7 @@ async function isFormValid(formData){
 
         }
     });
+
     return result;
 }
 
@@ -126,8 +127,7 @@ function submitToStripe(dataToSubmit) {
                 phone: dataToSubmit['mobile_number'],
                 email: dataToSubmit['email'],
             }
-        },
-        shipping: {name: $.trim(form.name.value)}
+        }
     }
     if (isCollection == false) {
         cardPaymentData['payment_method']['billing_details']['address'] = {
@@ -135,6 +135,7 @@ function submitToStripe(dataToSubmit) {
                     line2: dataToSubmit['address_line2'],
                     postal_code: dataToSubmit['postcode'],
         }
+        cardPaymentData['shipping'] = {name: dataToSubmit['name'],};
         cardPaymentData['shipping']['address'] = {
                     line1: dataToSubmit['address_line1'],
                     line2: dataToSubmit['address_line2'],

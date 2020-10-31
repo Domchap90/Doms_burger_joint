@@ -21,6 +21,7 @@ import re
 def cached_payment_intent(request):
     """ Complete remainder of payment intent based upon successful form
     validation """
+
     try:
         pid = request.POST.get('client_secret').split('_secret')[0]
         is_collection = request.POST.get('is_collection')
@@ -179,9 +180,11 @@ def is_form_valid(request, is_collect):
     valid before submitting """
 
     remaining_spend = order_contents(request)['remaining_delivery_amount']
-
     # convert javascript boolean to python boolean
-    is_collect = False if 'false' else True
+    if is_collect == 'false':
+        is_collect = False
+    else:
+        is_collect = True
 
     # Retrieves each key, value pair as a list of tuples
     post_data = request.POST.lists()
@@ -196,7 +199,6 @@ def is_form_valid(request, is_collect):
             form_data[key] = value
  
     form = set_order_form(form_data, is_collect)
-
     if form.is_valid() and remaining_spend == 0:
         return JsonResponse({'valid': True}, status=200)
 
@@ -289,6 +291,22 @@ def collect_or_delivery(request):
     their food """
 
     return render(request, 'checkout/collect_or_delivery.html')
+
+
+def get_sent_info(order, is_collection):
+    sent_info = "Available for collection from:\n\t20 Wardour St, \
+        \n\tWest End,\n\tLondon,\n\tW1D 6QG"
+
+    if not is_collection:
+        sent_info = "Sent to:\n\t"+order.address_line1+",\n\t"
+
+        # include optional address line 2 if present
+        if order.address_line2:
+            sent_info += order.address_line2+",\n\t"+order.postcode+"\n\t"
+        else:
+            sent_info += order.postcode+"\n\t"
+
+    return sent_info
 
 
 def checkout_success(request, order_number):

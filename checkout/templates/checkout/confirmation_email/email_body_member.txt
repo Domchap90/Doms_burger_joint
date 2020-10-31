@@ -6,10 +6,7 @@ Your food is on its way! Your order was successfully placed on {{ order.date }}.
 
     Reward Status: {{ reward_msg }}
    
-    Sent to:
-        {{ order.address_line1 }} 
-        {{ order.address_line2}}
-        {{ order.postcode }} 
+    {{ sent_info }}
      
     Amount paid:
         Delivery Fee:   £{{ order.delivery_fee }}  
