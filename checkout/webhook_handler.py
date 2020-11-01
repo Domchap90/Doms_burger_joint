@@ -43,12 +43,13 @@ class StripeWH_Handler:
             'checkout/confirmation_email/email_subject.txt',
             {'order': order}
         )
-        if member.reward_status == 0:
+
+        if member.reward_status == 4:
+            reward_msg = "Almost there, you will receive a free burger on your \
+next order." 
+        elif member.reward_status == 5:
             reward_msg = "Congratulations, you earned a free burger on this \
 order."
-        elif member.reward_status == 5:
-            reward_msg = "Almost there, you will receive a free burger on your \
-next order."
         else:
             reward_msg = f"Just {5-member.reward_status} more order(s) \
 needed to grab your free burger."
@@ -136,6 +137,7 @@ needed to grab your free burger."
             except Order.DoesNotExist:
                 iterations += 1
                 time.sleep(1)
+
         if order_exists:
             if memberprofile is None:
                 self._send_confirmation_email_to_nonmember(order, is_collection)

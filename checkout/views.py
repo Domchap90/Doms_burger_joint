@@ -92,7 +92,7 @@ def checkout(request):
                     # no discount means progress reward status
                     member_profile.reward_status += 1
                 MemberProfile.save(member_profile)
-
+                order.member_profile = member_profile
             order.save()
             for order_itemid, value in food_order.items():
                 try:
