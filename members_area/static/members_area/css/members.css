@@ -1,5 +1,5 @@
 .signup-container {
-    margin: 10% 20%;
+    margin: 10% 0%;
     padding: 20px 10px;
 }
 
@@ -15,6 +15,13 @@
 #signup-btn {
     background-color: red;
 }
+@media (min-width: 600px) {
+    .signup-container {
+        margin: 10% 20%;
+        padding: 20px 10px;
+    }
+}
+
 @media (min-width: 1200px) {
     .signup-container {
         margin: 8% 22%;
@@ -22,11 +29,14 @@
 }
 
 /*********************************************************** Profile page */
-
-.reward-status-container img {
-    width: 100px;
-    height: 100px;
+.reward-status-container .col.s2 {
+    width: fit-content;
 }
+.reward-status-container img {
+    width: 40px;
+    height: 40px;
+}
+
 p.reward-qualification-msg {
     font-weight: bold;
 }
@@ -59,4 +69,17 @@ span {
 .pagination li a {
     padding: 0px;
     color: #000;
+}
+@media (min-width:601px) {
+    .reward-status-container img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (min-width:900px) {
+    .reward-status-container img {
+        width: 80px;
+        height: 80px;
+    }
 }

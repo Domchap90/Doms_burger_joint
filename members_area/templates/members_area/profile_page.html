@@ -50,8 +50,9 @@
 
             {% if order_history.has_other_pages %}
 			<ul class="pagination">
+                <!-- <div class="row"> -->
 				{% if order_history.has_previous %}
-				<li>
+				<li class="arrow-btn">
                     <a href="?page={{ order_history.previous_page_number }}">
                         <span class="material-icons">navigate_before</span>
                     </a>
@@ -63,13 +64,13 @@
 				{% endif %}
 				{% for page in order_history.paginator.page_range %}
 				{% if order_history.number == page %}
-				<li class="active">{{ page }}</li>
+				<li class="active" id="pgBtn_{{ page }}">{{ page }}</li>
 				{% else %}
-				<li><a href="?pagenum={{ page }}">{{ page }}</a></li>
+				<li id="pgBtn_{{ page }}"><a href="?pagenum={{ page }}">{{ page }}</a></li>
 				{% endif %}
 				{% endfor %}
 				{% if order_history.has_next %}
-				<li>
+				<li class="arrow-btn">
                     <a href="?pagenum={{ order_history.next_page_number }}">
                         <span class="material-icons">navigate_next</span>
                     </a>
@@ -79,6 +80,7 @@
                     <span class="material-icons">navigate_next</span>
                 </li>
 				{% endif %}
+                <!-- </div> -->
 			</ul>
             {% endif %}
 
@@ -87,7 +89,7 @@
                     <tr>
                         <th>Date</th>
                         <th>Order no.</th>
-                        <th>Number of items</th>
+                        <th class="hide-on-med-and-down">Number of items</th>
                         <th>Total charged</th>
                     </tr>
                 </thead>
@@ -97,7 +99,7 @@
                     <tr class="general-order-row">
                         <td>{{ order.date }}</td>
                         <td>{{ order.order_number|truncatechars:8 }}</td>
-                        <td>{{ order.order_count }} items</td>
+                        <td class="hide-on-med-and-down">{{ order.order_count }} items</td>
                         <td>£{{ order.grand_total }}</td>
                     </tr>
                     <tr class="detail-order-row">
@@ -112,8 +114,8 @@
                                     {% if not item.combo_id %}
                                     <div class="row">
                                         <div class="col s5 m7">{{ item.food_item.name }}</div>
-                                        <div class="col s5 m3">{{ item.quantity }} @ £{{ item.food_item.price }}</div>
-                                        <div class="col s2">£{{ item.lineitem_total }}</div>
+                                        <div class="col s4 m3">{{ item.quantity }} @ £{{ item.food_item.price }}</div>
+                                        <div class="col s3 m2">£{{ item.lineitem_total }}</div>
                                     </div>
                                     {% endif %}
                                 {% endfor %}
@@ -126,8 +128,8 @@
                                     {% if item.combo_id %}
                                     <div class="row clear-10">
                                         <div class="col s5 m7">{{ item.combo_item.name }}</div>
-                                        <div class="col s5 m3">{{ item.combo_quantity }} @ £{{ item.combo_item.price }}</div>
-                                        <div class="col s2">£{{ item.lineitem_total }}</div>
+                                        <div class="col s4 m3">{{ item.combo_quantity }} @ £{{ item.combo_item.price }}</div>
+                                        <div class="col s3 m2">£{{ item.lineitem_total }}</div>
                                     </div>
                                     
                                     <div class="combo-unit-list">
@@ -181,7 +183,53 @@
             $('.detail-order-row').hide();
 		    $('.general-order-row').click(function(){
 		        $(this).next().toggle();
-		    });
-		});
+            });
+            controlPaginationMenuLength();
+        });
+
+        // Change number of pagination buttons according to screen size
+        window.addEventListener('resize', controlPaginationMenuLength);
+        
+        function controlPaginationMenuLength() {
+            let paginatedNumberBtns = $('.pagination li:not(.arrow-btn)');
+            paginatedNumberBtns.hide();
+            let activeElement = parseInt($('.pagination .active').html());
+            
+            if ($(window).width () < 601) {
+                // show 5 page buttons below 601px res
+                displayButtons(paginatedNumberBtns, activeElement, 5);
+            } else if ($(window).width () < 901) {
+                displayButtons(paginatedNumberBtns, activeElement, 7);
+            } else {
+                displayButtons(paginatedNumberBtns, activeElement, 10);
+            }
+        }
+
+        function displayButtons(paginatedNumberBtns, activeElement, numPageBtnsToDisplay) {
+            /* Limits the number of paginated buttons to be displayed when there are many */
+            
+            let btnsToDisplay = []
+            // limits will dictate the number of buttons either side of the active element
+            let limit = numPageBtnsToDisplay/2;
+
+            for (numberBtn of paginatedNumberBtns){
+                // read page number from id of button
+                let numberBtnValue = parseInt(numberBtn.id.split('_')[1]);
+                if (activeElement > limit) {
+                // enforces limits when active element is greater than number of pages to be displayed / 2
+                    if(numberBtnValue <= (activeElement + limit) && numberBtnValue > (activeElement - limit)) {
+                        btnsToDisplay.push(numberBtn);
+                    }
+                } else {
+                // otherwise show the first number of pages to be displayed as per input
+                    if(numberBtnValue < numPageBtnsToDisplay + 1) {
+                        btnsToDisplay.push(numberBtn);
+                    }
+                }
+            }
+            for (btn of btnsToDisplay) {
+                $(btn).show();
+            }
+        }
     </script>
 {% endblock %}
