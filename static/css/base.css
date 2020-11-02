@@ -314,9 +314,6 @@ a.sidenav-trigger {
     .postcode-checker {
         width: 50%;
     }
-    /* .postcode-button-area {
-    justify-content: flex-end;
-    } */
 }
 @media (min-width: 885px){
     .hero-burger-image {
@@ -407,13 +404,24 @@ a.sidenav-trigger {
 .menu-item-form {
     margin-bottom: 30px;
 }
+.food_item_name {
+    font-family: "Abel", sans-serif;
+    font-size: 1.4rem;
+}
 .menu_option_row {
+    width: 240px;
     background-color: #e5e5e5;
+    border: solid 0.5px;
 }
 .food_image_container {
     display: flex;
     /* Override materialize css padding */
     padding: 0px !important;
+}
+.food_image_container img {
+    width: 120px;
+    border: solid 1px black;
+    border-right-style: none;
 }
 
 @media (min-width: 601px){
@@ -435,6 +443,25 @@ a.sidenav-trigger {
         align-items: center;
         justify-content: center;
         color: white;
+    }
+    .menu_option_row {
+        width: 100%;
+    }
+    .food_image_container img {
+        width: 160px;
+    }
+}
+@media (min-width: 900px) {
+    .menu-items-container {
+        margin: 0% 16.0%;
+    }
+    .food_image_container img {
+        width: 200px;
+    }
+}
+@media (min-width: 1200px) {
+    .menu-items-container {
+        margin: 0% 20.0%;
     }
 }
 

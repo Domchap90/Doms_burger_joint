@@ -73,8 +73,8 @@
             <form action="{% url 'add_to_order' item.id %}" method="POST" class="menu-item-form">
             {% csrf_token %}
             <div class="row">
-                <div class="col s12" id="item-name-{{ forloop.counter }}">
-                    {{ item.name }} Order Quantity: {{ item.total_purchased }}
+                <div class="col s12 food_item_name" id="item-name-{{ forloop.counter }}">
+                    {{ item.name }}
                 </div>
             </div>
             <div class="row menu_option_row">
@@ -84,9 +84,9 @@
                 <div class="col m6 hide-on-small-and-down" id="item-desc-inline-{{ forloop.counter }}">
                     {{ item.description }}
                 </div> 
-                <div class="col s3 hide-on-med-and-up">
-                </div> 
-                <div class="col s3 m2 item-price" id="item-price-{{ forloop.counter }}">
+                <!-- <div class="col s3 hide-on-med-and-up">
+                </div>  -->
+                <div class="col s6 m2 item-price center" id="item-price-{{ forloop.counter }}">
                     £{{ item.price }}
                 </div> 
             </div>
