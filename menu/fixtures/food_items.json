@@ -37,12 +37,12 @@
     "model": "menu.food_item",
     "pk": 3,
     "fields": {
-      "name": "Burger Item 3",
+      "name": "Beany Burger",
       "description": "This is a description of item 3",
-      "price": "9.99",
-      "category": 1,
-      "total_purchased": 4,
-      "image": "burger_3.jpg",
+      "price": "10.99",
+      "category": 5,
+      "total_purchased": 0,
+      "image": "beany_burger.jpg",
       "food_combos": [
         1,
         2,
@@ -105,12 +105,12 @@
     "model": "menu.food_item",
     "pk": 7,
     "fields": {
-      "name": "Burger Item 7",
+      "name": "Guilt free Burger",
       "description": "This is a description of item 7",
       "price": "9.99",
-      "category": 1,
-      "total_purchased": 2,
-      "image": "burger_7.jpg",
+      "category": 5,
+      "total_purchased": 0,
+      "image": "guilt_free_burger.jpg",
       "food_combos": [
         1,
         2,
@@ -190,72 +190,6 @@
     "model": "menu.food_item",
     "pk": 12,
     "fields": {
-      "name": "Burger Deal",
-      "description": "This is a description of item 12",
-      "price": "14.99",
-      "category": 1,
-      "total_purchased": 0,
-      "image": "burger_deal_1.jpg",
-      "food_combos": [
-        2
-      ]
-    }
-  },
-  {
-    "model": "menu.food_item",
-    "pk": 13,
-    "fields": {
-      "name": "Burger & Fries",
-      "description": "This is a description of item 13",
-      "price": "14.99",
-      "category": 1,
-      "total_purchased": 0,
-      "image": "burger_fries_1.jpg",
-      "food_combos": [
-        1,
-        2,
-        3
-      ]
-    }
-  },
-  {
-    "model": "menu.food_item",
-    "pk": 14,
-    "fields": {
-      "name": "Burger & Fries 2",
-      "description": "This is a description of item 14",
-      "price": "14.99",
-      "category": 1,
-      "total_purchased": 0,
-      "image": "burger_fries_2.jpg",
-      "food_combos": [
-        1,
-        2,
-        3
-      ]
-    }
-  },
-  {
-    "model": "menu.food_item",
-    "pk": 15,
-    "fields": {
-      "name": "Burger & Fries 3",
-      "description": "This is a description of item 15",
-      "price": "14.99",
-      "category": 1,
-      "total_purchased": 0,
-      "image": "burger_fries_3.jpg",
-      "food_combos": [
-        1,
-        2,
-        3
-      ]
-    }
-  },
-  {
-    "model": "menu.food_item",
-    "pk": 16,
-    "fields": {
       "name": "Dessert Apple Pie",
       "description": "This is a description of item 16",
       "price": "6.99",
@@ -269,7 +203,7 @@
   },
   {
     "model": "menu.food_item",
-    "pk": 17,
+    "pk": 13,
     "fields": {
       "name": "Cheesecake",
       "description": "This is a description of item 17",
@@ -284,7 +218,7 @@
   },
   {
     "model": "menu.food_item",
-    "pk": 18,
+    "pk": 14,
     "fields": {
       "name": "Icecream",
       "description": "This is a description of item 18",
@@ -299,7 +233,7 @@
   },
   {
     "model": "menu.food_item",
-    "pk": 19,
+    "pk": 15,
     "fields": {
       "name": "Beer",
       "description": "This is a description of item 19",
@@ -312,7 +246,7 @@
   },
   {
     "model": "menu.food_item",
-    "pk": 20,
+    "pk": 16,
     "fields": {
       "name": "Cola",
       "description": "This is a description of item 20",
@@ -329,7 +263,7 @@
   },
   {
     "model": "menu.food_item",
-    "pk": 21,
+    "pk": 17,
     "fields": {
       "name": "Lemonade",
       "description": "This is a description of item 21",
@@ -346,7 +280,7 @@
   },
   {
     "model": "menu.food_item",
-    "pk": 22,
+    "pk": 18,
     "fields": {
       "name": "Cheesey Fries",
       "description": "This is a description of item 22",
@@ -363,7 +297,7 @@
   },
   {
     "model": "menu.food_item",
-    "pk": 23,
+    "pk": 19,
     "fields": {
       "name": "Chunky Fries",
       "description": "This is a description of item 23",
@@ -380,7 +314,7 @@
   },
   {
     "model": "menu.food_item",
-    "pk": 24,
+    "pk": 20,
     "fields": {
       "name": "Garlic Fries",
       "description": "This is a description of item 24",
@@ -397,7 +331,7 @@
   },
   {
     "model": "menu.food_item",
-    "pk": 25,
+    "pk": 21,
     "fields": {
       "name": "Thin Fries",
       "description": "This is a description of item 25",
