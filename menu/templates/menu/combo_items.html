@@ -24,7 +24,7 @@
                 <li>
                     <div class="row collapsible-header">
                         <div class="col s12 m6 l4">
-                            <h3>{{ combo.name }}</h3>
+                            <h3>{{ combo.name }}</h3><h3>£{{ combo.price }}</h3>
                         </div>
                         <div class="combo-desc col s12 m6 l8">
                             <p>{{ combo.description }}</p>
@@ -36,13 +36,13 @@
                         {% csrf_token %}
                         {% if combo.id == 1 %}
                         <div class="row">
-                            <div class="col s12" id="">
+                            <div class="col s12 m6 xl4" id="">
                                 Pick Your Burger
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c1-burger" id="c1-burger" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>burgers</option>
                                     {% for burger in combo1_burgers %}
@@ -50,20 +50,20 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c1-burger-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c1-burger-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c1-burger-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c1-burger-description">
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col s12" id="">
+                            <div class="col s12 m6 xl4" id="">
                                 Pick Your Side
                             </div>
                         </div>
                             
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c1-side" id="c1-side" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>sides</option>
                                     {% for side in combo1_sides %}
@@ -71,20 +71,20 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c1-side-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c1-side-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c1-side-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c1-side-description">
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col s12" id="">
+                            <div class="col s12 m6 xl4" id="">
                                 Pick Your Drink
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c1-drink" id="c1-drink" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>drinks</option>
                                     {% for drink in combo1_drinks %}
@@ -92,22 +92,22 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c1-drink-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c1-drink-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c1-drink-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c1-drink-description">
                             </div>
                         </div>
                         {% endif %}
                     
                         {% if combo.id == 2 %}
                         <div class="row">
-                            <div class="col s12" id="">
+                            <div class="col s12 m6 xl4" id="">
                                 Pick Your Burgers
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c2-burger1" id="c2-burger1" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>burgers</option>
                                     {% for burger in combo2_burgers %}
@@ -115,13 +115,13 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c2-burger1-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c2-burger1-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c2-burger1-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c2-burger1-description">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c2-burger2" id="c2-burger2" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>burgers</option>
                                     {% for burger in combo2_burgers %}
@@ -129,13 +129,13 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c2-burger2-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c2-burger2-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c2-burger2-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c2-burger2-description">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c2-burger3" id="c2-burger3" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>burgers</option>
                                     {% for burger in combo2_burgers %}
@@ -143,13 +143,13 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c2-burger3-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c2-burger3-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c2-burger3-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c2-burger3-description">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c2-burger4" id="c2-burger4" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>burgers</option>
                                     {% for burger in combo2_burgers %}
@@ -157,20 +157,20 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c2-burger4-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c2-burger4-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c2-burger4-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c2-burger4-description">
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col s12" id="">
+                            <div class="col s12 m6 xl4" id="">
                                 Pick Your Sides
                             </div>
                         </div>
                             
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c2-side1" id="c2-side1" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>sides</option>
                                     {% for side in combo2_sides %}
@@ -178,13 +178,13 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c2-side1-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c2-side1-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c2-side1-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c2-side1-description">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c2-side2" id="c2-side2" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>sides</option>
                                     {% for side in combo2_sides %}
@@ -192,13 +192,13 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c2-side2-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c2-side2-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c2-side2-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c2-side2-description">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c2-side3" id="c2-side3" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>sides</option>
                                     {% for side in combo2_sides %}
@@ -206,13 +206,13 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c2-side3-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c2-side3-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c2-side3-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c2-side3-description">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c2-side4" id="c2-side4" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>sides</option>
                                     {% for side in combo2_sides %}
@@ -220,20 +220,20 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c2-side4-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c2-side4-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6" id="c2-side4-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5" id="c2-side4-description">
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col s12" id="">
+                            <div class="col s12 m6 xl4" id="">
                                 Pick Your Drinks
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c2-drink1" id="c2-drink1" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>drinks</option>
                                     {% for drink in combo2_drinks %}
@@ -241,13 +241,13 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c2-drink1-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c2-drink1-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c2-drink1-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c2-drink1-description">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c2-drink2" id="c2-drink2" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>drinks</option>
                                     {% for drink in combo2_drinks %}
@@ -255,13 +255,13 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c2-drink2-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c2-drink2-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c2-drink2-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c2-drink2-description">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c2-drink3" id="c2-drink3" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>drinks</option>
                                     {% for drink in combo2_drinks %}
@@ -269,13 +269,13 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c2-drink3-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c2-drink3-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c2-drink3-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c2-drink3-description">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c2-drink4" id="c2-drink4" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>drinks</option>
                                     {% for drink in combo2_drinks %}
@@ -283,22 +283,22 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c2-drink4-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c2-drink4-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c2-drink4-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c2-drink4-description">
                             </div>
                         </div>
                         {% endif %}
                         
                         {% if combo.id == 3 %}
                         <div class="row">
-                            <div class="col s12" id="">
+                            <div class="col s12 m6 xl4" id="">
                                 Pick Your Burger
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c3-burger" id="c3-burger" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>burgers</option>
                                     {% for burger in combo3_burgers %}
@@ -306,20 +306,20 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c3-burger-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c3-burger-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c3-burger-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c3-burger-description">
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col s12" id="">
+                            <div class="col s12 m6 xl4" id="">
                                 Pick Your Side
                             </div>
                         </div>
                             
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c3-side" id="c3-side" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>sides</option>
                                     {% for side in combo3_sides %}
@@ -327,20 +327,20 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c3-side-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c3-side-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c3-side-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c3-side-description">
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col s12" id="">
+                            <div class="col s12 m6 xl4" id="">
                                 Pick Your Dessert
                             </div>
                         </div>
                             
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c3-dessert" id="c3-dessert" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>desserts</option>
                                     {% for dessert in combo3_dessert %}
@@ -348,20 +348,20 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c3-dessert-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c3-dessert-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c3-dessert-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c3-dessert-description">
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col s12" id="">
+                            <div class="col s12 m6 xl4" id="">
                                 Pick Your Drink
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col s12 m6 l3 combo-info" id="">
+                        <div class="row select_info_row">
+                            <div class="col s12 m6 xl4 combo-info" id="">
                                 <select name="c3-drink" id="c3-drink" onchange="updateComboSelection(this)" required>
                                     <option value="" disabled selected>drinks</option>
                                     {% for drink in combo3_drinks %}
@@ -369,9 +369,9 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="combo-img-container col s12 m6 l3 combo-info" id="c3-drink-image">
+                            <div class="combo-img-container col s12 m6 xl3 combo-info" id="c3-drink-image">
                             </div>
-                            <div class="combo-desc-container col s12 m6 offset-m6 l6 combo-info" id="c3-drink-description">
+                            <div class="combo-desc-container col s12 m6 offset-m6 xl5 combo-info" id="c3-drink-description">
                             </div>
                         </div>
                         {% endif %}

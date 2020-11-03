@@ -3,7 +3,7 @@
     "pk": 1,
     "model": "menu.food_combo",
     "fields": {
-      "name": "Combo Deal 1",
+      "name": "Regular Meal",
       "description": "Any Burger, Side and soft drink",
       "price": 14.99
     }
@@ -12,7 +12,7 @@
     "pk": 2,
     "model": "menu.food_combo",
     "fields": {
-      "name": "Combo Deal 2",
+      "name": "Family Deal",
       "description": "4 Burgers, 4 Sides & 4 soft drinks",
       "price": 49.99
     }
@@ -21,7 +21,7 @@
     "pk": 3,
     "model": "menu.food_combo",
     "fields": {
-      "name": "Combo Deal 3",
+      "name": "Deluxe Meal",
       "description": "Any burger, side, dessert & soft drink",
       "price": 19.99
     }

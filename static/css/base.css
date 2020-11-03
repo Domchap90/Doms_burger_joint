@@ -483,14 +483,45 @@ a.sidenav-trigger {
 .collapsible-body .row {
     display: block;
 }
+.collapsible-body .row:not(.select_info_row) {
+    text-align: center;
+}
+.select-dropdown {
+    width: fit-content !important;
+    z-index: 1000;
+}
+.select-dropdown li {
+    display: flex;
+    align-items: center;
+    padding: 0px 10px;
+    width: max-content;
+    font-family: 'Abel', sans-serif;
+    text-transform: uppercase;
+}
+.select-dropdown li > span {
+    color: #000;
+    width: 182.03px;
+}
+.select-wrapper .caret {
+/* Override Materialize css for select dropdown caret position*/
+    left: 150px;
+    z-index: 1;
+}
 .col-gap {
     background-color: inherit !important;
 }
 .combo-info {
     margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
 }
 .combo-info .select-wrapper input.select-dropdown {
-    text-align: center;
+    /* text-align: center; */
+    padding: 0px 10px;
+    background-color: white;
+    font-family: 'Abel', sans-serif;
+    text-transform: uppercase;
+    border: 1px solid;
 }
 .combo-desc {
     font-size: 16px;
@@ -540,6 +571,19 @@ a.sidenav-trigger {
 @media (min-width: 993px) {
     .row.collapsible-header {
         text-align: center;
+    }
+}
+@media (min-width: 1201px) {
+    .select_info_row {
+        height: 180px;
+    }
+    .combo-img {
+        width: 170px;
+        height: 170px;
+    }
+    .combo-desc-container {
+        height: inherit;
+        align-items: center;
     }
 }
 
