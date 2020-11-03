@@ -54,7 +54,7 @@
                                 {% endif %}
                                 </div>
                             </a>
-                            <a href="#!" class="brand-logo center">
+                            <a href="{% url 'home' %}" class="brand-logo center">
                                 <img src="{% static '/images/simplefastfoodicon.svg' %}" alt="">
                                 <h1>DOM'S BURGER JOINT</h1>
                             </a>
@@ -105,35 +105,29 @@
 				<li>
 				</li>
 				<li><a href="{% url 'home' %}">HOME</a></li>
-                <li>
-                    <ul class="collapsible collapsible-accordion">
-                        <li>
-                            <div class="collapsible-header">MENU<i class="material-icons">arrow_drop_down</i></div>
-                            <div class="collapsible-body">
-                                <ul>
-                                    <li><a href="{% url 'menu' %}?category=burgers">BURGERS</a></li>
-									<li><a href="{% url 'menu' %}?category=sides">SIDES</a></li>
-									<li><a href="{% url 'menu' %}?category=drinks">DRINKS</a></li>
-									<li><a href="{% url 'menu' %}?category=vegetarian">VEGETARIAN</a></li>
-									<li><a href="{% url 'menu' %}?category=dessert">DESSERTS</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <ul class="collapsible collapsible-accordion">
-                        <li>
-                            <div class="collapsible-header">DEALS<i class="material-icons">arrow_drop_down</i></div>
-                            <div class="collapsible-body">
-                                <ul>
-                                    <li><a href="{% url 'menu' %}?category=popular">POPULAR</a></li>
-                                    <li><a href="{% url 'combo' %}">COMBOS</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <div class="collapsible-header">MENU<i class="material-icons">arrow_drop_down</i></div>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="{% url 'menu' %}?category=burgers">BURGERS</a></li>
+                                <li><a href="{% url 'menu' %}?category=sides">SIDES</a></li>
+                                <li><a href="{% url 'menu' %}?category=drinks">DRINKS</a></li>
+                                <li><a href="{% url 'menu' %}?category=vegetarian">VEGETARIAN</a></li>
+                                <li><a href="{% url 'menu' %}?category=dessert">DESSERTS</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">DEALS<i class="material-icons">arrow_drop_down</i></div>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="{% url 'menu' %}?category=popular">POPULAR</a></li>
+                                <li><a href="{% url 'combo' %}">COMBOS</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
                 <li><a href="{% if request.user.is_authenticated %}{% url 'members_area' %}{% else %}{% url 'rewards' %}{% endif %}">MY BURGER</a></li>
                 <li><a href="{% url 'food_order' %}">YOUR ORDER</a></li>
 			</ul>

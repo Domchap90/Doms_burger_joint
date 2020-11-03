@@ -14,6 +14,8 @@ h2 {
 
 p, div {
     font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    color: black;
 }
 span {
     font-weight: bold;
@@ -47,6 +49,14 @@ input {
     width: 100%;
     border: solid 1px black !important;
     font-family: 'Montserrat', sans-serif;
+}
+/* ::-webkit-input-placeholder,
+:-ms-input-placeholder, */
+::placeholder {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    color: #5e5e5e;
 }
 textarea:focus {
     border-bottom: none !important;
@@ -165,6 +175,7 @@ a[data-target="account-options"] {
 
 .nav-wrapper ul li a {
     color: black;
+    font-size: 16px;
 }
 
 
@@ -184,7 +195,19 @@ a.sidenav-trigger {
 #slide-out {
     font-family: 'Abel', sans-serif;
 }
-
+#slide-out .collapsible-header {
+    font-family: 'Abel', sans-serif;
+    font-size: 16px;
+    padding: 0 32px;
+}
+.sidenav li > a {
+    font-size: 16px;
+}
+#slide-out .collapsible-body li a {
+    font-family: 'Abel', sans-serif;
+    font-size: 16px;
+    padding: 0 48px;
+}
 .sidenav-close {
     text-align: right;
 }
@@ -261,6 +284,7 @@ a.sidenav-trigger {
     align-items: center;
 }
 #menu-button {
+    z-index: 991;
 }
 .below_arrow_container {
     position: absolute;
@@ -270,10 +294,12 @@ a.sidenav-trigger {
     display: flex;
     justify-content: center;
     align-items: flex-end;
+    z-index: 990;
 }
 .below_arrow {
     padding-top: 20px;
     height: 100px;
+    z-index: 991;
 }
 .below_arrow img{
     display: none;
@@ -297,7 +323,13 @@ a.sidenav-trigger {
     margin: 0px;
     padding-bottom: 10px;
     background-color: #5d5d5d;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    color: white;
+}
+#postcode-checker-instruction {
+    margin: 0;
+    padding: 16px 0 10px 0;
+    background-color: #5d5d5d;
     color: white;
 }
 #delivery-eligibility-form {
@@ -305,7 +337,7 @@ a.sidenav-trigger {
 }
 #delivery-eligibility-form > input,
 #delivery-eligibility-form > div,
-.postcode-checker > p {
+.postcode-checker > p:not(#postcode-checker-instruction) {
     margin-bottom: 10px !important;
 }
 #delivery-eligibility-form > input {
@@ -342,7 +374,7 @@ a.sidenav-trigger {
         background-color: white;
     }
 }
-@media (min-width: 992px) {
+@media (min-width: 993px) {
     #postcode-checker-title {
         font-size: 1.5rem;
     }
@@ -478,7 +510,7 @@ a.sidenav-trigger {
         width: 160px;
     }
 }
-@media (min-width: 900px) {
+@media (min-width: 993px) {
     .menu-items-container {
         margin: 0% 16.0%;
     }
@@ -486,7 +518,7 @@ a.sidenav-trigger {
         width: 200px;
     }
 }
-@media (min-width: 1200px) {
+@media (min-width: 1201px) {
     .menu-items-container {
         margin: 0% 20.0%;
     }
@@ -709,19 +741,19 @@ button.qty-btn {
     font-size: 1.2rem;
 }
 
-@media(min-width: 600px) {
+@media(min-width: 601px) {
     .order-items-container {
         margin: 0 5%;
         min-height: 75vh;
     }
 }
-@media(min-width: 992px) {
+@media(min-width: 993px) {
     .order-items-container .order-btn-container {
         justify-content: space-between;
     }
 }
 
-@media(min-width: 1200px) {
+@media(min-width: 1201px) {
     .order-items-container {
         margin: 0 10%;
     }
@@ -745,7 +777,7 @@ button.qty-btn {
     margin: auto;
 }
 
-@media(min-width: 600px) {
+@media(min-width: 601px) {
     .checkout-form-container {
         width: 50%;
         margin-top: 100px;
@@ -756,7 +788,7 @@ button.qty-btn {
     }
 }
 
-@media(min-width: 992px) {
+@media(min-width: 993px) {
     .form-subtitle {
         font-size: 1.5rem;
     }
