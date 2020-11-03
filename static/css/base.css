@@ -1,8 +1,7 @@
 h1 {
     font-family: 'Abel', sans-serif;
     text-transform: uppercase;
-    margin: auto 20px;
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     color: black;
 }
 .hide {
@@ -34,20 +33,19 @@ hr {
 img {
     width: 100%;
 }
-.checkout-form-container input,
+
 .checkout-form-container input:focus {
-    border-bottom: none !important;
     -webkit-box-shadow: none !important;
     box-shadow: none !important; 
 }
 .checkout-form-container input:focus {
-    box-shadow: 0 1px 0 0 #000 !important;
+    background-color: white;
 }
 
 input {
     margin-bottom: 0px !important;
     width: 100%;
-    /* background-color: red; */
+    border: solid 1px black !important;
     font-family: 'Montserrat', sans-serif;
 }
 textarea:focus {
@@ -174,6 +172,10 @@ a[data-target="account-options"] {
     text-align: center;
     width: fit-content;
 }
+.brand-logo h1 {
+    margin: auto 20px;
+    font-size: 1.8rem;
+}
 
 a.sidenav-trigger {
     color: black;
@@ -259,7 +261,24 @@ a.sidenav-trigger {
     align-items: center;
 }
 #menu-button {
-    
+}
+.below_arrow_container {
+    position: absolute;
+    width: inherit;
+    height: 66.684vw;
+    max-height: calc(100vh - 195px);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+.below_arrow {
+    padding-top: 20px;
+    height: 100px;
+}
+.below_arrow img{
+    display: none;
+    width: 100px;
+    height: 100px;
 }
 .postcode-checker-container {
     background-color: #5d5d5d;
@@ -311,6 +330,9 @@ a.sidenav-trigger {
     }
 }
 @media (min-width: 601px) {
+    .hero-burger-image {
+        max-height: calc(100vh - 195px);
+    }
     .postcode-checker {
         width: 50%;
     }
@@ -323,6 +345,11 @@ a.sidenav-trigger {
 @media (min-width: 992px) {
     #postcode-checker-title {
         font-size: 1.5rem;
+    }
+}
+@media (min-width: 1068px) {
+    .below_arrow img{
+        display: block;
     }
 }
 

@@ -9,9 +9,16 @@
                     <a href="{% url 'menu' %}?category=burgers">MENU</a>
                 </button>
             </div>
+            <div class="below_arrow_container">
+                <div class="below_arrow">
+                    <a href="#postcode_section">
+                        <img src="{% static '/images/arrow-down-sign-to-navigate.png' %}">
+                    </a>
+                </div>
+            </div>
 		</div>
 
-        <div class="postcode-checker-container">
+        <div class="postcode-checker-container" id="postcode_section">
             <div class="postcode-checker">
                 <h2 id="postcode-checker-title">See if we deliver to you</h2>
                 <form method="POST" action="{% url 'check_postcode_home' %}" id="delivery-eligibility-form">
