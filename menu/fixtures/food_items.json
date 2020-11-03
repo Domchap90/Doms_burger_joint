@@ -207,7 +207,7 @@
     "fields": {
       "name": "DBJ Cheesecake",
       "description": "New York-style baked cheesecake with sour blueberries in blueberry sauce.",
-      "price": "6.99",
+      "price": "5.99",
       "category": 4,
       "total_purchased": 0,
       "image": "dessert_cheesecake.jpg",
@@ -222,7 +222,7 @@
     "fields": {
       "name": "Icecream",
       "description": "3 scoops - Caramel, vanilla & strawberry topped with chocolate sauce and a cherry on top.",
-      "price": "6.99",
+      "price": "4.99",
       "category": 4,
       "total_purchased": 0,
       "image": "dessert_icecream.jpg",
