@@ -9,7 +9,7 @@ h1 {
 }
 
 h2 {
-    font-size: 2rem;
+    font-size: 1.8rem;
 }
 
 p, div {
@@ -105,6 +105,14 @@ button a {
 a:hover {
     color: #fff;
     text-decoration: none;
+}
+@media (min-width: 993px) {
+    h2 {
+        font-size: 2rem;
+    }
+    p, div {
+        font-size: 18px;
+    }
 }
 /********************************************************* Navbar   */
 
@@ -424,12 +432,9 @@ a.sidenav-trigger {
     background-color: white;
     color: black;
 }
-
-
-.category-title {
+.category_title {
     text-transform: uppercase;
     font-family: "Abel", sans-serif;
-    font-size: 1.8rem;
 }
 
 .switch label .lever {
@@ -459,13 +464,17 @@ a.sidenav-trigger {
 .menu-items-container h2 {
     margin: 1.0rem 0 1.424rem 0;
 }
-
+.menu-items-container .col.s8 {
+    padding-left: 0px;
+}
 .menu-item-form {
     margin-bottom: 30px;
 }
 .food_item_name {
     font-family: "Abel", sans-serif;
     font-size: 1.4rem;
+    margin: 0;
+    padding: 0 !important;
 }
 .menu_option_row {
     width: 240px;
@@ -514,6 +523,9 @@ a.sidenav-trigger {
     .menu-items-container {
         margin: 0% 16.0%;
     }
+    .food_item_name {
+        font-size: 1.5rem;
+    }
     .food_image_container img {
         width: 200px;
     }
@@ -528,8 +540,9 @@ a.sidenav-trigger {
 .menu-navigator.deals {
     margin: 0 5%;
 }
-.category-title.combo {
+.category_title.combo {
     text-align: center;
+    font-size: 1.8rem;
 }
 .row.collapsible-header {
     display: block;
@@ -721,7 +734,7 @@ button.qty-btn {
 .order-combo-delete {
     text-align: center;
 }
-.order.category-title {
+.order.category_title {
     margin: 20px 10px;
     text-align: center;
 }
