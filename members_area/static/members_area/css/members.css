@@ -44,7 +44,14 @@ span {
     font-style: italic;
     font-weight: normal;
 }
-
+.pagination_container {
+/* if number of paginated btns below threshold pagination
+width will be shrunk and centred within its container as 
+specified in profile_page.js */
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
 .pagination {
     display: flex;
     width: 100%;
@@ -63,6 +70,7 @@ span {
 }
 .pagination li {
     font-size: 1.2rem;
+    margin: 0 10px;
     padding: 0 10px;
     line-height: 30px;
 }

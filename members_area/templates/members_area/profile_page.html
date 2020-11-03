@@ -49,39 +49,39 @@
             <h2>Order History</h2>
 
             {% if order_history.has_other_pages %}
-			<ul class="pagination">
-                <!-- <div class="row"> -->
-				{% if order_history.has_previous %}
-				<li class="arrow-btn">
-                    <a href="?page={{ order_history.previous_page_number }}">
+            <div class="pagination_container">
+                <ul class="pagination">
+                    {% if order_history.has_previous %}
+                    <li class="arrow-btn">
+                        <a href="?page={{ order_history.previous_page_number }}">
+                            <span class="material-icons">navigate_before</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="disabled">
                         <span class="material-icons">navigate_before</span>
-                    </a>
-                </li>
-				{% else %}
-				<li class="disabled">
-                    <span class="material-icons">navigate_before</span>
-                </li>
-				{% endif %}
-				{% for page in order_history.paginator.page_range %}
-				{% if order_history.number == page %}
-				<li class="active" id="pgBtn_{{ page }}">{{ page }}</li>
-				{% else %}
-				<li id="pgBtn_{{ page }}"><a href="?pagenum={{ page }}">{{ page }}</a></li>
-				{% endif %}
-				{% endfor %}
-				{% if order_history.has_next %}
-				<li class="arrow-btn">
-                    <a href="?pagenum={{ order_history.next_page_number }}">
+                    </li>
+                    {% endif %}
+                    {% for page in order_history.paginator.page_range %}
+                    {% if order_history.number == page %}
+                    <li class="active" id="pgBtn_{{ page }}">{{ page }}</li>
+                    {% else %}
+                    <li id="pgBtn_{{ page }}"><a href="?pagenum={{ page }}">{{ page }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if order_history.has_next %}
+                    <li class="arrow-btn">
+                        <a href="?pagenum={{ order_history.next_page_number }}">
+                            <span class="material-icons">navigate_next</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="disabled">
                         <span class="material-icons">navigate_next</span>
-                    </a>
-                </li>
-				{% else %}
-				<li class="disabled">
-                    <span class="material-icons">navigate_next</span>
-                </li>
-				{% endif %}
-                <!-- </div> -->
-			</ul>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
             {% endif %}
 
             <table>

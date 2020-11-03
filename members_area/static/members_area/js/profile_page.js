@@ -22,10 +22,20 @@ function controlPaginationMenuLength() {
     if ($(window).width () < 601) {
         // show 5 page buttons below 601px res
         displayButtons(paginatedNumberBtns, activeElement, 5);
+        console.log("number of buttons is "+paginatedNumberBtns.length)
+        if (paginatedNumberBtns.length < 5) {
+            $('.pagination').width("fit-content");
+        }
     } else if ($(window).width () < 901) {
         displayButtons(paginatedNumberBtns, activeElement, 7);
+        if (paginatedNumberBtns.length < 7) {
+            $('.pagination').width("fit-content");
+        }
     } else {
         displayButtons(paginatedNumberBtns, activeElement, 10);
+        if (paginatedNumberBtns.length < 10) {
+            $('.pagination').width("fit-content");
+        }
     }
 }
 
