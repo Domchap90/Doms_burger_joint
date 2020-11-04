@@ -7,7 +7,7 @@
     <div class="order-items-container">
         <div class="row">
             <div class="col s12">
-                <div class="order category-title">Your Order</div>
+                <h2 class="order category-title">Your Order</h2>
             </div>
         </div>
 
@@ -25,9 +25,9 @@
                 <div class="col s3 m2">Subtotal</div>
                 <div class="col s2 m1"></div>
             </div>
-            <div class="item_container">
+            <div class="item-container">
                 {% for item in order_items %}
-                <div class="row" id="itemrow_{{ item.food_item.id }}">
+                <div class="row {% if forloop.last and not combo_items %}bottom-row-black{% endif %}" id="itemrow_{{ item.food_item.id }}">
                     <div class="col s3 m2">{{ item.food_item.name }}</div>
                     <div class="col hide-on-small-and-down m4">{{ item.food_item.description }}</div>
                     <div class="order-qty col s4 m3">
@@ -47,7 +47,7 @@
                     <div class="col s3 m2 subtotal" onblur="updateTotals()">
                         £{{ item.food_item.price| get_subtotal:item.quantity }}
                     </div>
-                    <div class="col s2 m1">
+                    <div class="col s2 m1 order-item-delete">
                         <span class="material-icons" id="item_{{ item.food_item.id }}_delete" onclick="removeItem(this)">delete</span>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                     <div class="col s3 m2 order-combo-subtotal">Subtotal</div>
                 </div>
 
-                <div class="item_container">
+                <div class="item-container">
                 {% for combo_item, combo_item_list in combo_items.items %}
                     {% with combo=combo_item_list.0 combo_qty=combo_item_list.1 combo_content=combo_item_list.2 %}
                     <div class="row" id="comborow_{{ combo_item }}">
@@ -92,7 +92,7 @@
                                 <span class="material-icons">remove</span>
                             </button>
 
-                            <input class="order-qty-input" id="combo_{{ combo.id }}_{{ combo_item }}_qty" type="number" name="food-qty" 
+                            <input class="order-qty-input" id="combo_{{ combo.id }}_{{ combo_item }}_qty" type="number" name="food_qty" 
                             value="{{ combo_qty }}" min="1" max="5" onchange="updateQty(this)">
                             
                             <button class="qty-btn add" id="combo_{{ combo.id }}_{{ combo_item }}_add" onclick="increaseQuantity(this)">
@@ -139,7 +139,7 @@
                         </button> 
                     </a>
                     
-                    <a {% if remaining_delivery_amount == 0 %} href="{% url 'collect_or_delivery' %}" {% endif %} id="proceed-checkout-link">
+                    <a {% if remaining_delivery_amount == 0 %} href="{% url 'collect_or_delivery' %}" {% endif %} id="proceed_checkout_link">
                         <button class="checkout-btn">
                             PROCEED TO CHECKOUT
                         </button>

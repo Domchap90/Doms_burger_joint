@@ -294,7 +294,7 @@ a.sidenav-trigger {
 #menu-button {
     z-index: 991;
 }
-.below_arrow_container {
+.below-arrow-container {
     position: absolute;
     width: inherit;
     height: 66.684vw;
@@ -304,12 +304,12 @@ a.sidenav-trigger {
     align-items: flex-end;
     z-index: 990;
 }
-.below_arrow {
+.below-arrow {
     padding-top: 20px;
     height: 100px;
     z-index: 991;
 }
-.below_arrow img{
+.below-arrow img{
     display: none;
     width: 100px;
     height: 100px;
@@ -388,7 +388,7 @@ a.sidenav-trigger {
     }
 }
 @media (min-width: 1068px) {
-    .below_arrow img{
+    .below-arrow img{
         display: block;
     }
 }
@@ -432,7 +432,7 @@ a.sidenav-trigger {
     background-color: white;
     color: black;
 }
-.category_title {
+.category-title {
     text-transform: uppercase;
     font-family: "Abel", sans-serif;
 }
@@ -540,7 +540,7 @@ a.sidenav-trigger {
 .menu-navigator.deals {
     margin: 0 5%;
 }
-.category_title.combo {
+.category-title.combo {
     text-align: center;
     font-size: 1.8rem;
 }
@@ -555,7 +555,7 @@ a.sidenav-trigger {
 .collapsible-body .row {
     display: block;
 }
-.collapsible-body .row:not(.select_info_row) {
+.collapsible-body .row:not(.select-info-row) {
     text-align: center;
 }
 .select-dropdown {
@@ -617,7 +617,7 @@ a.sidenav-trigger {
 .form-error {
     color: red;
 }
-.order-btn-container {
+.order_btn-container {
     text-align: center;
 }
 
@@ -646,7 +646,7 @@ a.sidenav-trigger {
     }
 }
 @media (min-width: 1201px) {
-    .select_info_row {
+    .select-info-row {
         height: 180px;
     }
     .combo-img {
@@ -695,7 +695,7 @@ a.sidenav-trigger {
 }
 
 input.order-qty-input {
-    border-bottom: none !important;
+    /* border-bottom: none !important; */
     margin-bottom: 0px !important;
     text-align: center;
     width: 33% !important;
@@ -734,12 +734,18 @@ button.qty-btn {
 .order-combo-delete {
     text-align: center;
 }
-.order.category_title {
+.order-combo-delete:hover,
+.order-item-delete:hover,
+.order-combo-delete:active,
+.order-item-delete:active {
+    color: red;
+}
+.order.category-title {
     margin: 20px 10px;
     text-align: center;
 }
 
-#spending_warning {
+#spending-warning {
     color: red;
 }
 

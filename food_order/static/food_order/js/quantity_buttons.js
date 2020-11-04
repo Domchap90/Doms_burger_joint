@@ -30,7 +30,7 @@ function updateCheckoutBtnState() {
 
 function updateBtnState() {
     activateAllButtons();
-    let items = $(".item_container").children();
+    let items = $(".item-container").children();
     sum_combo_items_1 = 0;
     sum_combo_items_2 = 0;
     sum_combo_items_3 = 0;
