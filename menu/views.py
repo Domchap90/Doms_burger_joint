@@ -49,9 +49,9 @@ def sort_items(request):
     if request.is_ajax and request.method == "GET":
         sortkey = request.GET.get('sort_key')
 
-    if sortkey == 'price-asc':
+    if sortkey == 'price_asc':
         items = items.order_by('price')
-    if sortkey == 'price-desc':
+    if sortkey == 'price_desc':
         items = items.order_by('-price')
 
     sorted_items_ser = serializers.serialize('json', items)

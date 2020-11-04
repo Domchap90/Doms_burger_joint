@@ -9,7 +9,7 @@ function validateComboForm(form) {
     addComboForm = document.forms["add_combo"];
     for (field of addComboForm) {
         if ($(field).prop('required') && field.value=='') {
-            $('.form-error#err-'+form).html(`<p>Please select all food options to add the combo to your order.</p>`);
+            $('.form-error#err_'+form).html(`<p>Please select all food options to add the combo to your order.</p>`);
         }
     }
 }
@@ -34,8 +34,8 @@ function updateComboSelection(selectedItem){
             for ( i of item ) {
                 console.log(i['fields']['image'])
                 console.log(i['fields']['description'])
-            $("#"+combo_category+"-image").html(`<img class="combo-img" src="/media/`+i['fields']['image']+`">`);
-            $("#"+combo_category+"-description").html(i['fields']['description']);
+            $("#"+combo_category+"_image").html(`<img class="combo-img" src="/media/`+i['fields']['image']+`">`);
+            $("#"+combo_category+"_description").html(i['fields']['description']);
             }
         },
         error: function(response){

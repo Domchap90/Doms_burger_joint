@@ -291,7 +291,7 @@ a.sidenav-trigger {
     justify-content: center;
     align-items: center;
 }
-#menu-button {
+#menu_button {
     z-index: 991;
 }
 .below-arrow-container {
@@ -327,36 +327,36 @@ a.sidenav-trigger {
     width: 253px;
     max-width: 500px;
 }
-#postcode-checker-title {
+#postcode_checker_title {
     margin: 0px;
     padding-bottom: 10px;
     background-color: #5d5d5d;
     font-size: 1.4rem;
     color: white;
 }
-#postcode-checker-instruction {
+#postcode_checker_instruction {
     margin: 0;
     padding: 16px 0 10px 0;
     background-color: #5d5d5d;
     color: white;
 }
-#delivery-eligibility-form {
+#delivery_eligibility_form {
     border: black 1px solid;
 }
-#delivery-eligibility-form > input,
-#delivery-eligibility-form > div,
-.postcode-checker > p:not(#postcode-checker-instruction) {
+#delivery_eligibility_form > input,
+#delivery_eligibility_form > div,
+.postcode-checker > p:not(#postcode_checker_instruction) {
     margin-bottom: 10px !important;
 }
-#delivery-eligibility-form > input {
+#delivery_eligibility_form > input {
     background-color: white;
 } 
-#home-postcode-entry {
+#home_postcode_entry {
     box-sizing: border-box;
     padding-left: 10px;
     text-align: center;
 }
-#delivery-eligibility-message {
+#delivery_eligibility_message {
     padding-left: 10px;
     text-align: center;
 }
@@ -383,7 +383,7 @@ a.sidenav-trigger {
     }
 }
 @media (min-width: 993px) {
-    #postcode-checker-title {
+    #postcode_checker_title {
         font-size: 1.5rem;
     }
 }
@@ -453,7 +453,7 @@ a.sidenav-trigger {
     background-color: #ffff00;
 }
 
-#filter-btn-container {
+#filter_btn_container {
     text-align: right;
 }
 
@@ -470,23 +470,23 @@ a.sidenav-trigger {
 .menu-item-form {
     margin-bottom: 30px;
 }
-.food_item_name {
+.food-item-name {
     font-family: "Abel", sans-serif;
     font-size: 1.4rem;
     margin: 0;
     padding: 0 !important;
 }
-.menu_option_row {
+.menu-option-row {
     width: 240px;
     background-color: #e5e5e5;
     border: solid 0.5px;
 }
-.food_image_container {
+.food-image-container {
     display: flex;
     /* Override materialize css padding */
     padding: 0px !important;
 }
-.food_image_container img {
+.food-image-container img {
     width: 120px;
     border: solid 1px black;
     border-right-style: none;
@@ -512,10 +512,10 @@ a.sidenav-trigger {
         justify-content: center;
         color: white;
     }
-    .menu_option_row {
+    .menu-option-row {
         width: 100%;
     }
-    .food_image_container img {
+    .food-image-container img {
         width: 160px;
     }
 }
@@ -523,10 +523,10 @@ a.sidenav-trigger {
     .menu-items-container {
         margin: 0% 16.0%;
     }
-    .food_item_name {
+    .food-item-name {
         font-size: 1.5rem;
     }
-    .food_image_container img {
+    .food-image-container img {
         width: 200px;
     }
 }

@@ -30,21 +30,21 @@
             <div class="row">
             {% for cat in selected_category %}
                 <div {% if cat.name != 'popular' %}class="col s8"{% else %}class="col s12 center"{% endif %}>
-                    <h2 class="category_title">{{ cat.name }}</h2>
+                    <h2 class="category-title">{{ cat.name }}</h2>
                 </div>
 
                 {% if cat.name != 'popular' %}
                     <div class="col s4">
                         <div class="row">
-                            <div class="">Sort by Price:</div>
+                            <div>Sort by Price:</div>
                         </div>
                         <div class="row">
                             <div class="col s6">Low to High</div>
-                            <div class="col s6 switch" id="price-low-high">
+                            <div class="col s6 switch" id="price_low_high">
                                 
                                 <label>
                                 Off
-                                <input id="price-asc" name="price-asc" type="checkbox">
+                                <input id="price_asc" name="price_asc" type="checkbox">
                                 <span class="lever"></span>
                                 On
                                 </label>
@@ -53,16 +53,16 @@
                         </div>
                         <div class="row">
                             <div class="col s6">High to Low</div>
-                            <div class="col s6 switch" id="price-high-low">
+                            <div class="col s6 switch" id="price_high_low">
                                 <label>
                                 Off
-                                <input id="price-desc" name="price-desc"  type="checkbox">
+                                <input id="price_desc" name="price_desc"  type="checkbox">
                                 <span class="lever"></span>
                                 On
                                 </label>
                             </div>
                         </div>
-                        <div class="row" id="filter-btn-container">
+                        <div class="row" id="filter_btn_container">
                             <button type="submit" onclick="getFilteredResults('{{ cat.name }}')">
                                 <a href="#">Filter results</a>
                             </button>
@@ -76,23 +76,23 @@
             <form action="{% url 'add_to_order' item.id %}" method="POST" class="menu-item-form">
             {% csrf_token %}
             <div class="row">
-                <h3 class="col s12 food_item_name" id="item-name-{{ forloop.counter }}">
+                <h3 class="col s12 food-item-name" id="item_name_{{ forloop.counter }}">
                     {{ item.name }}
                 </h3>
             </div>
-            <div class="row menu_option_row">
-                <div class="col s6 m4 food_image_container">
-                    <img src="/media/{{item.image}}" id="item-pic-{{ forloop.counter }}" alt="">
+            <div class="row menu-option-row">
+                <div class="col s6 m4 food-image-container">
+                    <img src="/media/{{item.image}}" id="item_pic_{{ forloop.counter }}" alt="">
                 </div> 
-                <div class="col m6 hide-on-small-and-down" id="item-desc-inline-{{ forloop.counter }}">
+                <div class="col m6 hide-on-small-and-down" id="item_desc_inline_{{ forloop.counter }}">
                     {{ item.description }}
                 </div> 
-                <div class="col s6 m2 item-price center" id="item-price-{{ forloop.counter }}">
+                <div class="col s6 m2 item-price center" id="item_price_{{ forloop.counter }}">
                     £{{ item.price }}
                 </div> 
             </div>
             <div class="row hide-on-med-and-up">
-                <div class="col s12" id="item-desc-block-{{ forloop.counter }}">
+                <div class="col s12" id="item_desc_block_{{ forloop.counter }}">
                     {{ item.description }}
                 </div>
             </div>

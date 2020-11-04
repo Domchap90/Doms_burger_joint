@@ -3,10 +3,10 @@ $('.switch').find("input[type=checkbox]").on("click",function() {
     let switchOn = $('#'+switchID).find("input[type=checkbox]").is(':checked');
     let otherSwitchID;
     console.log(switchID+' turned on: '+switchOn)
-    if (switchID==='price-low-high') {
-        otherSwitchID='price-high-low';
+    if (switchID==='price_low_high') {
+        otherSwitchID='price_high_low';
     } else {
-        otherSwitchID='price-low-high';
+        otherSwitchID='price_low_high';
     }
     let otherSwitchOn = $('#'+otherSwitchID).find("input[type=checkbox]").is(':checked');
 
@@ -17,11 +17,11 @@ $('.switch').find("input[type=checkbox]").on("click",function() {
 
 function getFilteredResults(category_name) {
     let sort;
-    if ($('#price-desc').is(':checked')) {
-        sort='price-desc';
+    if ($('#price_desc').is(':checked')) {
+        sort='price_desc';
         console.log('desc is checked.')
     } else {
-        sort='price-asc';
+        sort='price_asc';
         console.log('asc is checked.')
     }
     let dataToSend = {
@@ -40,11 +40,11 @@ function getFilteredResults(category_name) {
             let counter = 0;
             for(item of itemsList) {
                 counter++;
-                $("#item-name-"+counter).html(item['fields']['name']);
-                $("#item-pic-"+counter).attr('src', '/media/'+item['fields']['image']);
-                $("#item-desc-inline-"+counter).html(item['fields']['description']);
-                $("#item-price-"+counter).html(item['fields']['price']);
-                $("#item-desc-block-"+counter).html(item['fields']['description']);
+                $("#item_name_"+counter).html(item['fields']['name']);
+                $("#item_pic_"+counter).attr('src', '/media/'+item['fields']['image']);
+                $("#item_desc_inline_"+counter).html(item['fields']['description']);
+                $("#item_price_"+counter).html(item['fields']['price']);
+                $("#item_desc_block_"+counter).html(item['fields']['description']);
                 }
             }
         })
