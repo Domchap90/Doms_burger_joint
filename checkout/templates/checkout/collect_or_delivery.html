@@ -7,14 +7,28 @@
 
 {% block content %}
     <div class="below-nav-container">
-        <div class="signup-container">  
+        <h2 class="collect-delivery-title">How would you like to receive your burgers?</h2>
+        <div class="collect-delivery signup-container">  
             <div class="signup-btns-container">
-                <button id="signup-btn"><a href="{% url 'checkout' %}">DELIVERY</a></button>
+                <button id="delivery_btn"><a href="{% url 'checkout' %}">DELIVERY</a></button>
                 <button><a href="{% url 'checkout' %}?is_collect=True">COLLECT</a></button>
             </div>
-            <p class="center">
-                You must be within a 1.5 mile radius of our Joint to be eligible for delivery
-            </p>
+            <div class="address-info-container">
+                <div class="location-container">
+                    <h2 class="category-title">Location</h2>
+                </div>
+				<div class="address-container">
+					<ul id="store_address">
+						<li>20 Wardour St</li>
+						<li>West End</li>
+						<li>London</li>
+						<li>W1D 6QG</li>
+					</ul>
+                </div>
+            </div>
+			<p class="delivery-info">
+				You must be within a 1.5 mile radius of our Joint to be eligible for delivery
+			</p>
         </div>
     </div>       
         
