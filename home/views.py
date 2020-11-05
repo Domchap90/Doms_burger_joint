@@ -16,20 +16,18 @@ def check_postcode_home(request):
     or if they must collect.
     """
 
-    postcode_valid = False
-    if request.method == 'POST':
-        postcode = request.POST.get('postcode')
+    postcode = request.POST.get('postcode')
 
-        postcode_valid = is_postcode_valid(postcode)
+    postcode_valid = is_postcode_valid(postcode)
 
-        msg = "Sorry it looks like you are not eligible for delivery. However \
-        please feel free to make an order for collection."
-        if postcode_valid:
-            msg = "Good news! You are eligible for delivery."
+    msg = "Sorry it looks like you are not eligible for delivery. However \
+    please feel free to make an order for collection."
+    if postcode_valid:
+        msg = "Good news! You are eligible for delivery."
 
-        request.session['delivery_eligibility'] = {}
-        request.session['delivery_eligibility']['message'] = msg
-        request.session['delivery_eligibility']['postcode'] = postcode
+    request.session['delivery_eligibility'] = {}
+    request.session['delivery_eligibility']['message'] = msg
+    request.session['delivery_eligibility']['postcode'] = postcode
 
     return redirect(reverse('home'))
 
