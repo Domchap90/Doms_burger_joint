@@ -1,27 +1,18 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from .models import Food_Item, Food_Category, Food_Combo
 from django.core import serializers
 import itertools
 
 
-# Create your views here.
 def menu(request):
     """ A view to reveal the menu items """
     items = Food_Item.objects.all()
     category = request.GET['category']
     categories = request.GET['category'].split(',')
 
-    if 'popular' == category:
-        """ Gets the most popular of 4 main categories and joins the queryset together """
-        meat_burgers = items.filter(category__name='burgers')
-        veg_burgers = items.filter(category__name='vegetarian')
-        burgers = meat_burgers | veg_burgers
-        burger_items = burgers.order_by('-total_purchased')[:3]
-        side_items = items.filter(category__name='sides').order_by('-total_purchased')[:1]
-        drink_items = items.filter(category__name='drinks').order_by('-total_purchased')[:1]
-        dessert_items = items.filter(category__name='dessert').order_by('-total_purchased')[:1]
-        items = list(itertools.chain(burger_items, side_items, drink_items, dessert_items))
+    if category == 'popular':
+        items = get_popular_items(items)
     else:
         if 'category' in request.GET:
             items = items.filter(category__name__in=categories)
@@ -32,11 +23,26 @@ def menu(request):
         'items': items,
         'selected_category': categories,
     }
-    counter = 0
-    for item in items:
-        counter += 1
 
     return render(request, 'menu/menu_items.html', context)
+
+
+def get_popular_items(all_items):
+    """ Gets the most popular of 4 main categories and joins the queryset
+    together """
+    burgers = join_queries(all_items, 'burgers', 'vegetarian')
+    burger_items = burgers.order_by('-total_purchased')[:3]
+    side_items = all_items.filter(category__name='sides').order_by(
+        '-total_purchased')[:1]
+    drink_items = all_items.filter(category__name='drinks').order_by(
+        '-total_purchased')[:1]
+    dessert_items = all_items.filter(category__name='dessert').order_by(
+        '-total_purchased')[:1]
+
+    items = list(itertools.chain(burger_items, side_items, drink_items,
+                 dessert_items))
+
+    return items
 
 
 def sort_items(request):
@@ -60,7 +66,7 @@ def sort_items(request):
 
 
 def combo(request):
-    """ A view to reveal the menu items """
+    """ A view to reveal the combo items """
 
     combos = Food_Combo.objects.all()
     # Create an instance of each combo
@@ -70,21 +76,31 @@ def combo(request):
 
     # Get items belonging to each combo set and split them into categories
     # listed in alphabetical order
-    c1_burgers_unordered = join_queries(combo1.food_items, 'burgers', 'vegetarian')
+    c1_burgers_unordered = join_queries(combo1.food_items, 'burgers',
+                                        'vegetarian')
     c1_burgers = c1_burgers_unordered.order_by('name')
-    c1_sides = combo1.food_items.filter(category__name='sides').order_by('name')
-    c1_drinks = combo1.food_items.filter(category__name='drinks').order_by('name')
+    c1_sides = combo1.food_items.filter(category__name='sides').order_by(
+        'name')
+    c1_drinks = combo1.food_items.filter(category__name='drinks').order_by(
+        'name')
 
-    c2_burgers_unordered = join_queries(combo2.food_items, 'burgers', 'vegetarian')
+    c2_burgers_unordered = join_queries(combo2.food_items, 'burgers',
+                                        'vegetarian')
     c2_burgers = c2_burgers_unordered.order_by('name')
-    c2_sides = combo2.food_items.filter(category__name='sides').order_by('name')
-    c2_drinks = combo2.food_items.filter(category__name='drinks').order_by('name')
+    c2_sides = combo2.food_items.filter(category__name='sides').order_by(
+        'name')
+    c2_drinks = combo2.food_items.filter(category__name='drinks').order_by(
+        'name')
 
-    c3_burgers_unordered = join_queries(combo3.food_items, 'burgers', 'vegetarian')
+    c3_burgers_unordered = join_queries(combo3.food_items, 'burgers',
+                                        'vegetarian')
     c3_burgers = c3_burgers_unordered.order_by('name')
-    c3_sides = combo3.food_items.filter(category__name='sides').order_by('name')
-    c3_drinks = combo3.food_items.filter(category__name='drinks').order_by('name')
-    c3_dessert = combo3.food_items.filter(category__name='dessert').order_by('name')
+    c3_sides = combo3.food_items.filter(category__name='sides').order_by(
+        'name')
+    c3_drinks = combo3.food_items.filter(category__name='drinks').order_by(
+        'name')
+    c3_dessert = combo3.food_items.filter(category__name='dessert').order_by(
+        'name')
     
     context = {
         'combos': combos,
