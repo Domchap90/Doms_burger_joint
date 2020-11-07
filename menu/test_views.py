@@ -1,7 +1,9 @@
 from django.test import TestCase, Client
 from .models import Food_Item, Food_Combo, Food_Category
-from .views import get_popular_items, sort_items, join_queries
+from .views import get_popular_items, join_queries
 from django.urls import reverse
+
+import json
 
 
 class TestMenuView(TestCase):
@@ -104,20 +106,37 @@ class TestMenuView(TestCase):
         self.assertEqual(result3_ordered_item_ids, [])
 
     def test_sort_items(self):
-        client = Client()
-        request = client.get("sort/", {"sort_key": "price_asc",
-                                       "category": "dessert"}, format='json')
-        sorted_dessert_items = Food_Item.objects.filter(
-            category__name='dessert').order_by('price')
-        self.assertGreater(sorted_dessert_items[1].price, sorted_dessert_items[0].price)
+        self.client = Client()
+    # Check price ascending sort
+        data = {"sort_key": "price_asc", "category": "dessert"}
+        request = self.client.get("/menu/sort/", data)
 
-        request = self.client.get("sort/", {"sort_key": "price_desc",
-                                            "category": "vegetarian"}, format='json')
+        # Read response data from string and inner string of items list
+        deserialized_data = json.loads(request.content)
+        deserialized_items = json.loads(deserialized_data['items'])
 
-        sorted_vegetarian_items = Food_Item.objects.filter(
-            category__name='vegetarian').order_by('-price')
-        self.assertGreater(sorted_vegetarian_items[0].price, 
-                           sorted_vegetarian_items[1].price)
+        sorted_items = []
+        # Sorted_items is a list of ordered prices as set by the view
+        for item in deserialized_items:
+            sorted_items.append(float(item["fields"]["price"]))
+        # deserialized items is a list therefore all elements are in order
+        self.assertGreater(sorted_items[1], sorted_items[0])
+        self.assertEqual(deserialized_data['selected_category'], 'dessert')
+
+    # Check price descending sort
+        data = {"sort_key": "price_desc", "category": "vegetarian"}
+        request = self.client.get("/menu/sort/", data)
+
+        # Read response data
+        deserialized_data = json.loads(request.content)
+        deserialized_items = json.loads(deserialized_data['items'])
+
+        sorted_items = []
+        for item in deserialized_items:
+            sorted_items.append(float(item["fields"]["price"]))
+        # deserialized items is a list therefore all elements are in order
+        self.assertGreater(sorted_items[0], sorted_items[1])
+        self.assertEqual(deserialized_data['selected_category'], 'vegetarian')
 
     def test_combo(self):
         response = self.client.post(reverse('combo'))
@@ -181,6 +200,7 @@ class TestMenuView(TestCase):
         test_items = Food_Item.objects.all()
         dessert_and_sides = join_queries(test_items, 'dessert', 'sides')
         result_ids = []
+        # Format result of join_queries function as easy to read list of ids
         for item in dessert_and_sides:
             result_ids.append(item.id)
         self.assertEqual(result_ids, [5, 6, 9, 10])
@@ -191,4 +211,25 @@ class TestMenuView(TestCase):
             result_ids.append(item.id)
         self.assertEqual(result_ids, [])
 
-    # def test_get_item(self):
+    def test_get_item(self):
+        url = '/menu/combo/item/'
+        data = {'food_id': 5}
+        response = self.client.get(url, data)
+        self.assertEqual(response.status_code, 200)
+
+        # Format result from serialized data
+        result_item = json.loads(response.content)
+        result_obj = json.loads(result_item)[0]
+
+        result_id = result_obj['pk']
+        result_name = result_obj['fields']['name']
+        result_desc = result_obj['fields']['description']
+        result_price = result_obj['fields']['price']
+        result_category = result_obj['fields']['category']
+
+        # Check result fields match item 5 fields
+        self.assertEqual(result_id, 5)
+        self.assertEqual(result_name, "test_food_item5")
+        self.assertEqual(result_desc, "This is a description of food item5")
+        self.assertEqual(float(result_price), 14.00)
+        self.assertEqual(result_category, 3)

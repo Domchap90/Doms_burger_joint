@@ -46,7 +46,8 @@ def get_popular_items(all_items):
 
 
 def sort_items(request):
-    """ A view to reveal the filtered menu items """
+    """ GET Ajax call made to view, returns sorted results according to the
+    data sent """
 
     items = Food_Item.objects.all()
     category = request.GET.get('category')
@@ -120,6 +121,7 @@ def combo(request):
 
 
 def join_queries(objects, category_1, category_2):
+    """ Effectively combines all objects from two categories together """
     query_1 = objects.filter(category__name=category_1)
     query_2 = objects.filter(category__name=category_2)
     joined_query = query_1 | query_2
@@ -128,6 +130,7 @@ def join_queries(objects, category_1, category_2):
 
 
 def get_item(request):
+    """ Ajax call asking for item object details from id """
     item_id = request.GET.get('food_id')
     item = Food_Item.objects.filter(pk=item_id)
     item_ser = serializers.serialize('json', item)
