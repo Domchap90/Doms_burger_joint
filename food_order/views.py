@@ -3,10 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.conf import settings
 
-from decimal import Decimal
 from food_order.contexts import order_contents
 from menu.models import Food_Item, Food_Combo
-# Create your views here.
 
 
 def food_order(request):
@@ -19,7 +17,6 @@ def add_to_order(request, item_id):
     """ Add a quantity of the specified product to the food order """
     food_item = get_object_or_404(Food_Item, pk=item_id)
     redirect_url = request.POST.get('redirect_url')
-
     order = request.session.get('food_order', {})
 
     if item_id in list(order.keys()):
@@ -89,6 +86,7 @@ def remove_from_order(request, item_type, item_id):
     """ Removes item from order effectively taking that item's quantity
     to zero. """
     order = request.session.get('food_order', {})
+
     if item_type == 'item':
         order.pop(item_id)
     else:
@@ -102,22 +100,26 @@ def edit_order(request, item_type, item_id):
     """ Edits quantity of the specified product to the food order """
 
     order = request.session.get('food_order', {})
-    # combo_value = order[request.POST.get('comboHashKey')]
+
+    # Convert string to ints in order to perform math operations
     changed_quantity_value = int(request.POST.get('newQtyVal'))
     original_quantity_value = int(request.POST.get('oldQtyVal'))
+
+    # Update quantity values for items or combos accordingly
     if item_type == 'item':
         order[item_id] = changed_quantity_value
+        # get object ready to retrieve price attribute
         item = get_object_or_404(Food_Item, pk=item_id)
     else:
         order[request.POST.get('comboHashKey')][1] = changed_quantity_value
+        # get object ready to retrieve price attribute
         item = get_object_or_404(Food_Combo, pk=order[request.POST.get('comboHashKey')][0])
 
+    # values below calculated to dynamically update subtotals in javascript
     subtotal = item.price * changed_quantity_value
     subtotal_change = (changed_quantity_value - original_quantity_value) * item.price
 
     request.session['food_order'] = order
-
-    print(f'edit_order:\norder is:\n\t{order}')
     data = {"subtotal": subtotal, "subtotal_change": subtotal_change}
 
     return JsonResponse(data, status=200)
@@ -126,7 +128,7 @@ def edit_order(request, item_type, item_id):
 def recalculate_remaining_delivery_amount(request):
     remaining_delivery_amount = order_contents(request)['remaining_delivery_amount']
     total = float(request.GET.get('total'))
-    print(f'total is {total}')
+
     if total < settings.MIN_DELIVERY_THRESHOLD:
         remaining_delivery_amount = settings.MIN_DELIVERY_THRESHOLD - float(
                                     total)
