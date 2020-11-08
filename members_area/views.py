@@ -1,4 +1,5 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
+from django.shortcuts import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import MemberProfile
@@ -8,8 +9,12 @@ from django.contrib import messages
 
 
 def members_area(request):
+    """ Renders profile page and all authenticated member's associated
+    details """
+
     member_profile = get_object_or_404(MemberProfile, member=request.user)
     form = MemberProfileForm(instance=member_profile)
+
     if request.method == 'POST':
         form = MemberProfileForm(request.POST, instance=member_profile)
         if form.is_valid():
@@ -39,9 +44,9 @@ def members_area(request):
 
 
 def rewards(request):
-    context = {}
+    """ Renders rewards page - access to login / signup """
 
-    return render(request, 'members_area/rewards.html', context)
+    return render(request, 'members_area/rewards.html')
 
 
 def repeat_order(request):
@@ -52,6 +57,8 @@ def repeat_order(request):
     order_id = request.POST.get('order_id')
     repeat_order = get_object_or_404(Order, order_number=order_id)
 
+    # Adds each food or combo item back to order dict in same structure as
+    # food_order app
     for item in repeat_order.lineitems.all():
         if not item.combo_id:
             item_id = item.food_item.id
@@ -63,9 +70,11 @@ def repeat_order(request):
             combo_quantity = item.combo_quantity
             order[combo_id] = [item.combo_item.id, combo_quantity, {}]
             for combo_item in item.combocontents.all():
-                order[combo_id][2][combo_item.food_item.id] = combo_item.quantity
-    
+                order[combo_id][2][
+                    combo_item.food_item.id] = combo_item.quantity
+
+    # Sets session variable equal to this order, overwriting any previous items
+    # inside it
     request.session['food_order'] = order
 
     return HttpResponseRedirect(reverse('checkout'))
-
