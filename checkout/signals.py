@@ -8,7 +8,7 @@ from menu.models import Food_Item
 @receiver(post_save, sender=OrderLineItem)
 def update_after_save_lineitem(sender, instance, created, **kwargs):
     """ Update order total upon LineItem update """
-    print('save signal received.')
+    
     instance.order.update_total()
 
 

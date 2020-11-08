@@ -21,6 +21,7 @@ class Order(models.Model):
     email = models.EmailField(max_length=254, null=False, blank=False, validators=[validate_email])
     mobile_number = models.CharField(max_length=13, null=False, blank=False)
     for_collection = models.BooleanField(default=False, null=True, blank=True, editable=True)
+    # Postcode & address_line1 changed to required in the delivery form
     postcode = models.CharField(max_length=20, null=True, blank=True)
     address_line1 = models.CharField(max_length=80, null=True, blank=True)
     address_line2 = models.CharField(max_length=80, null=True, blank=True)
