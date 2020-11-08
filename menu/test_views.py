@@ -109,10 +109,10 @@ class TestMenuView(TestCase):
         self.client = Client()
     # Check price ascending sort
         data = {"sort_key": "price_asc", "category": "dessert"}
-        request = self.client.get("/menu/sort/", data)
+        response = self.client.get("/menu/sort/", data)
 
         # Read response data from string and inner string of items list
-        deserialized_data = json.loads(request.content)
+        deserialized_data = json.loads(response.content)
         deserialized_items = json.loads(deserialized_data['items'])
 
         sorted_items = []
@@ -125,10 +125,10 @@ class TestMenuView(TestCase):
 
     # Check price descending sort
         data = {"sort_key": "price_desc", "category": "vegetarian"}
-        request = self.client.get("/menu/sort/", data)
+        response = self.client.get("/menu/sort/", data)
 
         # Read response data
-        deserialized_data = json.loads(request.content)
+        deserialized_data = json.loads(response.content)
         deserialized_items = json.loads(deserialized_data['items'])
 
         sorted_items = []
