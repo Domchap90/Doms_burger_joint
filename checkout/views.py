@@ -46,10 +46,11 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
     food_order = request.session.get('food_order', {})
-    total = order_contents(request)['grand_total']
+
+    total = None
     intent = None
 
-    is_collect = request.GET.get('is_collect', None)
+    is_collect = request.GET.get('is_collect', False)
     reward_notification = None
     discount_result = None
 
@@ -74,8 +75,6 @@ def checkout(request):
         order_form = set_order_form(form_data, for_collection)
 
         if order_form.is_valid():
-            # Commit false allows the information obtained from the form to be
-            # saved whilst not fully creating the order object just yet
             order = order_form.save(commit=False)
             pid = request.POST.get('client_secret').split('_secret')[0]
             order.pid = pid
@@ -95,7 +94,7 @@ def checkout(request):
                 order.member_profile = member_profile
             order.save()
             for order_itemid, value in food_order.items():
-                try:
+                try:                    
                     save_to_orderlineitem(order_itemid, value, order)
 
                 except Food_Item.DoesNotExist:
@@ -113,7 +112,7 @@ def checkout(request):
 
     else:
         order_form = set_order_form({}, is_collect)
-
+        total = order_contents(request)['grand_total']
         if request.user.is_authenticated:
             try:
                 member_profile = MemberProfile.objects.get(member=request.user)
@@ -262,6 +261,7 @@ def get_discount(order):
 
     for order_id, value in order.items():
         if order_id[0] != 'c':
+            
             food_item = Food_Item.objects.get(id=order_id)
             if food_item.category.id == 1:
                 if food_item.price < discount:
@@ -271,7 +271,7 @@ def get_discount(order):
         return discount
     else:
         return "You haven't selected your free burger yet! Remember this can't \
-                be part of a combo."
+be part of a combo."
 
 
 def set_order_form(form_data, is_collection):

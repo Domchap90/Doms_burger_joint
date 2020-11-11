@@ -18,14 +18,14 @@ class Order(models.Model):
                      blank=True, related_name='orders'
                      )
     name = models.CharField(max_length=50, null=False, blank=False)
-    email = models.EmailField(max_length=254, null=False, blank=False, validators=[validate_email])
-    mobile_number = models.CharField(max_length=13, null=False, blank=False)
+    email = models.EmailField(max_length=80, null=False, blank=False, validators=[validate_email])
+    mobile_number = models.CharField(max_length=15, null=False, blank=False)
     for_collection = models.BooleanField(default=False, null=True, blank=True, editable=True)
     # Postcode & address_line1 changed to required in the delivery form
-    postcode = models.CharField(max_length=20, null=True, blank=True)
+    postcode = models.CharField(max_length=9, null=True, blank=True)
     address_line1 = models.CharField(max_length=80, null=True, blank=True)
     address_line2 = models.CharField(max_length=80, null=True, blank=True)
-    delivery_instructions = models.CharField(max_length=200, null=True,
+    delivery_instructions = models.CharField(max_length=100, null=True,
                                              blank=True)
     date = models.DateTimeField(auto_now_add=True)
     item_quantity_count = models.IntegerField(null=True, blank=True, default=0)
@@ -127,10 +127,10 @@ class OrderLineItem(models.Model):
     def __str__(self):
         if self.combo_item:
             return f'Combo Id {self.combo_item.pk} on order \
-        {self.order.order_number}'
+{self.order.order_number}'
         else:
             return f'Item Id {self.food_item.pk} on order \
-        {self.order.order_number}'
+{self.order.order_number}'
 
 
 class ComboLineItem(models.Model):
@@ -146,4 +146,4 @@ class ComboLineItem(models.Model):
 
     def __str__(self):
         return f'Food item Id: {self.food_item.pk} added to combo \
-        {self.combo.combo_id}'
+{self.combo.combo_id}'
