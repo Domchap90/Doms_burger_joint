@@ -43,13 +43,14 @@ def cached_payment_intent(request):
 
 
 def checkout(request):
+    """ Control flow for initially rendering checkout page & posting form from this page """
+
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
     food_order = request.session.get('food_order', {})
 
     total = None
     intent = None
-
     is_collect = request.GET.get('is_collect', False)
     reward_notification = None
     discount_result = None
@@ -70,7 +71,8 @@ def checkout(request):
             form_data['address_line1'] = request.POST['address_line1']
             form_data['address_line2'] = request.POST['address_line2']
             form_data['postcode'] = request.POST['postcode']
-            form_data['delivery_instructions'] = request.POST['delivery_instructions']
+            form_data['delivery_instructions'] = request.POST[
+                'delivery_instructions']
 
         order_form = set_order_form(form_data, for_collection)
 
@@ -94,7 +96,7 @@ def checkout(request):
                 order.member_profile = member_profile
             order.save()
             for order_itemid, value in food_order.items():
-                try:                    
+                try:
                     save_to_orderlineitem(order_itemid, value, order)
 
                 except Food_Item.DoesNotExist:
@@ -132,7 +134,8 @@ def checkout(request):
                         'postcode': member_profile.saved_postcode,
                         'address_line1': member_profile.saved_address_line1,
                         'address_line2': member_profile.saved_address_line2,
-                        'delivery_instructions': member_profile.saved_delivery_instructions,
+                        'delivery_instructions':
+                            member_profile.saved_delivery_instructions,
                     })
                 if member_profile.reward_status == 5:
                     discount = get_discount(food_order)
@@ -179,6 +182,7 @@ def is_form_valid(request, is_collect):
     valid before submitting """
 
     remaining_spend = order_contents(request)['remaining_delivery_amount']
+
     # convert javascript boolean to python boolean
     if is_collect == 'false':
         is_collect = False
@@ -196,7 +200,7 @@ def is_form_valid(request, is_collect):
         value = re.sub("[^a-zA-Z0-9\\s@.]", "", str(pair[1]))
         if key != 'csrfmiddlewaretoken':
             form_data[key] = value
- 
+
     form = set_order_form(form_data, is_collect)
     if form.is_valid() and remaining_spend == 0:
         return JsonResponse({'valid': True}, status=200)
@@ -212,7 +216,7 @@ def is_form_valid(request, is_collect):
     return JsonResponse(err_dict, status=200)
 
 
-def save_to_orderlineitem(order_itemid, value, order):
+def save_to_orderlineitem(order_itemid, item_info, order):
     """ Used in both checkout (POST) and the webhook handler for successful
     payments which happen independently of each other."""
 
@@ -222,26 +226,26 @@ def save_to_orderlineitem(order_itemid, value, order):
         order_line_item = OrderLineItem(
             order=order,
             food_item=food_item,
-            quantity=value,
+            quantity=item_info,
         )
 
         # Update the total purchased for each food in the
         # orderline for popular deals.
-        food_item.total_purchased += value
+        food_item.total_purchased += item_info
         food_item.save()
     # For the instance of a combo
     else:
-        combo_item = Food_Combo.objects.get(id=value[0])
+        combo_item = Food_Combo.objects.get(id=item_info[0])
         order_line_item = OrderLineItem(
             order=order,
             combo_item=combo_item,
             combo_id=order_itemid,
-            combo_quantity=value[1],
+            combo_quantity=item_info[1],
         )
         order_line_item.save()
         # Iterate through combo contents to add each combo
         # line item to the combo
-        for item, qty in value[2].items():
+        for item, qty in item_info[2].items():
             food_item = Food_Item.objects.get(id=item)
             combo_line_item = ComboLineItem(
                                 combo=order_line_item,
@@ -250,20 +254,19 @@ def save_to_orderlineitem(order_itemid, value, order):
             combo_line_item.save()
             # Update the total purchased for admin and popular
             # deals
-            food_item.total_purchased += qty * value[1]
+            food_item.total_purchased += qty * item_info[1]
             food_item.save()
     order_line_item.save()
 
 
 def get_discount(order):
-    # Find cheapest burger for potential discount
+    """ Find cheapest burger (category id = 1/5) for potential discount """
     discount = 100.00
 
     for order_id, value in order.items():
         if order_id[0] != 'c':
-            
             food_item = Food_Item.objects.get(id=order_id)
-            if food_item.category.id == 1:
+            if food_item.category.id == 1 or food_item.category.id == 5:
                 if food_item.price < discount:
                     discount = food_item.price
 
@@ -278,6 +281,11 @@ def set_order_form(form_data, is_collection):
     """ Determines whether form is for collection or delivery and returns
     correct form"""
 
+    if not form_data:
+        if is_collection:
+            form_data = {'for_collection': True}
+        else:
+            form_data = {'for_collection': False}
     order_form = OrderFormDelivery(form_data)
 
     if is_collection:
@@ -294,8 +302,11 @@ def collect_or_delivery(request):
 
 
 def get_sent_info(order, is_collection):
+    """ Used by Webhook handler in checkout to attach correct address
+    info to confirmation email """
+
     sent_info = "Available for collection from:\n\t20 Wardour St, \
-        \n\tWest End,\n\tLondon,\n\tW1D 6QG"
+\n\tWest End,\n\tLondon,\n\tW1D 6QG"
 
     if not is_collection:
         sent_info = "Sent to:\n\t"+order.address_line1+",\n\t"
@@ -313,6 +324,7 @@ def checkout_success(request, order_number):
     """ Directs to this page if checkout was successful """
 
     order = get_object_or_404(Order, order_number=order_number)
+
     if request.user.is_authenticated:
         member = MemberProfile.objects.get(member=request.user)
         order.member_profile = member
