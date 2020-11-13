@@ -49,6 +49,7 @@ input {
     width: 100%;
     border: solid 1px black !important;
     font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box !important;
 }
 /* ::-webkit-input-placeholder,
 :-ms-input-placeholder, */
