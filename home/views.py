@@ -17,7 +17,6 @@ def check_postcode_home(request):
     """
 
     postcode = request.POST.get('postcode')
-
     postcode_valid = is_postcode_valid(postcode)
 
     msg = "Sorry it looks like you are not eligible for delivery. However \
@@ -41,11 +40,12 @@ def is_postcode_valid(postcode):
 
     if postcode_valid:
         formatted_postcode = []
-        # format postcode so all entries are standardized with no spaces or lower
-        # case characters
+        # format postcode so all entries are standardized with no spaces or
+        # lower case characters
         for char in postcode:
             if char != " ":
                 formatted_postcode.append(char.upper())
+
         postcode_string = "".join(formatted_postcode)
         accepted_prefixes = ['WC1', 'WC2', 'W1', 'SW1']
         # Check it's in listed postcode region
@@ -65,20 +65,26 @@ def is_postcode_valid(postcode):
             geocode_response = requests.get(geocode_url).json()
 
             # coordinates for user's address
-            user_lat = str(geocode_response['results'][0]['geometry']['location']['lat'])
-            user_lng = str(geocode_response['results'][0]['geometry']['location']['lng'])
+            user_lat = str(geocode_response['results'][0]['geometry'][
+                'location']['lat'])
+            user_lng = str(geocode_response['results'][0]['geometry'][
+                'location']['lng'])
 
             store_lat = '51.512647'
             store_lng = '-0.13375'
 
             # API check distance (using imperial units to get miles)
             distance_url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=\
-                "+user_lat+","+user_lng+"&destinations="+store_lat+","+store_lng+"&key="+settings.GOOGLEMAPS_API_KEY
+                "+user_lat+","+user_lng+"&destinations="+store_lat+",\
+"+store_lng+"&key="+settings.GOOGLEMAPS_API_KEY
 
             distance_response = requests.get(distance_url).json()
 
-            # extract value from JSON response object & split the string to get the value only.
-            distance_miles = float(distance_response['rows'][0]['elements'][0]['distance']['text'].split(' ')[0])
+            # extract value from JSON response object & split the string to
+            # get the value only.
+            distance_miles = float(
+                distance_response['rows'][0]['elements'][0]['distance'][
+                    'text'].split(' ')[0])
 
             if distance_miles > 1.5:
                 postcode_valid = False
