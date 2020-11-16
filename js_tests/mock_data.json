@@ -1,0 +1,22 @@
+{"items":
+    [
+        {"fields": {
+                "name": "cheeseburger",
+                "image": "img_of_cheeseburger",
+                "description": "desc_cheeseburger",
+                "price": 10.00}
+        },
+        {"fields": {
+                "name": "veggieburger",
+                "image": "img_of_veggieburger",
+                "description": "desc_veggieburger",
+                "price": 15.00}
+        },
+        {"fields": {
+                "name": "doublebaconburger",
+                "image": "img_of_db_burger",
+                "description": "desc_db_burger",
+                "price": 20.00}
+        }
+    ]
+}

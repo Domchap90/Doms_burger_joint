@@ -62,8 +62,7 @@ def sort_items(request):
         items = items.order_by('-price')
 
     sorted_items_ser = serializers.serialize('json', items)
-    data = {"items": sorted_items_ser, 'selected_category': category}
-    return JsonResponse(data, status=200)
+    return JsonResponse(sorted_items_ser, status=200, safe=False)
 
 
 def combo(request):

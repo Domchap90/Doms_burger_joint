@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>QUnit Test Suite</title>
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.12.0.css">
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/vendor/js/jquery.mockjax.js"></script>
+    <script src="https://code.jquery.com/qunit/qunit-2.12.0.js" 
+    integrity="sha256-1OG2KXcIqF7ISoLYbZ9PxwTVRsgyiQJP5KGsQSycXvo="
+    crossorigin="anonymous"></script>
+    <script src="../menu/static/menu/js/menu_filter.js"></script>
+    <script src="../menu/static/menu/js/tests.js"></script>
+    
+  </head>
+  <body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <div id="qunit-dom" style="display: none;">
+
+        <div class="col s6 switch" id="price_low_high">
+            <label>
+                <input id="price_asc" name="price_asc"  type="checkbox">
+            </label>
+        </div>
+        <div class="col s6 switch" id="price_high_low">
+            <label>
+                <input id="price_desc" name="price_desc"  type="checkbox">
+            </label>
+        </div>
+
+        <button type="submit" onclick="getFilteredResults('burgers')">
+            Filter results
+        </button>
+
+        <div id="item_name_1"></div>
+        <div id="item_pic_1"></div>
+        <div id="item_desc_inline_1"></div>
+        <div id="item_price_1"></div>
+        <div id="item_desc_block_1"></div>
+
+        <div id="item_name_2"></div>
+        <div id="item_pic_2"></div>
+        <div id="item_desc_inline_2"></div>
+        <div id="item_price_2"></div>
+        <div id="item_desc_block_2"></div>
+
+        <div id="item_name_3"></div>
+        <div id="item_pic_3"></div>
+        <div id="item_desc_inline_3"></div>
+        <div id="item_price_3"></div>
+        <div id="item_desc_block_3"></div>
+        
+    </div>
+    
+</body>
+</html>
