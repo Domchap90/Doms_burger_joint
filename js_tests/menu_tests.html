@@ -7,11 +7,17 @@
     <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.12.0.css">
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Materialize imported for formSelect & collapsible functions found in combo_items.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Mockjax used to create mock responses to Ajax calls therefore avoid live server communication in tests-->
     <script type="text/javascript" src="../static/vendor/js/jquery.mockjax.js"></script>
     <script src="https://code.jquery.com/qunit/qunit-2.12.0.js" 
     integrity="sha256-1OG2KXcIqF7ISoLYbZ9PxwTVRsgyiQJP5KGsQSycXvo="
     crossorigin="anonymous"></script>
+    <!-- Files to be tested -->
     <script src="../menu/static/menu/js/menu_filter.js"></script>
+    <script src="../menu/static/menu/js/combo_items.js"></script>
+    <!-- File executing tests -->
     <script src="../menu/static/menu/js/tests.js"></script>
     
   </head>
@@ -52,7 +58,21 @@
         <div id="item_desc_inline_3"></div>
         <div id="item_price_3"></div>
         <div id="item_desc_block_3"></div>
-        
+
+        <!-- Combo_items DOM -->
+        <form name="add_combo" onsubmit="event.preventDefault();">
+
+            <input name="c3_starter" id="c3_starter" onchange="updateComboSelection(this)" required>
+            <div id="c3_starter_image"></div><div id="c3_starter_description"></div>
+            <input name="c3_main" id="c3_main" onchange="updateComboselection(this)" required>
+            <input name="c3_drink" id="c3_drink" onchange="updateComboSelection(this)" required>
+            <input name="c3_dessert" id="c3_dessert" onchange="updateComboSelection(this)" required>
+
+            <div class="form-error" id="change_in_test"></div>
+
+            <button onclick="validateComboForm(3)" id="combo_btn"></button>
+
+        </form>
     </div>
     
 </body>

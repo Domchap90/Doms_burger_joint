@@ -17,7 +17,7 @@ QUnit.module('Menu filter tests:', function(hooks) {
         // Awaits done() call before making assertions
         let done = assert.async();
         
-        let expectedData = {
+        let expectedSortData = {
             'sort_key': 'price_asc',
             'category': 'burgers'
         }
@@ -26,7 +26,7 @@ QUnit.module('Menu filter tests:', function(hooks) {
         $.mockjax({
             url: "sort/",
             contentType: 'application/text',
-            proxy: 'mock_data.txt'                
+            proxy: 'menu_mock_data/sort_mock_data.txt'                
         });
         
         $.ajax({
@@ -53,11 +53,12 @@ QUnit.module('Menu filter tests:', function(hooks) {
             let thirdPriceListed = parseFloat($("#item_price_3").html());
 
             // Data sent from ajax call is matching the data from filter buttons pressed
-            assert.deepEqual($.mockjax.unmockedAjaxCalls()[0]['data'], expectedData, "correct data sent");
+            assert.deepEqual($.mockjax.unmockedAjaxCalls()[0]['data'], expectedSortData, "correct data sent");
 
             // Items price sorted in ascending order
             assert.ok(thirdPriceListed > secondPriceListed && secondPriceListed > firstPriceListed, "list in ascending order");
-            
+
+            $.mockjax.clear();
             done();
         }, 2000)
     });
@@ -86,5 +87,98 @@ QUnit.module('Menu filter tests:', function(hooks) {
             let switchB= $('#price_asc').is(':checked');
             assert.propEqual(switchB, true, 'switch B turns on.');
         });
+    });
+});
+
+QUnit.module('Combo items tests:', function(hooks) {
+    hooks.afterEach( function () {
+        $('#c3_starter').val('');
+        $('#c3_main').val('');
+        $('#c3_dessert').val('');
+        $('#c3_drink').val('');
+        $("#c3_starter_image").empty();
+        $("#c3_starter_description").empty();
+    })
+
+    test('validateComboForm working', function(assert) {
+        assert.expect(5);
+        $('#c3_starter').val('soup');
+        $('#c3_main').val('chicken');
+        $('#c3_dessert').val('doughnut');
+        $('#c3_drink').val('cola');
+        $('.form-error').attr('id','err_3');
+
+        $('#combo_btn').trigger('click');
+        assert.ok($('.form-error#err_3').is(':empty'), 'no errors rendered when form is complete');
+        let formInputs = $('form').children('input');
+
+        for (input of formInputs){
+            // Fill all inputs in
+            for (inputInner of formInputs){
+                $(inputInner).val('rice');
+            }
+            // Except for one
+            $(input).val('');
+
+            $('#combo_btn').trigger('click');
+            // Check error message is raised when form is submitted with empty field. 
+            assert.equal($('.form-error#err_3').html(), `<p>Please select all food options to add the combo to your order.</p>`,
+                         "error message displaying for empty "+input.name+" field");
+        }
+    });
+
+    test('updateComboSelection working', function(assert) {
+        assert.expect(3);
+        let done = assert.async();
+
+        // Set value to update info for
+        $('#c3_starter').val('whitebait');
+        $('#c3_starter').trigger('change');
+        let selectedVal = $('#c3_starter').val();
+        let combo_category = $('#c3_starter').attr('id');
+        let expectedItemData = {'food_id': selectedVal}
+        // Initialize array to collect response items
+        let responseItems = []
+
+        $.mockjax({
+            url: 'item/',
+            dataType: 'json',
+            proxy: 'menu_mock_data/combo_mock_data.txt', 
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: 'item/',
+            success: function(response) {
+                let item = JSON.parse(response);  
+                for ( i of item ) { 
+                    $("#"+combo_category+"_image").html(`<img class="combo-img" src="/media/`+i['fields']['image']+`">`);
+                    $("#"+combo_category+"_description").html(i['fields']['description']);
+
+                    // Collect results for assertion
+                    responseItems.push("/media/"+i['fields']['image'], i['fields']['description'])
+                }
+            },
+            error: function(response){
+                alert(response.error); 
+            }
+        });
+
+        setTimeout(function() {
+            // Get updated field information from DOM to compare against the ajax response info
+            let changedFieldImgSrc = $("#c3_starter_image img").attr('src'); 
+            let changedFieldDesc = $("#c3_starter_description").html();
+
+            // Data sent from ajax call is matching the item changed in form
+            assert.deepEqual($.mockjax.unmockedAjaxCalls()[0]['data'], expectedItemData, "correct data sent");
+
+            // ajax response correctly updates changed fields information
+            assert.equal(responseItems[0], changedFieldImgSrc, "image updated correctly");
+            assert.equal(responseItems[1], changedFieldDesc, "description updated correctly");
+
+            $.mockjax.clear();
+            done();
+        }, 2000)
+
     });
 });

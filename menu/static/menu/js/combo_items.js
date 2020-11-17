@@ -15,9 +15,10 @@ function validateComboForm(form) {
 }
 
 function updateComboSelection(selectedItem){
+    // From changed field id, function sends ajax call to server and 
+    // dynamically updates item's info on page (image and description)
     let selectedID = selectedItem.value;
     let combo_category = selectedItem.id;
-    console.log('selectedID = '+selectedID+' combo_category = '+combo_category)
     let itemData = {
         'food_id': selectedID
     }
@@ -28,14 +29,11 @@ function updateComboSelection(selectedItem){
         data: itemData,
         dataType: 'json',
         success: function(response) {
-            console.log("SUCCESS")
             let item = JSON.parse(response);
-            console.log(response)
+
             for ( i of item ) {
-                console.log(i['fields']['image'])
-                console.log(i['fields']['description'])
-            $("#"+combo_category+"_image").html(`<img class="combo-img" src="/media/`+i['fields']['image']+`">`);
-            $("#"+combo_category+"_description").html(i['fields']['description']);
+                $("#"+combo_category+"_image").html(`<img class="combo-img" src="/media/`+i['fields']['image']+`">`);
+                $("#"+combo_category+"_description").html(i['fields']['description']);
             }
         },
         error: function(response){
