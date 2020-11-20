@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>QUnit Test Suite</title>
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.12.0.css">
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Materialize imported for formSelect & collapsible functions found in combo_items.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Mockjax used to create mock responses to Ajax calls therefore avoid live server communication in tests-->
+    <script type="text/javascript" src="../static/vendor/js/jquery.mockjax.js"></script>
+    <script src="https://code.jquery.com/qunit/qunit-2.12.0.js" 
+    integrity="sha256-1OG2KXcIqF7ISoLYbZ9PxwTVRsgyiQJP5KGsQSycXvo="
+    crossorigin="anonymous"></script>
+    <!-- Files to be tested -->
+    <script src="../food_order/static/food_order/js/quantity_buttons.js"></script>
+    <!-- File executing tests -->
+    <script src="../food_order/static/food_order/js/tests.js"></script>
+    
+  </head>
+  <body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <div id="qunit-dom" style="display: none;">
+
+        <!-- Item qty buttons -->
+
+        <div class="item-container">
+
+            <div class="order-qty" id="itemrow_7">
+
+                <div class="order-qty">
+                    <button class="qty-btn remove" id="item_7_remove" onclick="decreaseQuantity(this)">
+                        <span class="material-icons">remove</span>
+                    </button>
+                    
+                    <input class="order-qty-input" id="item_7_qty" type="number" name="food-qty"
+                    value="10" min="1" max="10" >
+                    
+                    <button class="qty-btn add" id="item_7_add" onclick="increaseQuantity(this)">
+                        <i class="material-icons">add</i>
+                    </button>
+                </div>
+
+                <div class="col s2 m1 order-item-delete">
+                    <span class="material-icons" id="item_7_delete" onclick="removeItem(this)">delete</span>
+                </div>
+
+                <div></div>
+
+                <div class="col s3 m2 subtotal" onblur="updateTotals()">£100</div>
+
+            </div>
+
+        </div>
+
+        <div class="order-combo-container">
+            <div class="item-container">
+            <!-- Combo 1 qty ctrls -->
+
+                <div class="order-qty" id="comborow_c123">
+
+                    <div class="col s3 m2 order-combo-subtotal subtotal">£100</div>
+
+                    <div class="order-qty">
+                        <button class="qty-btn remove" id="combo_1_c123_remove" onclick="decreaseQuantity(this)">
+                            <span class="material-icons">remove</span>
+                        </button>
+
+                        <input class="order-qty-input" id="combo_1_c123_qty" type="number" name="food_qty" 
+                        value="5" min="1" max="5" onchange="updateQty(this)">
+                        
+                        <button class="qty-btn add" id="combo_1_c123_add" onclick="increaseQuantity(this)">
+                            <i class="material-icons">add</i>
+                        </button>
+                    </div>
+
+                    <div class="col s3 m2 order-combo-delete">
+                        <span class="material-icons" id="combo_1_c123_delete" onclick="removeItem(this)">delete</span>
+                    </div>
+                </div>
+
+            <!-- Combo 2 qty ctrls -->
+
+                <div class="order-qty" id="comborow_c278">
+                    <div class="col s3 m2 order-combo-subtotal subtotal">£90</div>
+
+                    <div class="order-qty">
+                        <button class="qty-btn remove" id="combo_2_c278_remove" onclick="decreaseQuantity(this)">
+                            <span class="material-icons">remove</span>
+                        </button>
+
+                        <input class="order-qty-input" id="combo_2_c278_qty" type="number" name="food_qty" 
+                        value="3" min="1" max="5" onchange="updateQty(this)">
+                        
+                        <button class="qty-btn add" id="combo_2_c278_add" onclick="increaseQuantity(this)">
+                            <i class="material-icons">add</i>
+                        </button>
+                    </div>
+
+                    <div class="col s3 m2 order-combo-delete">
+                        <span class="material-icons" id="combo_2_c278_delete" onclick="removeItem(this)">delete</span>
+                    </div>
+                </div>
+
+            <!-- Combo 3 qty ctrls -->
+
+                <div class="order-qty" id="comborow_c369">
+
+                    <div class="col s3 m2 order-combo-subtotal subtotal">£120</div>
+
+                    <div class="order-qty">
+                        <button class="qty-btn remove" id="combo_3_c369_remove" onclick="decreaseQuantity(this)">
+                            <span class="material-icons">remove</span>
+                        </button>
+
+                        <input class="order-qty-input" id="combo_3_c369_qty" type="number" name="food_qty" 
+                        value="3" min="1" max="5" onchange="updateQty(this)">
+                        
+                        <button class="qty-btn add" id="combo_3_c369_add" onclick="increaseQuantity(this)">
+                            <i class="material-icons">add</i>
+                        </button>
+                    </div>
+
+                    <div class="col s3 m2 order-combo-delete">
+                        <span class="material-icons" id="combo_3_c369_delete" onclick="removeItem(this)">delete</span>
+                    </div>
+                </div>
+
+                <!-- 2nd combo 3 -->
+
+                <div class="order-qty" id="comborow_c379">
+                    <div class="col s3 m2 order-combo-subtotal subtotal">£80</div>
+
+                    <div class="order-qty">
+                        <button class="qty-btn remove" id="combo_3_c379_remove" onclick="decreaseQuantity(this)">
+                            <span class="material-icons">remove</span>
+                        </button>
+
+                        <input class="order-qty-input" id="combo_3_c379_qty" type="number" name="food_qty" 
+                        value="2" min="1" max="5" onchange="updateQty(this)">
+                        
+                        <button class="qty-btn add" id="combo_3_c379_add" onclick="increaseQuantity(this)">
+                            <i class="material-icons">add</i>
+                        </button>
+                    </div>
+
+                    <div class="col s3 m2 order-combo-delete">
+                        <span class="material-icons" id="combo_3_c379_delete" onclick="removeItem(this)">delete</span>
+                    </div>
+                </div>
+                
+                <!-- End of combos -->
+            </div>
+        </div>
+
+        <!-- Totals -->
+
+        <div id="total">£490.00</div>
+
+        <div id="delivery_fee">£1.99</div>
+
+        <div id="grand_total">£491.99</div>
+
+        <!-- Only for testing checkout button status, in actual html only displayed if total < £15.00 -->
+		<div class="col s12" id="spending_warning">
+			<p>You still need to spend £<span>5.00</span> more to be eligible to order online.</p>
+		</div>
+
+		<button class="checkout-btn">
+            PROCEED TO CHECKOUT
+        </button>
+        
+        <!-- For Ajax calls: -->
+        <script>
+            const csrfToken = 'csrf_test';
+        </script>
+    </div>
+
+</body>
+</html>

@@ -160,7 +160,7 @@
 
 {% block postloadjs %}
 <script>
-    var csrfToken = "{{ csrf_token }}";
+    const csrfToken = "{{ csrf_token }}";
 </script>
 <script src="{% static 'food_order/js/quantity_buttons.js' %}"></script>
 {% endblock %}

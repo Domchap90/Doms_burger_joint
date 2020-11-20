@@ -1,24 +1,24 @@
 $(document).ready(function(){
-        window.addEventListener( "pageshow", function ( event ) {
-            // Determines if page was reloaded using bf cache and
-            // reloads from server to retrieve correct context data.
-		    var loadedFromCache = event.persisted ||
-		    ( typeof window.performance != "undefined" && 
-              window.performance.navigation.type === 2 );
+    window.addEventListener( "pageshow", function ( event ) {
+        // Determines if page was reloaded using bf cache and
+        // reloads from server to retrieve correct context data.
+        var loadedFromCache = event.persisted ||
+        ( typeof window.performance != "undefined" && 
+            window.performance.navigation.type === 2 );
 
-            if ( loadedFromCache ) {
-                // Handle page restore.
-                window.location.reload();
-            }
-		});
-        updateBtnState();
-        updateCheckoutBtnState();
-    }, {passive: true});
+        if ( loadedFromCache ) {
+            // Handle page restore.
+            window.location.reload();
+        }
+    });
+    updateBtnState();
+    updateCheckoutBtnState();
+}, {passive: true});
 // Make event listener passive to improve performance (wheel scroll element).
-var itemUpperQtyLimit = 10;
-var comboUpperQtyLimit = 5;
-var comboTwoUpperQtyLimit = 3;
-var lowerQtyLimit = 1;
+const itemUpperQtyLimit = 10;
+const comboUpperQtyLimit = 5;
+const comboTwoUpperQtyLimit = 3;
+const lowerQtyLimit = 1;
 
 function updateCheckoutBtnState() {
     if($('#spending_warning').children().length>0) {
@@ -30,35 +30,41 @@ function updateCheckoutBtnState() {
 
 function updateBtnState() {
     activateAllButtons();
-    let items = $(".item-container").children();
-    sum_combo_items_1 = 0;
-    sum_combo_items_2 = 0;
-    sum_combo_items_3 = 0;
+    let combos = $(".order-combo-container .item-container").children();
+    let sum_combo_items_1 = 0;
+    let sum_combo_items_2 = 0;
+    let sum_combo_items_3 = 0;
     updateCheckoutBtnState();
 
     // Evaluate sum of combo items for each id
-    for(item of items) {
-        let itemQty = $(item).find('.order-qty');
+    for(combo of combos) {
+        let comboQty = $(combo).find('.order-qty');
+
         // First check that quantity area belongs to a combo
-        if (itemQty.length>0 && itemQty.children('input').attr('id').split('_')[0]=='combo') {
-            // Then sum combos with identical item ids.
-            combo_val = parseInt(itemQty.children('input').val());
-            if (itemQty.children('input').attr('id').split('_')[1]=='1') {
+        if (comboQty.length>0) {
+            // Then sum combos with identical ids.
+            combo_val = parseInt(comboQty.children('input').val());
+            
+            if (comboQty.children('input').attr('id').split('_')[1]=='1') {
                 sum_combo_items_1 += combo_val;
-            } else if (itemQty.children('input').attr('id').split('_')[1]=='2') {
+            } else if (comboQty.children('input').attr('id').split('_')[1]=='2') {
                 sum_combo_items_2 += combo_val;
             } else {
                 sum_combo_items_3 += combo_val;
             }
         }
     }
+    let items = $('.item-container').children();
+    let allItems = items.append(combos);
 
     // Evaluate state of +/- buttons for each qty area using the sum of combos from above.
-    for(item of items) {
+    for(item of allItems) {
         let itemQty = $(item).find('.order-qty');
+
         // Check Qty area contains at least 1 element/button to be valid
         if (itemQty.length>0) {
             let itemQtyInputId = itemQty.children('input').attr('id');
+
             if (itemQtyInputId.includes("item")) {
                 changeBtnState(itemQty, 0, lowerQtyLimit , itemUpperQtyLimit);
             } else if (itemQtyInputId.includes("combo_2")) {
@@ -78,19 +84,26 @@ function changeBtnState(quantityObj, sum_combo_items, lowerLimit , upperLimit) {
         // Disables add button for item upper limit
         if (quantityObj.children('input').val()==upperLimit) {
             $(quantityObj).find('.add i').addClass('disabled');
-        } // Disables remove button for item lower limit
-         else if(quantityObj.children('input').val()==lowerLimit){
+        } else { 
+        // Case where quantity value is moving down from upper limit.
+            if ($(quantityObj).find('.add i').hasClass('disabled')){
+                $(quantityObj).find('.add i').removeClass('disabled');
+            }
+        }
+        
+        // Disables remove button for item lower limit
+        if(quantityObj.children('input').val()==lowerLimit){
             $(quantityObj).find('.remove span').addClass('disabled');
-        } 
-        // Deals with case where quantity value is moving away from the limits.
-        else { 
-            if ($(quantityObj).find('button > *').hasClass('disabled')){
-                $(quantityObj).find('button > *').removeClass('disabled');
+        } else { 
+        // Case where quantity value is moving up from lower limit.
+            if ($(quantityObj).find('.remove span').hasClass('disabled')){
+                $(quantityObj).find('.remove span').removeClass('disabled');
             }
         }
     } else { 
         // handles combo qty button states
         combo_inputs = []
+
         // Gather combos of same id into list in order to iterate through list with appropriate limit.
         for (input of $('.order-combo-container .order-qty-input')) {
             if (input.id.split('_')[1] == quantityObj.children('input').attr('id').split('_')[1]) {
@@ -98,7 +111,7 @@ function changeBtnState(quantityObj, sum_combo_items, lowerLimit , upperLimit) {
             }
         }
 
-        // if value in Qty input box is equal to upper limit, disable add button.
+        // Where combo qty input boxes sum to upper limit, disable add buttons for corresponding combos.
         if (sum_combo_items == upperLimit) {
             for (combo_input of combo_inputs) { 
                 $(combo_input).find('.add i').addClass('disabled'); 
@@ -113,7 +126,7 @@ function changeBtnState(quantityObj, sum_combo_items, lowerLimit , upperLimit) {
             }
         }
 
-        // if value in Qty input box is equal to lower limit, disable remove button.
+        // Qty input box is equal to lower limit, disable remove button.
         if (quantityObj.children('input').val()==lowerLimit) {
             $(quantityObj).find('.remove span').addClass('disabled');
         } 
@@ -133,21 +146,21 @@ function increaseQuantity(selectedQuantityBtn){
     let typeOfItem = selectedQuantityBtn.id.split("_")[0];
     let itemID = selectedQuantityBtn.id.split("_")[1];
     let itemQtyId = typeOfItem+'_'+itemID+"_qty";
+
     // Account for combo add button ids having a different structure.
     if (typeOfItem == 'combo') {
         let comboHashKey = selectedQuantityBtn.id.split("_")[2]; 
         itemQtyId = typeOfItem+'_'+itemID+'_'+comboHashKey+"_qty";
     }
     let qtyValue = $('#'+itemQtyId).val();
+
     // Only allow quantity to be increased when the button is not disabled (from updateBtnState).
     if (!$(selectedQuantityBtn).children().hasClass('disabled')) {
         let oldQtyValue = qtyValue;
         qtyValue = parseInt(qtyValue)+1;
         updateQty(itemQtyId, qtyValue, oldQtyValue);
     }
-    
-    // $('#'+itemQtyId).val(qtyValue);
-    // updateBtnState();
+
 }
 
 function decreaseQuantity(selectedQuantityBtn){
@@ -167,8 +180,6 @@ function decreaseQuantity(selectedQuantityBtn){
         qtyValue = parseInt(qtyValue)-1;
         updateQty(itemQtyId, qtyValue, oldQtyValue);
     }
-    // $('#'+itemQtyId).val(qtyValue);
-    // updateBtnState();
 }
 
 function updateQty(itemQtyId, newQtyVal, oldQtyVal) {
@@ -263,6 +274,7 @@ function removeItem(itemToRemove){
 }
 
 function deactivateAllButtons() {
+    // Prevents qty buttons from being spammed whilst ajax calls are made
     let buttons = document.getElementsByTagName('button');
     Array.from(buttons).forEach( button => {
         $(button).prop('disabled', true);
@@ -270,6 +282,7 @@ function deactivateAllButtons() {
 }
 
 function activateAllButtons() {
+    // Allows buttons to be pressed after server has finished dealing with request
     let buttons = document.getElementsByTagName('button');
 
     Array.from(buttons).forEach( button => {
