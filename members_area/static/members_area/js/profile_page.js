@@ -15,14 +15,13 @@ $(document).ready(function() {
 window.addEventListener('resize', controlPaginationMenuLength);
 
 function controlPaginationMenuLength() {
-    let paginatedNumberBtns = $('.pagination li:not(.arrow-btn)');
+    const paginatedNumberBtns = $('.pagination li:not(.arrow-btn)');
     paginatedNumberBtns.hide();
-    let activeElement = parseInt($('.pagination .active').html());
+    const activeElement = parseInt($('.pagination .active').html());
     
     if ($(window).width () < 601) {
         // show 5 page buttons below 601px res
         displayButtons(paginatedNumberBtns, activeElement, 5);
-        console.log("number of buttons is "+paginatedNumberBtns.length)
         if (paginatedNumberBtns.length < 5) {
             $('.pagination').width("fit-content");
         }
@@ -42,9 +41,9 @@ function controlPaginationMenuLength() {
 function displayButtons(paginatedNumberBtns, activeElement, numPageBtnsToDisplay) {
     /* Limits the number of paginated buttons to be displayed when there are many */
     
-    let btnsToDisplay = []
+    let btnsToDisplay = [];
     // limits will dictate the number of buttons either side of the active element
-    let limit = numPageBtnsToDisplay/2;
+    const limit = numPageBtnsToDisplay/2;
 
     for (numberBtn of paginatedNumberBtns){
         // read page number from id of button

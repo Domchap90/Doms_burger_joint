@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>QUnit Test Suite</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.css">
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.12.0.css">
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Materialize imported for formSelect & collapsible functions found in combo_items.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Mockjax used to create mock responses to Ajax calls therefore avoid live server communication in tests-->
+    <script type="text/javascript" src="../static/vendor/js/jquery.mockjax.js"></script>
+    <script src="https://code.jquery.com/qunit/qunit-2.12.0.js" 
+    integrity="sha256-1OG2KXcIqF7ISoLYbZ9PxwTVRsgyiQJP5KGsQSycXvo="
+    crossorigin="anonymous"></script>
+    <!-- Files to be tested -->
+    <script src="../members_area/static/members_area/js/profile_page.js"></script>
+    <!-- File executing tests -->
+    <script src="../members_area/static/members_area/js/tests.js"></script>
+    
+  </head>
+  <body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <div id="qunit-dom">
+        <h1>Profile Page Test DOM</h1>
+        <div class="pagination_container">
+            <ul class="pagination" style="display: flex;">                
+                <li class="disabled">
+                    <span class="material-icons">navigate_before</span>
+                </li>
+                <li class="active" id="pgBtn_1">1</li>
+                <li id="pgBtn_2">2</li>
+                <li id="pgBtn_3">3</li>
+                <li id="pgBtn_4">4</li>
+                <li id="pgBtn_5">5</li>
+                <li id="pgBtn_6">6</li>
+                <li id="pgBtn_7">7</li>
+                <li id="pgBtn_8">8</li>
+                <li id="pgBtn_9">9</li>
+                <li id="pgBtn_10">10</li>
+                <li id="pgBtn_11">11</li>
+                <li id="pgBtn_12">12</li>
+                <li class="arrow-btn">
+                    <span class="material-icons">navigate_next</span>
+                </li>
+            </ul>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Order no.</th>
+                    <th>Total charged</th>
+                </tr>
+            </thead>
+        
+            <tbody>
+
+            <!-- Order 1  -->
+
+                <tr class="general-order-row">
+                    <td>10/10/2018</td>
+                    <td>o123</td>
+                    <td>£50</td>
+                </tr>
+
+                <tr class="detail-order-row" id="detail_0123">
+                    <td>
+                        <table>
+                            <h3 class="form-subtitle">Food ordered</h3>
+                            <div class="row">
+                                <div>item 1</div>
+                                <div>item 2</div>
+                                <div>item 3</div>
+                            </div>
+                            
+                        </table>
+                    </td>
+                </tr>
+
+            <!-- Order 2  -->
+
+                <tr class="general-order-row">
+                    <td>10/10/2019</td>
+                    <td>o234</td>
+                    <td>£60</td>
+                </tr>
+
+                <tr class="detail-order-row" id="detail_0234">
+                    <td>
+                        <table>
+                            <h3 class="form-subtitle">Food ordered</h3>
+                            <div class="row">
+                                <div>item 1</div>
+                                <div>item 2</div>
+                                <div>item 3</div>
+                            </div>
+                            
+                        </table>
+                    </td>
+                </tr>
+
+            <!-- Order 3  -->
+
+                <tr class="general-order-row">
+                    <td>10/10/2020</td>
+                    <td>o345</td>
+                    <td>£70</td>
+                </tr>
+
+                <tr class="detail-order-row" id="detail_0345">
+                    <td>
+                        <table>
+                            <h3 class="form-subtitle">Food ordered</h3>
+                            <div class="row">
+                                <div>item 1</div>
+                                <div>item 2</div>
+                                <div>item 3</div>
+                            </div>
+                            
+                        </table>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+    </div>
+
+</body>
+</html>
