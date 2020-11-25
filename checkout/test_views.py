@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.shortcuts import get_object_or_404
 from django.test import TestCase, Client
 from menu.models import Food_Item, Food_Category, Food_Combo
 from members_area.models import MemberProfile
@@ -111,7 +110,7 @@ class TestCheckoutView(TestCase):
         self.assertEqual(float(round(response.context['total'], 2)), 7.48)
         self.assertEqual(float(response.context['discount']), 0.99)
         self.assertEqual(response.context['reward_notification'], None)
-        self.assertEqual(   
+        self.assertEqual(
             [field.value() for field in response.context['form']],
             ['elvisTheKing', '07771 555 229', 'heartbreak@hotel.com', False,
              '3764 Elvis Presley Boulevard', 'Memphis, Tennessee', 'TN 38116',
@@ -325,7 +324,7 @@ However please feel free to make an order for collection.'
         )
         # Check total is updated
         self.assertEqual(
-            float(self.test_order.grand_total), 
+            float(self.test_order.grand_total),
             (self.apple.price * 5) + (self.orange.price * 3) +
             settings.DELIVERY_FEE
             )
@@ -442,13 +441,15 @@ However please feel free to make an order for collection.'
         session.save()
 
         # Get order number assigned upon saving the order in checkout
-        response = self.client2.post('/checkout/success/'+self.test_order.order_number)
+        response = self.client2.post(
+            '/checkout/success/'+self.test_order.order_number)
 
         # Check order is in context
         self.assertEqual(response.context['order'], self.test_order)
 
         # Check order is saved to member's profile if logged in
-        self.assertEqual(response.context['order'].member_profile, self.test_member2)
+        self.assertEqual(response.context[
+            'order'].member_profile, self.test_member2)
 
         # Check food order session variable is cleared after successful order
         self.assertFalse('food_order' in self.client2.session.keys())

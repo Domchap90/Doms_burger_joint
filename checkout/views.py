@@ -228,11 +228,6 @@ def save_to_orderlineitem(order_itemid, item_info, order):
             food_item=food_item,
             quantity=item_info,
         )
-
-        # Update the total purchased for each food in the
-        # orderline for popular deals.
-        food_item.total_purchased += item_info
-        food_item.save()
     # For the instance of a combo
     else:
         combo_item = Food_Combo.objects.get(id=item_info[0])
@@ -252,10 +247,6 @@ def save_to_orderlineitem(order_itemid, item_info, order):
                                 food_item=food_item,
                                 quantity=qty)
             combo_line_item.save()
-            # Update the total purchased for admin and popular
-            # deals
-            food_item.total_purchased += qty * item_info[1]
-            food_item.save()
     order_line_item.save()
 
 
