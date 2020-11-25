@@ -4,6 +4,15 @@ from .forms import MemberProfileForm
 
 class TestMembersAreaForm(TestCase):
 
+    def test_required_fields(self):
+        # Check each field has correct label and placeholder formatting
+        form = MemberProfileForm()
+        for field, field_obj in form.fields.items():
+            if field_obj.required:
+                self.assertTrue(
+                    field_obj.label[-1] == '*' and field_obj.widget.attrs[
+                        'placeholder'][-10:] == '(required)')
+
     def test_saved_mobile_number_correct_length(self):
         member_form = MemberProfileForm(
             data={'saved_mobile_number': '01234 567 8912'}
@@ -80,7 +89,11 @@ not valid."]
     def test_saved_postcode_is_valid(self):
         # User enters invalid UK postcode
         member_form = MemberProfileForm(
-            data={"saved_postcode": "W1 E63"}
+            data={
+                "saved_email": "test@gmail.com",
+                "saved_mobile_number": "07777111222",
+                "saved_address_line1": "29 London street",
+                "saved_postcode": "W1 E63"}
             )
 
         self.assertEqual(
@@ -91,7 +104,12 @@ not valid."]
 
         # User enters valid UK postcode but not in range of store
         member_form = MemberProfileForm(
-            data={"saved_postcode": "MK40 4FE"}
+            data={
+                "saved_email": "test@gmail.com",
+                "saved_mobile_number": "07777111222",
+                "saved_address_line1": "29 London street",
+                "saved_postcode": "MK40 4FE"
+                }
             )
 
         self.assertEqual(
@@ -102,7 +120,11 @@ not valid."]
 
         # User enters valid UK postcode in range of store
         member_form = MemberProfileForm(
-            data={"saved_postcode": "W1W 7JE"}
+            data={
+                "saved_email": "test@gmail.com",
+                "saved_mobile_number": "07777111222",
+                "saved_address_line1": "29 London street",
+                "saved_postcode": "W1W 7JE"}
             )
 
         self.assertTrue(member_form.is_valid())

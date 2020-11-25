@@ -28,6 +28,7 @@ def members_area(request):
 
     orders_list = list(orders)
     orders_paginated = Paginator(orders_list, 5)
+
     try:
         orders_page_objects = orders_paginated.page(pagenum)
     except PageNotAnInteger:

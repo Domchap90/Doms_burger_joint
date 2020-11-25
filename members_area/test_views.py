@@ -53,7 +53,7 @@ class TestMembersAreaView(TestCase):
 
         # Create test users
         self.user = User.objects.create_user(
-            username='john_wick', email='johnwick@badass.com',
+            username='john_wick', email='johnwick@badman.com',
             password='love_dog'
             )
 
@@ -155,7 +155,7 @@ class TestMembersAreaView(TestCase):
         # Update member form details to be posted
         data = {'saved_email': 'dr_jones@archaeologist.com',
                 'saved_mobile_number': '07777 777 777',
-                'saved_postcode': 'SE10 9UX',
+                'saved_postcode': 'W1W 7JB',
                 'saved_address_line1': '23 sunshine lane',
                 'saved_delivery_instructions': 'Come round back'}
 
@@ -165,7 +165,7 @@ class TestMembersAreaView(TestCase):
         # Check Member's delivery details are updated correctly on the form
         self.assertEqual(
             [field.value() for field in response.context['memberform']],
-            ['dr_jones@archaeologist.com', '07777 777 777', 'SE10 9UX',
+            ['dr_jones@archaeologist.com', '07777 777 777', 'W1W 7JB',
              '23 sunshine lane', None, 'Come round back'])
 
         # Format response context data into 3 lists
@@ -211,6 +211,16 @@ class TestMembersAreaView(TestCase):
         # Check returns correct status code and renders correct template
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'members_area/profile_page.html')
+
+        # Still shows first page when argument passed is not a number
+        response2 = self.client.get(url, {'pagenum': ''})
+        # page 10 doesn't exist should run Except EmptyPage and render
+        # last page
+        response3 = self.client.get(url, {'pagenum': 10})
+
+        # Check pages not empty
+        self.assertGreater(len(response2.context['order_history']), 0)
+        self.assertGreater(len(response3.context['order_history']), 0)
 
     def test_rewards(self):
         url = '/members_area/rewards/'

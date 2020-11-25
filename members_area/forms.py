@@ -24,46 +24,6 @@ class MemberProfileForm(forms.ModelForm):
 
     def clean_saved_mobile_number(self):
         return check_number_format(self, 'saved_mobile_number')
-#         saved_mobile_number = self.cleaned_data['saved_mobile_number']
-
-#         if saved_mobile_number:
-#             formatted_mobile_number = saved_mobile_number.replace(' ', '')
-
-#             # Catch any numbers that contain special chars or anything other than
-#             # numerical digits and '+'
-#             if re.match("[0-9+]*[^0-9+]+[0-9+]*", formatted_mobile_number):
-#                 self.add_error(
-#                         'saved_mobile_number',
-#                         'This phone number contains non numerical characters and is therefore \
-# not valid.')
-#                 return formatted_mobile_number
-
-#             if '+' not in formatted_mobile_number:
-#                 if len(formatted_mobile_number) > 11:
-#                     self.add_error(
-#                         'saved_mobile_number',
-#                         "This phone number is too long. It can only have a maximum \
-# of 11 digits without a '+'.")
-#                 elif len(formatted_mobile_number) < 10:
-#                     self.add_error(
-#                         'saved_mobile_number',
-#                         "This phone number is too short. It needs a minimum \
-# of 10 digits without a '+'.")
-#             else:
-#                 if len(formatted_mobile_number) > 13:
-#                     self.add_error(
-#                         'saved_mobile_number',
-#                         "This phone number is too long. It can only have a maximum \
-# of 13 digits with a '+'.")
-#                 elif len(formatted_mobile_number) < 12:
-#                     self.add_error(
-#                         'saved_mobile_number',
-#                         "This phone number is too short. It needs a minimum \
-# of 12 digits with a '+'.")
-
-#             return formatted_mobile_number
-
-#         return saved_mobile_number
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -84,9 +44,16 @@ class MemberProfileForm(forms.ModelForm):
             'saved_postcode': 'Post Code',
             'saved_delivery_instructions': 'Delivery Instructions'
         }
+        required = [
+            'saved_mobile_number',
+            'saved_email',
+            'saved_address_line1',
+            'saved_postcode']
 
+        for field in required:
+            self.fields[field].required = True
         # self.fields['name'].widget.attrs['autofocus'] = True
-        for field in self.fields: 
+        for field in self.fields:
             if self.fields[field].required:
                 self.fields[field].label = f'{labels[field]}*'
                 placeholder = f'{placeholders[field]} (required)'
