@@ -111,32 +111,31 @@ class TestMenuView(TestCase):
         data = {"sort_key": "price_asc", "category": "dessert"}
         response = self.client.get("/menu/sort/", data)
 
-        # Read response data from string and inner string of items list
+        # Read response data to string and then evaluate as list of dictionaries
         deserialized_data = json.loads(response.content)
-        deserialized_items = json.loads(deserialized_data['items'])
+        deserialized_items = eval(deserialized_data)
 
         sorted_items = []
         # Sorted_items is a list of ordered prices as set by the view
         for item in deserialized_items:
             sorted_items.append(float(item["fields"]["price"]))
+
         # deserialized items is a list therefore all elements are in order
         self.assertGreater(sorted_items[1], sorted_items[0])
-        self.assertEqual(deserialized_data['selected_category'], 'dessert')
 
-    # Check price descending sort
+        # Check price descending sort
         data = {"sort_key": "price_desc", "category": "vegetarian"}
         response = self.client.get("/menu/sort/", data)
 
         # Read response data
         deserialized_data = json.loads(response.content)
-        deserialized_items = json.loads(deserialized_data['items'])
+        deserialized_items = eval(deserialized_data)
 
         sorted_items = []
         for item in deserialized_items:
             sorted_items.append(float(item["fields"]["price"]))
         # deserialized items is a list therefore all elements are in order
         self.assertGreater(sorted_items[0], sorted_items[1])
-        self.assertEqual(deserialized_data['selected_category'], 'vegetarian')
 
     def test_combo(self):
         response = self.client.post(reverse('combo'))
