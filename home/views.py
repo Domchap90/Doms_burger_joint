@@ -20,7 +20,7 @@ def check_postcode_home(request):
     postcode_valid = is_postcode_valid(postcode)
 
     msg = "Sorry it looks like you are not eligible for delivery. However \
-    please feel free to make an order for collection."
+please feel free to make an order for collection."
     if postcode_valid:
         msg = "Good news! You are eligible for delivery."
 
@@ -89,8 +89,7 @@ def is_postcode_valid(postcode):
             if distance_miles > 1.5:
                 postcode_valid = False
 
-        except Exception as e:
-            print(f"Exception: {e}")
+        except Exception:
             postcode_valid = False
 
     return postcode_valid
