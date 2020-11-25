@@ -1,18 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
+{% endblock %}
+
 {% block content %}
     <div class="below-nav-container" id="checkout-success">
         <div class="receipt-area">
-            <div class="checkout-form-container">
+            <div class="receipt-text-container">
                 
                 <h2 class="">Your food is on its way!</h2>
 
                 <div class="confirmation-num">Confirmation Number: {{ order.order_number }}</div>
 
                 <p>
-                Thank you for completing your order. Your payment was processed successfully & an email has been sent to {{ order.email }}
+                Thank you for completing your order. Your payment was processed successfully & an email has been sent to:<br> 
                 </p>
+                <div id="receipt_email">{{ order.email }}</div>
 
             </div>
         </div>
@@ -31,8 +36,12 @@
                 </div>
                 {% endif %}
             {% endfor %}
-            {% if order_items_count == 0 %}
-            <p>There are no individual items in this order.</p>
+            {% if order.item_quantity_count == 0 %}
+            <div class="row">
+                <div class="col s12">
+                    <p>There are no individual items in this order.</p>
+                </div>
+            </div>
             {% endif %}
 
             <h3 class="form-subtitle">Combos ordered</h3>
@@ -55,8 +64,13 @@
                 </div>
                 {% endif %}
             {% endfor %}
-            {% if combo_count == 0 %}
-                <p>There are no combos in this order.</p>
+
+            {% if order.combo_quantity_count == 0 %}
+            <div class="row">
+                <div class="col s12">
+                    <p>There are no combos in this order.</p>
+                </div>
+            </div>
             {% endif %}
             <hr>
             
@@ -76,26 +90,49 @@
                 <div class="col offset-s5 s4 offset-m7 m3">Total:</div>
                 <div class="col s3 m2">£{{ order.grand_total }}</div>
             </div>
+            {% if order.for_collection %}
 
-            <h3 class="form-subtitle">Sent to</h3>
-            <div class="combo-unit-list">
-                <div class="row">
-                    <div class="col s12 center">{{ order.address_line1 }}</div>
+                <h3 class="form-subtitle">Collect from</h3>
+
+                <div class="combo-unit-list">
+                    <div class="row">
+                        <div class="col s12 center">20 Wardour St,</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 center">West End,</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 center">London</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 center">W1D 6QG</div>
+                    </div>
                 </div>
-                {% if order.address_line2 %}
-                <div class="row">
-                    <div class="col s12 center">{{ order.address_line2 }}</div>
+
+            {% else %}
+
+                <h3 class="form-subtitle">Sent to</h3>
+
+                <div class="combo-unit-list">
+                    <div class="row">
+                        <div class="col s12 center">{{ order.address_line1 }}</div>
+                    </div>
+                    {% if order.address_line2 %}
+                    <div class="row">
+                        <div class="col s12 center">{{ order.address_line2 }}</div>
+                    </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col s12 center">{{ order.postcode }}</div>
+                    </div>
+                    {% if order.delivery_instructions %}
+                    <div class="row">
+                        <div class="col s12 center">{{ order.delivery_instructions }}</div>
+                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
-                <div class="row">
-                    <div class="col s12 center">{{ order.postcode }}</div>
-                </div>
-                {% if order.delivery_instructions %}
-                <div class="row">
-                    <div class="col s12 center">{{ order.delivery_instructions }}</div>
-                </div>
-                {% endif %}
-            </div>
+
+            {% endif %}
 
             <h3 class="form-subtitle">Your details</h3>
             <div class="combo-unit-list">

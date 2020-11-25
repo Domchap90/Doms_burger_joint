@@ -814,21 +814,6 @@ button.qty-btn {
     }
 }
 
-/********************************************************* Checkout Success page   */
-.below-nav-container#checkout-success {
-   padding: 0px 0px 40px 0px;
-}
-
-.receipt-area {
-    background-color: black;
-    color: white;
-    padding: 20px 10px;
-}
-
-.clear-10 {
-    margin: 10px 0 !important;
-}
-
 /********************************************************* Allauth pages   */
 
 .allauth-container {
