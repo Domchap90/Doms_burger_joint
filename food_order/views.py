@@ -25,7 +25,7 @@ def add_to_order(request, item_id):
             messages.success(request, f'Added {food_item.name} to your order.')
         else:
             messages.error(request, f'You have reached your order limit for \
-                           {food_item.name}.')
+{food_item.name}.')
     else:
         order[item_id] = 1
         messages.success(request, f'Added {food_item.name} to your order.')
@@ -76,7 +76,9 @@ def add_combo_to_order(request, combo_id):
         combo_counter += 1
 
     else:
-        messages.error(request, f'You have reached your order limit for {combo_item.name}.')
+        messages.error(
+            request, f'You have reached your order limit for \
+{combo_item.name}.')
     request.session['food_order'] = order
 
     return redirect(redirect_url)
@@ -113,11 +115,14 @@ def edit_order(request, item_type, item_id):
     else:
         order[request.POST.get('comboHashKey')][1] = changed_quantity_value
         # get object ready to retrieve price attribute
-        item = get_object_or_404(Food_Combo, pk=order[request.POST.get('comboHashKey')][0])
+        item = get_object_or_404(
+            Food_Combo, pk=order[request.POST.get('comboHashKey')][0]
+            )
 
     # values below calculated to dynamically update subtotals in javascript
     subtotal = item.price * changed_quantity_value
-    subtotal_change = (changed_quantity_value - original_quantity_value) * item.price
+    subtotal_change = (
+        changed_quantity_value - original_quantity_value) * item.price
 
     request.session['food_order'] = order
     data = {"subtotal": subtotal, "subtotal_change": subtotal_change}
@@ -126,7 +131,8 @@ def edit_order(request, item_type, item_id):
 
 
 def recalculate_remaining_delivery_amount(request):
-    remaining_delivery_amount = order_contents(request)['remaining_delivery_amount']
+    remaining_delivery_amount = order_contents(request)[
+        'remaining_delivery_amount']
     total = float(request.GET.get('total'))
 
     if total < settings.MIN_DELIVERY_THRESHOLD:
@@ -135,7 +141,8 @@ def recalculate_remaining_delivery_amount(request):
     else:
         remaining_delivery_amount = 0
 
-    order_contents(request)['remaining_delivery_amount'] = remaining_delivery_amount
+    order_contents(request)[
+        'remaining_delivery_amount'] = remaining_delivery_amount
     order_contents(request)['total'] = total
     data = {'remaining_delivery_amount': remaining_delivery_amount}
 
