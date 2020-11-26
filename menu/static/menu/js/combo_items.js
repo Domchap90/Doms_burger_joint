@@ -5,8 +5,10 @@ $(document).ready(function(){
 
 function validateComboForm(form) {
     // Notifies user that all form fields have to be selected in order to send the form.
-    $('.form-error').html('');
-    addComboForm = document.forms["add_combo"];
+
+    $('.form-error#err_'+form).empty();
+    addComboForm = document.forms["add_combo_"+form];
+
     for (field of addComboForm) {
         if ($(field).prop('required') && field.value=='') {
             $('.form-error#err_'+form).html(`<p>Please select all food options to add the combo to your order.</p>`);
