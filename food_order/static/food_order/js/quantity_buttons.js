@@ -23,8 +23,10 @@ const lowerQtyLimit = 1;
 function updateCheckoutBtnState() {
     if($('#spending_warning').children().length>0) {
         $(".checkout-btn").addClass('disabled');
+        $(".checkout-btn").prop('disabled', true);
     } else {
         $(".checkout-btn").removeClass('disabled');
+        $(".checkout-btn").prop('disabled', false);
     }
 }
 
@@ -242,12 +244,15 @@ function updateRemainingSpend(newTotal) {
             let remaining_spend = JSON.parse(response['remaining_delivery_amount']);
             if (remaining_spend > 0) {
                 $('#spending_warning').html(`<p>You still need to spend £`+remaining_spend+` more to be eligible for delivery.</p>`);
-                document.getElementById('proceed-checkout-link').removeAttribute("href");
+                $('.checkout-btn').prop("disabled", true);
                 $('.checkout-btn').addClass('disabled');
             } else {
                 $('.checkout-btn').prop('disabled', false);
-                let proceedBtn = document.getElementById('proceed-checkout-link');
-                proceedBtn.setAttribute("href", "/checkout/collect_or_delivery/");
+                if ($('.checkout-btn').hasClass('disabled')){
+                    $('.checkout-btn').removeClass('disabled');
+                }
+                // let proceedBtn = document.getElementById('proceed-checkout-link');
+                // $(proceedBtn).attr("href", "/checkout/collect_or_delivery/");
             }
         }
     });

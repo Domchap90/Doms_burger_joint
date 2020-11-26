@@ -5,8 +5,9 @@ QUnit.module('Quantity buttons tests:', function() {
     QUnit.module('updateCheckoutBtnState', function() {
         test('spending warning present', function(assert) {
             // Qunit DOM is initialized with spending warning
-            let checkoutDisabled = $('.checkout-btn').hasClass('disabled');
-            assert.ok(checkoutDisabled, "button is disabled");
+            let checkoutVisualDisabled = $('.checkout-btn').hasClass('disabled');
+            let checkoutFunctionalDisabled = $('.checkout-btn').is(':disabled');
+            assert.ok(checkoutVisualDisabled && checkoutFunctionalDisabled, "button is disabled");
         });
 
         test('spending warning absent', function(assert) {
@@ -15,8 +16,9 @@ QUnit.module('Quantity buttons tests:', function() {
             $(document).ready(updateCheckoutBtnState);
             updateCheckoutBtnState();
 
-            let checkoutDisabled = $('.checkout-btn').hasClass('disabled');
-            assert.ok(checkoutDisabled==false, "button is enabled");
+            let checkoutVisualDisabled = $('.checkout-btn').hasClass('disabled');
+            let checkoutFunctionalDisabled = $('.checkout-btn').is(':disabled');
+            assert.ok(checkoutVisualDisabled==false && checkoutFunctionalDisabled==false, "button is enabled");
         });
         
     });
