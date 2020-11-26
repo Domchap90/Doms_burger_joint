@@ -43,7 +43,8 @@ def cached_payment_intent(request):
 
 
 def checkout(request):
-    """ Control flow for initially rendering checkout page & posting form from this page """
+    """ Control flow for initially rendering checkout page & posting form from
+    this page """
 
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
@@ -171,6 +172,10 @@ def checkout(request):
         'discount': discount_result,
         'total': total,
     }
+
+    if request.method == 'GET':
+        # initial rendering should not show form errors
+        context['GET'] = True
     if intent:
         context['client_secret'] = intent.client_secret
 

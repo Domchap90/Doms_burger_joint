@@ -38,9 +38,11 @@ result-message {
   display: none;
 }
 .field-error {
-    color: red;
     text-align: left;
     font-size: 13px;
+}
+.field-error p {
+    color: red;
 }
 #card-error {
     color: red;
