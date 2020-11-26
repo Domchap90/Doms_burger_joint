@@ -46,9 +46,10 @@ result-message {
 }
 #card-error {
     color: red;
-    text-align: left;
-    font-size: 13px;
-    line-height: 17px;
+    /* text-align: left; */
+    /* font-size: 13px; */
+    /* line-height: 17px; */
+    font-family: "Montserrat", sans-serif;
     margin-top: 12px;
     display: flex;
     align-items: center;

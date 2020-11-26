@@ -5,10 +5,7 @@ const stripe = Stripe(stripePublicKey);
 const elements = stripe.elements({
     fonts: [
         {
-            family: 'Montserrat A',
-            src: 'url(https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap)',
-            style: 'normal',
-            weight: '300',
+            cssSrc: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap',
         },
     ],
 });
@@ -16,23 +13,19 @@ const form = document.getElementById('payment-form');
 const isCollection = ($('input[name="for_collection"]').val() == 'True') ? true : false;
 const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
 
-let style = {
+const style = {
     base: {
-        color: "#32325d",
-        fontFamily: 'Montserrat',
-        // fontSmoothing: "antialiased",
+        color: "#000",
+        fontFamily: '"Montserrat", sans-serif',
+        fontSmoothing: "antialiased",
         fontSize: "16px",
         "::placeholder": {
-            color: '#aab7c4',
-            fontFamily: 'Montserrat',
+            color: "#5e5e5e",
+            fontFamily: "Montserrat",
         }
     },
-    invalid: {
-        fontFamily: "'Montseratt', sans-serif",
-        color: "#fa755a",
-    }
 };
-const card = elements.create("card", { style: style });
+const card = elements.create("card", { hidePostalCode: true, style: style });
 
 $(document).ready(function() {
     // Stripe injects an iframe into the DOM
@@ -168,7 +161,7 @@ function submitToStripe(dataToSubmit) {
             } else {
                 // The payment has been processed!
                 if (result.paymentIntent.status === 'succeeded') {
-                    form.submit(); // comment out for testing webhooks are working
+                    form.submit(); // comment out for testing webhooks
                 }
             }
         });
