@@ -81,7 +81,7 @@ class TestFoodOrderView(TestCase):
         # quantity UNDER upper limit (10)
         self.assertEqual(
             self.mock_success_msg.call_args[0][1],
-            "Added test_food_item5 to your order.")
+            'Added "test_food_item5" to your order.')
 
         self._patcherS.stop()
 
@@ -92,7 +92,7 @@ class TestFoodOrderView(TestCase):
         self.c.post('/food_order/add/5/', data)
         self.assertEqual(
             self.mock_err_msg.call_args[0][1],
-            "You have reached your order limit for test_food_item5.")
+            'You have reached your order limit for "test_food_item5".')
 
         self._patcherE.stop()
 
@@ -134,7 +134,7 @@ class TestFoodOrderView(TestCase):
         # Check combo is NOT added
         self.assertEqual(
             self.mock_err_msg.call_args[0][1],
-            "You have reached your order limit for combo2.")
+            'You have reached your order limit for "combo2".')
 
         # Setup food order to contain combo id 3 BELOW the upper limit of 5
         combo_key = 'c'+str(hash(str({'1': 1, '5': 2, '7': 1})))
@@ -156,7 +156,7 @@ class TestFoodOrderView(TestCase):
         self.c.post('/food_order/add_combo/3/', success_data)
         self.assertEqual(
             self.mock_success_msg.call_args[0][1],
-            "Added combo3 to your order.")
+            'Added "combo3" to your order.')
 
         self.assertEqual(
             self.c.session.get('food_order'),

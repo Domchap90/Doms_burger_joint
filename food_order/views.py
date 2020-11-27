@@ -22,13 +22,13 @@ def add_to_order(request, item_id):
     if item_id in list(order.keys()):
         if order[item_id] < 10:
             order[item_id] += 1
-            messages.success(request, f'Added {food_item.name} to your order.')
+            messages.success(request, f'Added "{food_item.name}" to your order.')
         else:
             messages.error(request, f'You have reached your order limit for \
-{food_item.name}.')
+"{food_item.name}".')
     else:
         order[item_id] = 1
-        messages.success(request, f'Added {food_item.name} to your order.')
+        messages.success(request, f'Added "{food_item.name}" to your order.')
     request.session['food_order'] = order
 
     return redirect(redirect_url)
@@ -72,13 +72,13 @@ def add_combo_to_order(request, combo_id):
         else:
             order[combo_key] = [combo_id, 1, combo_to_append]
 
-        messages.success(request, f'Added {combo_item.name} to your order.')
+        messages.success(request, f'Added "{combo_item.name}" to your order.')
         combo_counter += 1
 
     else:
         messages.error(
             request, f'You have reached your order limit for \
-{combo_item.name}.')
+"{combo_item.name}".')
     request.session['food_order'] = order
 
     return redirect(redirect_url)
