@@ -44,6 +44,13 @@ span {
     font-style: italic;
     font-weight: normal;
 }
+#user_details_form input {
+    padding-left: 10px;
+}
+#user_details_form input:focus {
+    background-color: white;
+    box-shadow: none !important;
+}
 .pagination_container {
 /* if number of paginated btns below threshold pagination
 width will be shrunk and centred within its container as 

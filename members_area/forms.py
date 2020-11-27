@@ -50,9 +50,11 @@ class MemberProfileForm(forms.ModelForm):
             'saved_address_line1',
             'saved_postcode']
 
+        self.fields['saved_email'].widget.attrs['autofocus'] = True
+
         for field in required:
             self.fields[field].required = True
-        # self.fields['name'].widget.attrs['autofocus'] = True
+
         for field in self.fields:
             if self.fields[field].required:
                 self.fields[field].label = f'{labels[field]}*'

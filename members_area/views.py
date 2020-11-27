@@ -20,7 +20,7 @@ def members_area(request):
         if form.is_valid():
             form.save()
             messages.success(request, f'Saved information updated for \
-                             {member_profile}')
+{member_profile}')
 
     orders = member_profile.orders.all().order_by('-date')
 
@@ -41,6 +41,10 @@ def members_area(request):
         'memberform': form,
         'order_history': orders_page_objects,
     }
+    if request.method == 'GET':
+        # initial rendering should not show form errors
+        context['GET'] = True
+
     return render(request, 'members_area/profile_page.html', context)
 
 

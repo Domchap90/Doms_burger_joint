@@ -39,9 +39,21 @@
             {% endwith %}
 
             <h2>Details on record</h2>
-            <form method="POST" action="{% url 'members_area' %}">
+            <form method="POST" action="{% url 'members_area' %}" id="user_details_form">
                 {% csrf_token %}
-                {{ memberform.as_p }}
+
+                {% for field in memberform %} 
+                    <p>{{ field.label }}</p>
+                    <p>{{ field }}</p>
+                    <!-- Only show errors after posting form -->
+                    {% if not GET %}
+                        <div class="field-error" id="{{ field.name }}-error">
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
 
                 <button class="submit">Update Info</button>
             </form>
