@@ -1,39 +1,86 @@
 <img src="https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png" style="margin: 0;">
 
-Welcome Domchap90,
+# Dom's Burger Joint 
 
-This is the Code Institute student template for Gitpod. We have preinstalled all of the tools you need to get started. You can safely delete this README.md file, or change it for your own project.
+# Contents
 
-## Gitpod Reminders
+1. UX Design
+    - [Site Goals](#site-goals)
+    - [User Goals](#user-goals)
+    - [User Stories](#user-stories)
+    - [Color scheme](#color-scheme)
+    - [Wireframes](#wireframes)
 
-To run a frontend (HTML, CSS, Javascript only) application in Gitpod, in the terminal, type:
+2. Features
+    - [Core Features](#core-features)
+    - [Non Essential Features](#non-essential-features)
+    - [Features Left to Implement](#features-left-to-implement)
 
-`python3 -m http.server`
+3. Technologies Used
+    
+4. Testing
+    - [Manual Testing](#manual-testing)
+    - [Automated Testing](#automated-testing)
 
-A blue button should appear to click: *Make Public*,
+5. Deployment
 
-Another blue button should appear to click: *Open Browser*.
+6. Credits
+    - [Content](#content)
+    - [Media](#media)
+    - [Code](#code)
+    - [Acknowledgements](#acknowledgements)
 
-To run a backend Python file, type `python3 app.py`, if your Python file is named `app.py` of course.
+# UX Design
+## Site Goals
+## User Goals
+## User Stories
+## Color scheme
+## Wireframes
 
-A blue button should appear to click: *Make Public*,
+### Home page
+<img src="static/wireframes/home.png" alt="markup of home page">
 
-Another blue button should appear to click: *Open Browser*.
+### Menu page
+<img src="static/wireframes/menu.png" alt="markup of menu page">
 
-In Gitpod you have superuser security privileges by default. Therefore you do not need to use the `sudo` (superuser do) command in the bash terminal in any of the backend lessons.
+### Combo Deals page
+<img src="static/wireframes/combos.png" alt="markup of combo deals page">
 
-## Updates Since The Instructional Video
+### Order page
+<img src="static/wireframes/orders.png" alt="markup of order page">
 
-We continually tweak and adjust this template to help give you the best experience. Here are the updates since the original video was made:
+### Member's Promo page
+<img src="static/wireframes/members_promo.png" alt="markup of member's promo page">
 
-**April 16 2020:** The template now automatically installs MySQL instead of relying on the Gitpod MySQL image. The message about a Python linter not being installed has been dealt with, and the set-up files are now hidden in the Gitpod file explorer.
+### Member's Area page
+<img src="static/wireframes/members_area.png" alt="markup of member's area page">
 
-**April 13 2020:** Added the _Prettier_ code beautifier extension instead of the code formatter built-in to Gitpod.
+### Checkout page
+<img src="static/wireframes/checkout.png" alt="markup of checkout page">
 
-**February 2020:** The initialisation files now _do not_ auto-delete. They will remain in your project. You can safely ignore them. They just make sure that your workspace is configured correctly each time you open it. It will also prevent the Gitpod configuration popup from appearing.
+### Checkout Success page
+<img src="static/wireframes/checkout_success.png" alt="markup of checkout success page">
 
-**December 2019:** Added Eventyret's Bootstrap 4 extension. Type `!bscdn` in a HTML file to add the Bootstrap boilerplate. Check out the <a href="https://github.com/Eventyret/vscode-bcdn" target="_blank">README.md file at the official repo</a> for more options.
+### Login page
+<img src="static/wireframes/login.png" alt="markup of login page">
 
---------
 
-Happy coding!
+
+# Features
+## Core Features
+## Non Essential Features
+## Features Left to Implement
+
+# Technologies Used
+
+# Testing
+## Manual Testing
+## Automated Testing
+
+# Deployment
+
+# Credits
+## Content 
+## Media
+## Code
+## Acknowledgements
