@@ -59,8 +59,8 @@ A prototype for a burger delivery service's web application. Serving customers w
 | 1 | Customer | View food and drink products |	See what i want to order |
 | 2	| Customer | Add food/ drink to checkout | Review my order before paying |
 | 3 | Customer | Search for food items based on allergens | Find suitable food for me |
-| 4 | Customer | Search for food items based on vegetarian/ vegan/ pescetarian | Find suitable food for me |
-| 5 | Customer | Search for food items based on Popularity | Make a decision more easily |
+| 4 | Customer | Search for food items based on vegetarian | Find suitable food for me |
+| 5 | Customer | Search for food items based on Popularity & Price | Make a decision more easily |
 | 6 | Customer | Have the option of ordering my food to collect | Get it on the way home/ still make an order if i live too far away |
 | 7 | Customer | Be able to find out if i'm eligible for delivery before i make an order | Save time / convenience |
 | Checkout |			
@@ -85,7 +85,10 @@ A prototype for a burger delivery service's web application. Serving customers w
 
 ## Color scheme
 
-Predominant background color white
+- Predominant background color: white
+- Header and paragraph text color: black
+- Buttons: background - black, foreground text - white
+hover: background - yellow, foreground text - black
 
 ## Wireframes
 
@@ -120,8 +123,71 @@ Predominant background color white
 
 # Features
 ## Core Features
+
+- As the user will have to pay for their burgers & the company that runs the website need to get paid, a payment feature is essential.
+User stories 13 & 15 will be incorporated by integrating Stripe payment system. 14 & 16 will be considered very much standard practice with online payments
+and these features will be implemented using webhooks. In the event that the user somehow makes an error during checkout and their computer crashes after clicking the submit button.
+The payment will still go through and the webhook will allow a confirmation email to be sent to the user through the webhook handler in the app.
+
+- The confirmation process will take place once the user has selected all their items to purchase then 2 further pages will have to be visited. 
+The first being where the user decides whether or not they want their order delivered to them or to be collected at the store (user story 6). 
+The second will be where the details of the payment must be made and any relevant delivery or contact information. Since picking their items, the user will have had to make
+3 clicks in total to submit their order. Therefore ommitting the need for a modal to appear at checkout submission as this would be overkill & potentially frustrate the customer.
+
+- The user is constantly reminded of how much they are going to spend by the grand total being written in the proceed to checkout button, the place order button as well as in the actual order table itself.
+So there is no sense of the user being tricked into paying for something or there is very little risk of accidentally purchasing food that they didn't mean to.
+
+- Another essential feature is ofcourse the potential customer being able to add food and drinks items to their order. For this to happen, 
+the food items must be viewable and it must be clear and intuitive how to navigate to these items. The foods will be grouped as a typical menu would be -
+by course. In the nav bar link aptly named "menu" which will contain a drop down menu of the categories as seen in the wireframe for home page.
+
+- Foods will be added via simple forms that consist of select input boxes & an 'add' button for each item. This will post a form to the backend and
+accumulatively build an order that is available via the django context session variable meaning it can be accessed from any app. The food order will be needed
+in the menu where it is built, the order app where it is edited and the checkout where it is saved and submitted.
+
+User stories: 1, 2, 8, 9, 10, 11, 12, 13, 14, 15, 16
+
 ## Non Essential Features
+
+With vegetarianism being very popular these days and 'vege' burgers becoming a big trend in their own right, a small subsection of burgers will be filtered through 
+the menu options as vegetarian (User Story 4). This will be treated as a separate category and then joined with the burger category in searches for combos etc.
+
+The menu will have a price filter at the top right hand corner of the page below the nav bar for the more price conscious customers. Allowing the user to
+present the menu items from low to high price or vice versa. Similarly this is done with popularity of the food items ordered, although no switch is available on 
+this filtering option because why would customers want to see the least popular items? The popular page shows 3 of the most ordered burgers, 1 of each for the most
+ordered side, dessert & drink (User Story 5).
+
+Unlike delivering from an ecommerce store where essentially no where is off limits. With food delivery, the food has to be served fresh and hot, therefore the distance the user is 
+from the store has to be taken into account. Not all visitors to the site will be eligible for delivery and therefore it is nice to have another option. If the customer is willing
+to travel to the store they can collect. This doesn't really affect the checkout process too much other than the order model must state whether it is for collection or delivery & 
+must collect the appropriate information for each type. The collection fields on the checkout form will be the same barr fields pertaining to delivery - address lines and postcode
+(User Story 6).
+
+It would be rather unpleasant for the user who wanted an order for delivery to have to pick everything they wanted and fill out most of their details only to find out they are not eligible
+for delivery. Hence user story 7 that allows the user to see their eligibility immediately from the home page.
+
+User story 19 is really for repeat customers. On the member's customized page they have the option to save their details of things like address and contact information to avoid having to enter
+this every single time that they want to checkout an order. This saves time and increases likelihood of them making another order with DBJ.
+
+If a user wants to see what they've ordered in the past or can't remember how much they spent on an order then they can view all these little details in tabular form in their profile page.
+Better still if they want to repeat another order again being a creature of habit they have this option. This saves time by bypassing building an order from no items. Jumping straight to
+only having to enter their card details. For security reasons this cannot be saved (User Story 20 & 21).
+ 
+
+User stories: 4, 5, 6, 7, 19, 20, 21
+
 ## Features Left to Implement
+
+Due to time restrictions not all features will be implemented. From a health and safety perspective if the website were to go live for a real business delivering
+food to paying customers then of course allergens would have to be considered. At the very minimum they would have to be listed in each of the food options. However 
+as this is a hobby/ educational project and not commercial the legislative principles can be ignored. Furthermore to filter the menu options based on which allergens
+they contain may be useful to some users who suffer from allergies but even then the mere listing of whether those allergens are present would be enough. Most customers
+wouldn't search for what they wanted to eat based on this (User Story 3).
+
+Whilst there is currently no customized format for a site manager to edit, add or delete food items. All of these actions can be performed in the Django admin interface
+by the super user. This could be added in after a few months of usage when the site owner wants to change the menu (User Stories 17, 18).
+
+User stories: 3, 17, 18
 
 # Technologies Used
 
