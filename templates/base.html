@@ -61,15 +61,31 @@
                         </div>
                         <div class="menu-container">
                             <ul class="right hide-on-small-and-down">
-                                <li><a href="{% url 'home' %}">HOME</a></li>
-                                <li><a class="dropdown-trigger" href="#!" data-target="menu-options">MENU
-                                <i class="material-icons right">arrow_drop_down</i></a></li>
-                                <li><a class="dropdown-trigger" href="#!" data-target="deal-options">DEALS</a></li>
-                                <li><a href="{% if request.user.is_authenticated %}{% url 'members_area' %}{% else %}{% url 'rewards' %}{% endif %}">MY BURGER</a></li>
-                                <li><a href="{% url 'food_order' %}">YOUR ORDER{% if order_count > 0 %}({{ order_count }}){% endif %}</a></li>
+                                {% with request.resolver_match.url_name as url_name %}
+                                <li class="{% if url_name == 'home' %}active{% endif %}">
+                                    <a href="{% url 'home' %}">HOME</a>
+                                </li>
+                                <li class="{% if url_name == 'menu' and not popular %}active{% endif %}">
+                                    <a class="dropdown-trigger" href="#!" data-target="menu-options">MENU
+                                        <i class="material-icons right">arrow_drop_down</i>
+                                    </a>
+                                </li>
+								<li class="{% if url_name == 'combo' or popular %}active{% endif %}">
+                                    <a class="dropdown-trigger" href="#!" data-target="deal-options">DEALS
+										<i class="material-icons right">arrow_drop_down</i>
+                                    </a>
+                                </li>
+                                <li class="{% if url_name == 'members_area' or url_name == 'rewards' %}active{% endif %}">
+                                    <a href="{% if request.user.is_authenticated %}{% url 'members_area' %}{% else %}{% url 'rewards' %}{% endif %}">MY BURGER
+                                    </a>
+                                </li>
+                                <li class="{% if url_name == 'food_order' %}active{% endif %}">
+                                    <a href="{% url 'food_order' %}">YOUR ORDER{% if order_count > 0 %}({{ order_count }}){% endif %}</a>
+                                </li>
+                                {% endwith %}
                             </ul>
                         </div>
-                        <a href="#" data-target="slide-out" class="sidenav-trigger right hide-on-med-and-up"><i class="material-icons">menu</i></a>
+                        <a href="#" data-target="slide_out" class="sidenav-trigger right hide-on-med-and-up"><i class="material-icons">menu</i></a>
 					</div>
 				</nav>
 			</div>
@@ -99,15 +115,20 @@
 
             <!-- Sidebar navigation -->
             
-			<ul id="slide-out" class="sidenav">
+			<ul id="slide_out" class="sidenav">
                 <li><a class="sidenav-close" href="#!"><span class="material-icons">close</span></a></li>
 
 				<li>
 				</li>
-				<li><a href="{% url 'home' %}">HOME</a></li>
+                {% with request.resolver_match.url_name as url_name %}
+				<li class="{% if url_name == 'home' %}active{% endif %}">
+                    <a href="{% url 'home' %}">HOME</a>
+                </li>
                 <ul class="collapsible collapsible-accordion">
                     <li>
-                        <div class="collapsible-header">MENU<i class="material-icons">arrow_drop_down</i></div>
+                        <div class="collapsible-header {% if url_name == 'menu' and not popular %}active{% endif %}">
+                            MENU<i class="material-icons">arrow_drop_down</i>
+                        </div>
                         <div class="collapsible-body">
                             <ul>
                                 <li><a href="{% url 'menu' %}?category=burgers">BURGERS</a></li>
@@ -119,7 +140,9 @@
                         </div>
                     </li>
                     <li>
-                        <div class="collapsible-header">DEALS<i class="material-icons">arrow_drop_down</i></div>
+                        <div class="collapsible-header {% if url_name == 'combo' or popular %}active{% endif %}">
+                            DEALS<i class="material-icons">arrow_drop_down</i>
+                        </div>
                         <div class="collapsible-body">
                             <ul>
                                 <li><a href="{% url 'menu' %}?category=popular">POPULAR</a></li>
@@ -128,8 +151,13 @@
                         </div>
                     </li>
                 </ul>
-                <li><a href="{% if request.user.is_authenticated %}{% url 'members_area' %}{% else %}{% url 'rewards' %}{% endif %}">MY BURGER</a></li>
-                <li><a href="{% url 'food_order' %}">YOUR ORDER</a></li>
+                <li class="{% if url_name == 'members_area' or url_name == 'rewards' %}active{% endif %}">
+                    <a href="{% if request.user.is_authenticated %}{% url 'members_area' %}{% else %}{% url 'rewards' %}{% endif %}">MY BURGER</a>
+                </li>
+                <li class="{% if url_name == 'food_order' %}active{% endif %}">
+                    <a href="{% url 'food_order' %}">YOUR ORDER</a>
+                </li>
+                {% endwith %}
 			</ul>
 
 		</header>

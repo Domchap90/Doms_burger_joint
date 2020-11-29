@@ -103,9 +103,10 @@ button a {
     color: grey;
 }
 
-a:hover {
-    color: #fff;
+a:hover:not(.brand-logo) {
+    color: #000;
     text-decoration: none;
+    opacity: 0.5;
 }
 @media (min-width: 993px) {
     h2 {
@@ -166,6 +167,10 @@ a[data-target="account-options"] {
     font-family: 'Abel', sans-serif;
 }
 
+.active {
+    font-weight: bold;
+}
+
 #account-options {
     /* Allows account options dropdown to be clicked */
     z-index: 999;
@@ -187,6 +192,13 @@ a[data-target="account-options"] {
     font-size: 16px;
 }
 
+.nav-wrapper ul li a:hover:not(.brand-logo),
+.nav-wrapper ul li.active,
+.sidenav li.active,
+.sidenav li > a:hover {
+    /* Undo materialize default background shading */
+    background-color: rgba(0, 0, 0, 0);
+}
 
 .brand-logo {
     text-align: center;
@@ -201,18 +213,28 @@ a.sidenav-trigger {
     color: black;
 }
 
-#slide-out {
+#slide_out {
     font-family: 'Abel', sans-serif;
 }
-#slide-out .collapsible-header {
+#slide_out li.active > a {
+    font-weight: bold;
+}
+#slide_out .collapsible-header {
     font-family: 'Abel', sans-serif;
     font-size: 16px;
     padding: 0 32px;
 }
+#slide_out .collapsible-header.active {
+    font-weight: bold;
+}
+#slide_out .collapsible-header:hover {
+    background-color: rgba(0, 0, 0, 0);
+    opacity: 0.5;
+}
 .sidenav li > a {
     font-size: 16px;
 }
-#slide-out .collapsible-body li a {
+#slide_out .collapsible-body li a {
     font-family: 'Abel', sans-serif;
     font-size: 16px;
     padding: 0 48px;
@@ -260,12 +282,15 @@ a.sidenav-trigger {
 #toast-container {
     top: 0% !important;
     right: 0% !important;
+    width: fit-content;
+    height: fit-content;
     font-family: 'Montserrat', sans-serif;
 }
 
 .toast {
     background-color: white;
     color: black;
+    border: solid 1px black;
 }
 
 /********************************************************* Home page   */
@@ -323,7 +348,6 @@ a.sidenav-trigger {
 .postcode-checker {
     margin-top: 50px;
     margin-bottom: 50px;
-    /* border: 1px black solid; */
     background-color: #e4e4e4;
     width: 253px;
     max-width: 500px;
@@ -429,7 +453,8 @@ a.sidenav-trigger {
     /* color: white; */
 }
 .menu-navigator .col.s4 a:hover,
-.menu-navigator .col.m2 a:hover {
+.menu-navigator .col.m2 a:hover,
+div.selected {
     background-color: white;
     color: black;
 }
@@ -474,6 +499,7 @@ a.sidenav-trigger {
 .food-item-name {
     font-family: "Abel", sans-serif;
     font-size: 1.4rem;
+    text-align: center;
     margin: 0;
     padding: 0 !important;
 }
@@ -492,7 +518,7 @@ a.sidenav-trigger {
     border: solid 1px black;
     border-right-style: none;
 }
-
+ 
 @media (min-width: 601px){
     .below-nav-container{
         margin-top: 147px;
@@ -512,6 +538,9 @@ a.sidenav-trigger {
         align-items: center;
         justify-content: center;
         color: white;
+    }
+    .food-item-name {
+        text-align: left;
     }
     .menu-option-row {
         width: 100%;
@@ -618,7 +647,7 @@ a.sidenav-trigger {
 .form-error {
     color: red;
 }
-.order_btn-container {
+.order-btn-container {
     text-align: center;
 }
 
@@ -696,7 +725,6 @@ a.sidenav-trigger {
 }
 
 input.order-qty-input {
-    /* border-bottom: none !important; */
     margin-bottom: 0px !important;
     text-align: center;
     width: 33% !important;
