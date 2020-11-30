@@ -47,10 +47,10 @@
                                 <div class="login-status-container">
                                 {% if request.user.is_authenticated %}
                                     <span class="material-icons">account_box</span>
-                                    <p class="hide-very-small-and-down">{{user.username}}</p> 
+                                    <p class="hide-on-small-and-down">{{user.username}}</p> 
                                 {% else %}
                                     <span class="material-icons disabled">account_box</span>
-                                    <p class="hide-very-small-and-down disabled">Logged out</p>                  
+                                    <p class="hide-on-small-and-down disabled">Logged out</p>                  
                                 {% endif %}
                                 </div>
                             </a>

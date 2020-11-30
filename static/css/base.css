@@ -150,9 +150,6 @@ a[data-target="account-options"] {
 .dropdown-content {
     z-index: 996;
 }
-.hide-very-small-and-down {
-    display: none;
-}
 
 .menu-container {
     width: 100%;
@@ -255,12 +252,6 @@ a.sidenav-trigger {
     .navbar-brand {
         display: flex;
         justify-content: center;
-    }
-}
-
-@media (min-width: 500px){
-    .hide-very-small-and-down {
-        display: block;
     }
 }
 
