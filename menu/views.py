@@ -1,27 +1,25 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Food_Item, Food_Category, Food_Combo
+from .models import Food_Item, Food_Combo
 from django.core import serializers
 import itertools
 
 
 def menu(request):
     """ A view to reveal the menu items """
+
     items = Food_Item.objects.all()
     category = request.GET['category']
-    categories = request.GET['category'].split(',')
 
     if category == 'popular':
         items = get_popular_items(items)
     else:
         if 'category' in request.GET:
-            items = items.filter(category__name__in=categories)
-
-    categories = Food_Category.objects.filter(name__in=categories)
+            items = items.filter(category__name=category)
 
     context = {
         'items': items,
-        'selected_category': categories,
+        'selected_category': category,
     }
 
     return render(request, 'menu/menu_items.html', context)
@@ -101,7 +99,7 @@ def combo(request):
         'name')
     c3_dessert = combo3.food_items.filter(category__name='dessert').order_by(
         'name')
-    
+
     context = {
         'combos': combos,
         'combo1_burgers': c1_burgers,
