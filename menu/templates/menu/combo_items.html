@@ -7,7 +7,7 @@
         <div class="menu-navigator deals">
             <div class="row">
                 <div class="col s4 offset-s1 m3 offset-m2"><a href="{% url 'menu' %}?category=popular">POPULAR</a></div>
-                <div class="col s4 offset-s2 m3 offset-m2"><a href="{% url 'combo' %}">COMBOS</a></div>
+                <div class="col s4 offset-s2 m3 offset-m2 {% if combos %}current{% endif %}"><a href="{% url 'combo' %}">COMBOS</a></div>
                 <div class="col s1 m2 col-gap"></div>
             </div>
         </div>

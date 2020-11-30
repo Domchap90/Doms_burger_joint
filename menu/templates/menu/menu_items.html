@@ -4,72 +4,72 @@
 {% block content %}
     <div class="below-nav-container">
         
-        {% for cat in selected_category %}
-            {% if cat.name == 'popular' %}
-            <div class="menu-navigator deals">
-                <div class="row">
-                    <div class="col s4 offset-s1 m3 offset-m2"><a href="{% url 'menu' %}?category=popular">POPULAR</a></div>
-                    <div class="col s4 offset-s2 m3 offset-m2"><a href="{% url 'combo' %}">COMBOS</a></div>
-                    <div class="col s1 m2 col-gap"></div>
-                </div>
+        
+        {% if selected_category == 'popular' %}
+        <div class="menu-navigator deals">
+            <div class="row">
+                <div class="col s4 offset-s1 m3 offset-m2 {% if selected_category == 'popular' %}current{% endif %}"><a href="{% url 'menu' %}?category=popular">POPULAR</a></div>
+                <div class="col s4 offset-s2 m3 offset-m2"><a href="{% url 'combo' %}">COMBOS</a></div>
+                <div class="col s1 m2 col-gap"></div>
             </div>
-            {% else %}
-            <div class="menu-navigator">
-                <div class="row">
-                    <div class="col s4 m2 offset-m1"><a href="{% url 'menu' %}?category=burgers">BURGERS</a></div>
-                    <div class="col s4 m2"><a href="{% url 'menu' %}?category=sides">SIDES</a></div>
-                    <div class="col s4 m2"><a href="{% url 'menu' %}?category=drinks">DRINKS</a></div>
-                    <div class="col s4 offset-s2 m2"><a href="{% url 'menu' %}?category=vegetarian">VEGETARIAN</a></div>
-                    <div class="col s4 m2"><a href="{% url 'menu' %}?category=dessert">DESSERTS</a></div>
-                </div>
+        </div>
+        {% else %}
+        <div class="menu-navigator">
+            <div class="row">
+                <div class="col s4 m2 offset-m1 {% if selected_category == 'burgers' %}current{% endif %}"><a href="{% url 'menu' %}?category=burgers">BURGERS</a></div>
+                <div class="col s4 m2 {% if selected_category == 'sides' %}current{% endif %}"><a href="{% url 'menu' %}?category=sides">SIDES</a></div>
+                <div class="col s4 m2 {% if selected_category == 'drinks' %}current{% endif %}"><a href="{% url 'menu' %}?category=drinks">DRINKS</a></div>
+                <div class="col s4 offset-s2 m2 {% if selected_category == 'vegetarian' %}current{% endif %}"><a href="{% url 'menu' %}?category=vegetarian">VEGETARIAN</a></div>
+                <div class="col s4 m2 {% if selected_category == 'dessert' %}current{% endif %}"><a href="{% url 'menu' %}?category=dessert">DESSERTS</a></div>
             </div>
-            {% endif %}
-        {% endfor %}
+        </div>
+        {% endif %}
+        
 
         <div class="menu-items-container">
             <div class="row">
-            {% for cat in selected_category %}
-                <div {% if cat.name != 'popular' %}class="col s8"{% else %}class="col s12 center"{% endif %}>
-                    <h2 class="category-title">{{ cat.name }}</h2>
+            
+                <div {% if selected_category != 'popular' %}class="col s8"{% else %}class="col s12 center"{% endif %}>
+                    <h2 class="category-title">{{ selected_category }}</h2>
                 </div>
 
-                {% if cat.name != 'popular' %}
-                    <div class="col s4">
-                        <div class="row">
-                            <div>Sort by Price:</div>
-                        </div>
-                        <div class="row">
-                            <div class="col s6">Low to High</div>
-                            <div class="col s6 switch" id="price_low_high">
-                                
-                                <label>
-                                Off
-                                <input id="price_asc" name="price_asc" type="checkbox">
-                                <span class="lever"></span>
-                                On
-                                </label>
-                                
-                            </div>  
-                        </div>
-                        <div class="row">
-                            <div class="col s6">High to Low</div>
-                            <div class="col s6 switch" id="price_high_low">
-                                <label>
-                                Off
-                                <input id="price_desc" name="price_desc"  type="checkbox">
-                                <span class="lever"></span>
-                                On
-                                </label>
-                            </div>
-                        </div>
-                        <div class="row" id="filter_btn_container">
-                            <button type="submit" onclick="getFilteredResults('{{ cat.name }}')">
-                                <a href="#">Filter results</a>
-                            </button>
+                {% if selected_category != 'popular' %}
+                <div class="col s4">
+                    <div class="row">
+                        <div>Sort by Price:</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6">Low to High</div>
+                        <div class="col s6 switch" id="price_low_high">
+                            
+                            <label>
+                            Off
+                            <input id="price_asc" name="price_asc" type="checkbox">
+                            <span class="lever"></span>
+                            On
+                            </label>
+                            
+                        </div>  
+                    </div>
+                    <div class="row">
+                        <div class="col s6">High to Low</div>
+                        <div class="col s6 switch" id="price_high_low">
+                            <label>
+                            Off
+                            <input id="price_desc" name="price_desc"  type="checkbox">
+                            <span class="lever"></span>
+                            On
+                            </label>
                         </div>
                     </div>
+                    <div class="row" id="filter_btn_container">
+                        <button type="submit" onclick="getFilteredResults('{{ selected_category }}')">
+                            <a href="#">Filter results</a>
+                        </button>
+                    </div>
+                </div>
                 {% endif %}
-            {% endfor %}
+
             </div>
 
             {% for item in items %}
@@ -101,7 +101,7 @@
                     ADD TO ORDER
                 </button>
             </div>
-            <input type="hidden" name="redirect_url" value="{{ request.path }}{% for cat in selected_category %}?category={{ cat }}{% endfor %}">
+            <input type="hidden" name="redirect_url" value="{{ request.path }}?category={{ selected_category }}">
             </form>
             {% endfor %}
         </div>

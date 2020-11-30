@@ -63,99 +63,127 @@
                             <ul class="right hide-on-small-and-down">
                                 {% with request.resolver_match.url_name as url_name %}
                                 <li class="{% if url_name == 'home' %}active{% endif %}">
-                                    <a href="{% url 'home' %}">HOME</a>
+                                    <a href="{% url 'home' %}" class="nav-link">HOME</a>
                                 </li>
-                                <li class="{% if url_name == 'menu' and not popular %}active{% endif %}">
-                                    <a class="dropdown-trigger" href="#!" data-target="menu-options">MENU
+                                <li class="{% if url_name == 'menu' and selected_category != 'popular' %}active{% endif %}">
+                                    <a class="dropdown-trigger nav-link" href="#!" data-target="menu-options">MENU
                                         <i class="material-icons right">arrow_drop_down</i>
                                     </a>
                                 </li>
-								<li class="{% if url_name == 'combo' or popular %}active{% endif %}">
-                                    <a class="dropdown-trigger" href="#!" data-target="deal-options">DEALS
+								<li class="{% if url_name == 'combo' or selected_category and selected_category == 'popular' %}active{% endif %}">
+                                    <a class="dropdown-trigger nav-link" href="#!" data-target="deal-options">DEALS
 										<i class="material-icons right">arrow_drop_down</i>
                                     </a>
                                 </li>
                                 <li class="{% if url_name == 'members_area' or url_name == 'rewards' %}active{% endif %}">
-                                    <a href="{% if request.user.is_authenticated %}{% url 'members_area' %}{% else %}{% url 'rewards' %}{% endif %}">MY BURGER
+                                    <a href="{% if request.user.is_authenticated %}{% url 'members_area' %}{% else %}{% url 'rewards' %}{% endif %}" class="nav-link">MY BURGER
                                     </a>
                                 </li>
                                 <li class="{% if url_name == 'food_order' %}active{% endif %}">
-                                    <a href="{% url 'food_order' %}">YOUR ORDER{% if order_count > 0 %}({{ order_count }}){% endif %}</a>
+                                    <a href="{% url 'food_order' %}" class="nav-link">YOUR ORDER{% if order_count > 0 %}({{ order_count }}){% endif %}</a>
                                 </li>
                                 {% endwith %}
                             </ul>
                         </div>
-                        <a href="#" data-target="slide_out" class="sidenav-trigger right hide-on-med-and-up"><i class="material-icons">menu</i></a>
+                        <a href="#" data-target="slide_out" class="sidenav-trigger nav-link right hide-on-med-and-up"><i class="material-icons">menu</i></a>
 					</div>
 				</nav>
 			</div>
 
             <ul id="account-options" class="dropdown-content">
                 {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'members_area' %}">MY BURGERS</a></li>
-                    <li><a href="{% url 'account_logout' %}">LOG OUT</a></li>
+                    <li><a href="{% url 'members_area' %}" class="nav-link">MY BURGERS</a></li>
+                    <li><a href="{% url 'account_logout' %}" class="nav-link">LOG OUT</a></li>
                 {% else %}
-                    <li><a href="{% url 'account_login' %}">LOGIN</a></li>
+                    <li><a href="{% url 'account_login' %}" class="nav-link">LOGIN</a></li>
                 {% endif %}
             </ul>
 
-            <ul id="menu-options" class="dropdown-content">
-				<li><a href="{% url 'menu' %}?category=burgers">BURGERS</a></li>
-				<li><a href="{% url 'menu' %}?category=sides">SIDES</a></li>
-				<li><a href="{% url 'menu' %}?category=drinks">DRINKS</a></li>
-                <li><a href="{% url 'menu' %}?category=vegetarian">VEGETARIAN</a></li>
-				<li><a href="{% url 'menu' %}?category=dessert">DESSERTS</a></li>
+            <ul id="menu-options" class="dropdown-content nav-link">
+				<li class="{% if selected_category and selected_category == 'burgers' %}active{% endif %}">
+                    <a href="{% url 'menu' %}?category=burgers" class="nav-link">BURGERS</a>
+                </li>
+				<li class="{% if selected_category and selected_category == 'sides' %}active{% endif %}">
+                    <a href="{% url 'menu' %}?category=sides" class="nav-link">SIDES</a>
+                </li>
+				<li class="{% if selected_category and selected_category == 'drinks' %}active{% endif %}">
+                    <a href="{% url 'menu' %}?category=drinks" class="nav-link">DRINKS</a>
+                </li>
+                <li class="{% if selected_category and selected_category == 'vegetarian' %}active{% endif %}">
+                    <a href="{% url 'menu' %}?category=vegetarian" class="nav-link">VEGETARIAN</a>
+                </li>
+				<li class="{% if selected_category and selected_category == 'dessert' %}active{% endif %}">
+                    <a href="{% url 'menu' %}?category=dessert" class="nav-link">DESSERTS</a>
+                </li>
 			</ul>
 
-            <ul id="deal-options" class="dropdown-content">
-				<li><a href="{% url 'menu' %}?category=popular">POPULAR</a></li>
-				<li><a href="{% url 'combo' %}">COMBOS</a></li>
+            <ul id="deal-options" class="dropdown-content nav-link">
+				<li class="{% if selected_category and selected_category == 'popular' %}active{% endif %}">
+                    <a href="{% url 'menu' %}?category=popular" class="nav-link">POPULAR</a>
+                </li>
+				<li class="{% if combos %}active{% endif %}">
+                    <a href="{% url 'combo' %}" class="nav-link">COMBOS</a>
+                </li>
 			</ul>
 
 
             <!-- Sidebar navigation -->
             
 			<ul id="slide_out" class="sidenav">
-                <li><a class="sidenav-close" href="#!"><span class="material-icons">close</span></a></li>
+                <li><a class="sidenav-close nav-link" href="#!"><span class="material-icons">close</span></a></li>
 
 				<li>
 				</li>
                 {% with request.resolver_match.url_name as url_name %}
 				<li class="{% if url_name == 'home' %}active{% endif %}">
-                    <a href="{% url 'home' %}">HOME</a>
+                    <a href="{% url 'home' %}" class="nav-link">HOME</a>
                 </li>
                 <ul class="collapsible collapsible-accordion">
                     <li>
-                        <div class="collapsible-header {% if url_name == 'menu' and not popular %}active{% endif %}">
+                        <div class="collapsible-header {% if url_name == 'menu' and selected_category != 'popular' %}active{% endif %} nav-link">
                             MENU<i class="material-icons">arrow_drop_down</i>
                         </div>
                         <div class="collapsible-body">
                             <ul>
-                                <li><a href="{% url 'menu' %}?category=burgers">BURGERS</a></li>
-                                <li><a href="{% url 'menu' %}?category=sides">SIDES</a></li>
-                                <li><a href="{% url 'menu' %}?category=drinks">DRINKS</a></li>
-                                <li><a href="{% url 'menu' %}?category=vegetarian">VEGETARIAN</a></li>
-                                <li><a href="{% url 'menu' %}?category=dessert">DESSERTS</a></li>
+                                <li class="{% if selected_category and selected_category == 'burgers' %}active{% endif %}">
+                                    <a href="{% url 'menu' %}?category=burgers" class="nav-link">BURGERS</a>
+                                </li>
+                                <li class="{% if selected_category and selected_category == 'sides' %}active{% endif %}">
+                                    <a href="{% url 'menu' %}?category=sides" class="nav-link">SIDES</a>
+                                </li>
+                                <li class="{% if selected_category and selected_category == 'drinks' %}active{% endif %}">
+                                    <a href="{% url 'menu' %}?category=drinks" class="nav-link">DRINKS</a>
+                                </li>
+                                <li class="{% if selected_category and selected_category == 'vegetarian' %}active{% endif %}">
+                                    <a href="{% url 'menu' %}?category=vegetarian" class="nav-link">VEGETARIAN</a>
+                                </li>
+                                <li class="{% if selected_category and selected_category == 'dessert' %}active{% endif %}">
+                                    <a href="{% url 'menu' %}?category=dessert" class="nav-link">DESSERTS</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
                     <li>
-                        <div class="collapsible-header {% if url_name == 'combo' or popular %}active{% endif %}">
+                        <div class="collapsible-header {% if url_name == 'combo' or selected_category == 'popular' %}active{% endif %}">
                             DEALS<i class="material-icons">arrow_drop_down</i>
                         </div>
                         <div class="collapsible-body">
                             <ul>
-                                <li><a href="{% url 'menu' %}?category=popular">POPULAR</a></li>
-                                <li><a href="{% url 'combo' %}">COMBOS</a></li>
+                                <li class="{% if selected_category and selected_category == 'popular' %}active{% endif %}">
+                                    <a href="{% url 'menu' %}?category=popular" class="nav-link">POPULAR</a>
+                                </li>
+                                <li class="{% if combos %}active{% endif %}">
+                                    <a href="{% url 'combo' %}" class="nav-link">COMBOS</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
                 </ul>
                 <li class="{% if url_name == 'members_area' or url_name == 'rewards' %}active{% endif %}">
-                    <a href="{% if request.user.is_authenticated %}{% url 'members_area' %}{% else %}{% url 'rewards' %}{% endif %}">MY BURGER</a>
+                    <a href="{% if request.user.is_authenticated %}{% url 'members_area' %}{% else %}{% url 'rewards' %}{% endif %}" class="nav-link">MY BURGER</a>
                 </li>
                 <li class="{% if url_name == 'food_order' %}active{% endif %}">
-                    <a href="{% url 'food_order' %}">YOUR ORDER</a>
+                    <a href="{% url 'food_order' %}" class="nav-link">YOUR ORDER</a>
                 </li>
                 {% endwith %}
 			</ul>

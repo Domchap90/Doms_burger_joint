@@ -36,11 +36,10 @@ img {
     width: 100%;
 }
 
-.checkout-form-container input:focus {
+input:focus {
+    /* Override materialize default style */
     -webkit-box-shadow: none !important;
     box-shadow: none !important; 
-}
-.checkout-form-container input:focus {
     background-color: white;
 }
 
@@ -103,11 +102,20 @@ button a {
     color: grey;
 }
 
+.text-link {
+    text-decoration: underline;
+}
+
+.text-link:hover,
+.nav-link:hover {
+    opacity: 0.5;
+}
+
 a:hover:not(.brand-logo) {
     color: #000;
     text-decoration: none;
-    opacity: 0.5;
 }
+
 @media (min-width: 993px) {
     h2 {
         font-size: 2rem;
@@ -164,7 +172,7 @@ a[data-target="account-options"] {
     font-family: 'Abel', sans-serif;
 }
 
-.active {
+.active > a {
     font-weight: bold;
 }
 
@@ -190,11 +198,17 @@ a[data-target="account-options"] {
 }
 
 .nav-wrapper ul li a:hover:not(.brand-logo),
+.nav-wrapper .dropdown-content li:hover,
 .nav-wrapper ul li.active,
 .sidenav li.active,
 .sidenav li > a:hover {
     /* Undo materialize default background shading */
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.sidenav .collapsible-body > ul:not(.collapsible)
+> li.active a {
+    color: black;
 }
 
 .brand-logo {
@@ -425,9 +439,13 @@ a.sidenav-trigger {
 .menu-navigator .row {
     display: block !important;
 }
-.menu-navigator .row div {
+.menu-navigator .row div:not(.col-gap) {
     background-color: black;
     text-align: center;
+    border: solid 1px white;
+}
+.menu-navigator .row div:not(.col-gap):not(.current):hover {
+    border-color: black;
 }
 .menu-navigator .row .col a {
     color: white;
@@ -445,8 +463,12 @@ a.sidenav-trigger {
 }
 .menu-navigator .col.s4 a:hover,
 .menu-navigator .col.m2 a:hover,
-div.selected {
+.menu-navigator .row .col.current {
     background-color: white;
+    border-color: black;
+    color: black;
+}
+.menu-navigator .row .col.current a {
     color: black;
 }
 .category-title {
@@ -776,7 +798,7 @@ button.qty-btn {
 }
 
 .order-items-container .order-btn-container button {
-    border: 1px solid white !important;
+    border: 2px solid black !important;
     font-size: 1.2rem;
 }
 
@@ -854,15 +876,19 @@ button.qty-btn {
     color: black;
 }
 .allauth-container form label {
-    font-size: 14px;
+    font-size: 16px;
     color: black;
-    margin: 14px 0;
+    margin: 16px 0;
     font-family: 'Montserrat', sans-serif;
 }
+.allauth-container form label.active {
+    font-weight: 500;
+}
 .allauth-container input[type=text],
+.allauth-container input[type=email],
 .allauth-container input[type=password],
 .allauth-container p input#id_login {
-    margin-top: 14px;
+    margin-top: 16px;
     padding-left: 10px;
     background-color: white !important;
     border: 1px solid black;
@@ -870,13 +896,11 @@ button.qty-btn {
     font-size: 16px;
 }
 .allauth-container [type="checkbox"] {
+    margin-left: 10px;
     opacity: 1;
     width: 10px;
     position: relative;
     pointer-events: visiblepainted;
-}
-.allauth-container p label[for=id_remember] {
-    width: 120px;
 }
 
 @media (min-width: 601px) {
@@ -887,6 +911,9 @@ button.qty-btn {
 @media (min-width: 993px) {
     .allauth-container {
         padding: 40px 30%;
+    }
+    .allauth-container form label {
+        font-size: 18px;
     }
 }
 /********************************************************* Logout page   */
