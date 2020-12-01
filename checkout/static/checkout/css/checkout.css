@@ -1,7 +1,3 @@
-.checkout-form-container p a {
-    color: red;
-}
-
 .checkout-form-container p a:hover {
     text-decoration: underline;
 }
@@ -25,7 +21,7 @@
     /* Override Materialize css default code */
     box-shadow: none !important;
 }
-result-message {
+.result-message {
   line-height: 22px;
   font-size: 16px;
 }
@@ -44,11 +40,11 @@ result-message {
 .field-error p {
     color: red;
 }
+.field-error {
+    display: none;
+}
 #card-error {
     color: red;
-    /* text-align: left; */
-    /* font-size: 13px; */
-    /* line-height: 17px; */
     font-family: "Montserrat", sans-serif;
     margin-top: 12px;
     display: flex;

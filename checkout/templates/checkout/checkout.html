@@ -11,7 +11,7 @@
         <div class="checkout-form-container">
 
             {% if not request.user.is_authenticated %}
-                <p>You are not currently logged in to your account. To be eligible for rewards, please sign in <a href="{% url 'account_login' %}?next={{request.path}}">here</a>.</p>
+                <p>You are not currently logged in to your account. To be eligible for rewards, please sign in <a href="{% url 'account_login' %}?next={{request.path}}" class="text-link">here</a>.</p>
             {% elif reward_notification %}
                 <div class="rewards-notification">
                 {{ reward_notification }} 
@@ -24,6 +24,11 @@
 			<div class="col s12" id="spending_warning">
 				{% if remaining_delivery_amount > 0 %}
 				<p>You still need to spend £{{ remaining_delivery_amount|floatformat:2 }} more to be eligible to order online.</p>
+                <a href="{% url 'menu' %}?category=burgers">
+                    <button>
+                        BACK TO MENU
+                    </button>
+                </a>
 				{% endif %}
 			</div>
 
@@ -43,17 +48,10 @@
                         {% else %}
                             <p>{{ field.label }}</p>
                             <p>{{ field }}</p>
-                            <!-- Only show errors after posting form -->
-                            {% if not GET %}
-                                <div class="field-error" id="{{ field.name }}-error">
-                                {% for error in field.errors %}
-                                    <p>{{ error }}</p>
-                                    {% if field.name == 'postcode' and forloop.last %}
-                                        <button><a href="{% url 'checkout' %}?is_collect=True">COLLECT</a></button>
-                                    {% endif %}
-                                {% endfor %}
-                                </div>
-                            {% endif %}
+
+                            <!-- Only show errors after validating form with js -->
+                            <div class="field-error" id="{{ field.name }}-error"></div>
+                           
                         {% endif %}
 
                     {% endfor %}
@@ -65,11 +63,10 @@
                 {% if discount %}
                     <input type="hidden" value="{{ discount }}" name="discount">
                 {% endif %}
-                <p class="result-message hidden">
-                    Payment succeeded
-                </p>
+                <p class="result-message hidden">Payment succeeded</p>
+                <p id="server-err"></p>
 
-                <button class="submit" id="place-order-btn">
+                <button class="submit" id="place-order-btn" onclick="validateForm(event)">
                     PLACE YOUR ORDER (£{{ total|floatformat:2 }})
                 </button>
 

@@ -173,9 +173,6 @@ def checkout(request):
         'total': total,
     }
 
-    if request.method == 'GET':
-        # initial rendering should not show form errors
-        context['GET'] = True
     if intent:
         context['client_secret'] = intent.client_secret
 
@@ -218,6 +215,7 @@ def is_form_valid(request, is_collect):
         for error in field.errors:
             err_dict[field.name] = error
 
+    # set status to 400 to test catch error message in stripe_element.js
     return JsonResponse(err_dict, status=200)
 
 

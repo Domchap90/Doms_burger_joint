@@ -53,7 +53,6 @@ class OrderFormDelivery(forms.ModelForm):
                            'postcode']
 
         self.fields['name'].widget.attrs['autofocus'] = True
-        # self.fields['for_collection'].default = False
 
         for field in required_fields:
             self.fields[field].required = True
