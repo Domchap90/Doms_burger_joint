@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="below-nav-container">
-        <div class="allauth-container">
+        <div class="allauth-container {% if request.resolver_match.url_name == 'account_signup' %}signup{% endif %}">
             {% block inner_content %}
             {% endblock %}
         </div>

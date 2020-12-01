@@ -858,9 +858,10 @@ button.qty-btn {
 /********************************************************* Allauth pages   */
 
 .allauth-container {
-    padding: 15% 0;
-    /* height: 70vh; */
-    height: 80vh;
+    padding-top: 10vh;
+    height: 70vh;
+    width: 95%;
+    margin: auto;
 }
 
 .allauth-container h1 {
@@ -902,16 +903,20 @@ button.qty-btn {
     position: relative;
     pointer-events: visiblepainted;
 }
+.allauth-container.signup {
+    padding: 8vh 0;
+    height: 100%;
+}
 
 @media (min-width: 601px) {
     .allauth-container {
-        padding: 30px 20%;
+         max-width: 500px;
+    }
+    .allauth-container.signup {
+        width: 50%;
     }
 }
 @media (min-width: 993px) {
-    .allauth-container {
-        padding: 40px 30%;
-    }
     .allauth-container form label {
         font-size: 18px;
     }
