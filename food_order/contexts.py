@@ -36,7 +36,8 @@ def order_contents(request):
                 # replace item_ids with the actual item objects so all the
                 # information can be rendered on the order page.
                 for item_id, qty in order[key][2].items():
-                    item_obj_dict[get_object_or_404(Food_Item, pk=item_id)] = qty
+                    item_obj_dict[
+                        get_object_or_404(Food_Item, pk=item_id)] = qty
 
                 combo_hash_map[key][2] = item_obj_dict
 
@@ -69,4 +70,3 @@ def order_contents(request):
     }
 
     return context
-

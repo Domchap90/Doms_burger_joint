@@ -32,10 +32,10 @@
 				{% endif %}
 			</div>
 
-            <h1 id="collection-delivery-title">
+            <h1 id="collection_delivery_title">
             {% if is_collect %}Collection{% else %}Delivery{% endif %} Details
             </h1>
-            <form action="{% url 'checkout' %}" method="POST" id="payment-form">
+            <form action="{% url 'checkout' %}" method="POST" id="payment_form">
             {% csrf_token %}
                 <h2 class="form-subtitle">Who wants these Burgers?</h2>
                     {% for field in form %}
@@ -50,23 +50,23 @@
                             <p>{{ field }}</p>
 
                             <!-- Only show errors after validating form with js -->
-                            <div class="field-error" id="{{ field.name }}-error"></div>
+                            <div class="field-error" id="{{ field.name }}_error"></div>
                            
                         {% endif %}
 
                     {% endfor %}
                 <p>Payment</p>
-                <div id="card-element"><!--Stripe.js injects the Card Element--></div>
+                <div id="card_element"><!--Stripe.js injects the Card Element--></div>
 
-                <p id="card-error" role="alert"></p>
+                <p id="card_error" role="alert"></p>
                 <input type="hidden" value="{{ client_secret }}" name="client_secret">
                 {% if discount %}
                     <input type="hidden" value="{{ discount }}" name="discount">
                 {% endif %}
                 <p class="result-message hidden">Payment succeeded</p>
-                <p id="server-err"></p>
+                <p id="server_err"></p>
 
-                <button class="submit" id="place-order-btn" onclick="validateForm(event)">
+                <button class="submit" id="place_order_btn" onclick="validateForm(event)">
                     PLACE YOUR ORDER (£{{ total|floatformat:2 }})
                 </button>
 

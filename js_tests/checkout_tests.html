@@ -21,7 +21,7 @@
   <body>
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
-    <div id="qunit-dom">   <!-- style="display: none;" -->
+    <div id="qunit-dom" style="display: none;">
 
         <div class="checkout-form-container">
 
@@ -82,14 +82,14 @@
         </div>
 
     </div>
-
+    
     <!-- Add in mock environment variables that would normally be passed in via the view -->
     <script id="id_stripe_public_key" type="application/json">"test_public_key"</script>
     <script id="id_client_secret" type="application/json">"test_client_secret"</script> 
     <!-- Files to be tested -->
     <script src="../checkout/static/checkout/js/stripe_element.js"></script>
     <!-- File executing tests -->
-    <script src="../checkout/static/checkout/js/tests.js"></script>
+    <script src="../checkout/static/checkout/js/tests.js"></script>   
 
 </body>
 </html>

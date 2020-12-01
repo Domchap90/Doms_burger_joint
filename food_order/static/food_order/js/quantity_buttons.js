@@ -243,7 +243,7 @@ function updateRemainingSpend(newTotal) {
         success: function(response) {
             let remaining_spend = JSON.parse(response['remaining_delivery_amount']);
             if (remaining_spend > 0) {
-                $('#spending_warning').html(`<p>You still need to spend £`+remaining_spend+` more to be eligible for delivery.</p>`);
+                $('#spending_warning').html(`<p>You still need to spend £`+remaining_spend.toFixed(2)+` more to be eligible for delivery.</p>`);
                 $('.checkout-btn').prop("disabled", true);
                 $('.checkout-btn').addClass('disabled');
             } else {

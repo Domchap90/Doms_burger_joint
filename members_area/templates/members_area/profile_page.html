@@ -8,7 +8,7 @@
 
 {% block content %}
     <div class="below-nav-container">
-        <div class="signup-container">
+        <div class="member-container">
             <h1>Members Area</h1>
 
             <p>Hey {{ member }}!</p>
@@ -46,8 +46,8 @@
                     <p>{{ field.label }}</p>
                     <p>{{ field }}</p>
                     <!-- Only show errors after posting form -->
-                    {% if not GET %}
-                        <div class="field-error" id="{{ field.name }}-error">
+                    {% if request.method == 'POST' %}
+                        <div class="field-error" id="{{ field.name }}_error">
                         {% for error in field.errors %}
                             <p>{{ error }}</p>
                         {% endfor %}

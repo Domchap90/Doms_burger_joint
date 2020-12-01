@@ -41,9 +41,6 @@ def members_area(request):
         'memberform': form,
         'order_history': orders_page_objects,
     }
-    if request.method == 'GET':
-        # initial rendering should not show form errors
-        context['GET'] = True
 
     return render(request, 'members_area/profile_page.html', context)
 

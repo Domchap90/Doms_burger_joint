@@ -66,6 +66,9 @@ a {
     color: black;
 }
 
+.field-error p {
+    color: red;
+}
 
 button {
     padding: 8px 16px;
@@ -868,9 +871,12 @@ button.qty-btn {
     margin: 0px; 
     text-transform: uppercase;
 }
-.allauth-container #login-form p:nth-child(4) {
+.allauth-container #login-form p:last-child {
     display: flex;
     align-items: center;
+}
+.allauth-container #forgot_password {
+    margin-bottom: 36px;
 }
 .allauth-container p a:hover {
     text-decoration: underline;

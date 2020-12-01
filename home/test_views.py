@@ -54,4 +54,3 @@ please feel free to make an order for collection."
         # range
         self.assertEqual(
             self.client3.session['delivery_eligibility']['message'], fail_msg)
-

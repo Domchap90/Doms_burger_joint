@@ -9,7 +9,7 @@ const elements = stripe.elements({
         },
     ],
 });
-const form = document.getElementById('payment-form');
+const form = document.getElementById('payment_form');
 const isCollection = ($('input[name="for_collection"]').val() == 'True') ? true : false;
 const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
 
@@ -30,25 +30,25 @@ const card = elements.create("card", { hidePostalCode: true, style: style });
 $(document).ready(function() {
     // $('.field-error').hide();
     // Stripe injects an iframe into the DOM
-    card.mount("#card-element");
+    card.mount("#card_element");
 
     updateSubmitBtnState();
 });
 
 function updateSubmitBtnState() {
     if($('#spending_warning').children().length>0) {
-        $("#place-order-btn").addClass('disabled');
-        $('#place-order-btn').prop('disabled', true);
+        $("#place_order_btn").addClass('disabled');
+        $('#place_order_btn').prop('disabled', true);
     } else {
-        $("#place-order-btn").removeClass('disabled');
-        $('#place-order-btn').prop('disabled', false);
+        $("#place_order_btn").removeClass('disabled');
+        $('#place_order_btn').prop('disabled', false);
     }
 }
 
 card.addEventListener('change', function(event){
-    $('#card-error').empty();
+    $('#card_error').empty();
     if (event.error){
-        $('#card-error').html(`<span class="material-icons">error</span>  ${event.error.message}`);
+        $('#card_error').html(`<span class="material-icons">error</span>  ${event.error.message}`);
     } 
 })
 
@@ -58,7 +58,7 @@ async function validateForm(event) {
     // First stop form being submitted immediately to allow control of form submission
     event.preventDefault(); // comment out code for JS testing
     // Clear previous error message if necessary
-    $('#server-err').empty();
+    $('#server_err').empty();
     card.update({ 'disabled': true});
     $('#submit-button').attr('disabled', true);
     $('#below-nav-container').fadeToggle(100);
@@ -83,13 +83,13 @@ async function validateForm(event) {
     try {
         isValid = await isFormValid(dataToValidate);
     } catch(error) {
-        $('#server-err').html("We were unable to process your request at this time. Please try again later.");
+        $('#server_err').html("We were unable to process your request at this time. Please try again later.");
     }
     if (isValid == false) {
         $('#loading-overlay').fadeToggle(100);
         $('#below-nav-container').fadeToggle(100);
         card.update({ 'disabled': false});
-        $('#place-order-btn').attr('disabled', false);
+        $('#place_order_btn').attr('disabled', false);
     } else {
         submitToStripe(dataToValidate);
     }
@@ -109,11 +109,11 @@ async function isFormValid(formData){
                 result = JSON.parse(response['valid']);
             } else {
                 for (err in response) {
-                    if (err == 'postcode') {
+                    if (err == 'postcode' && response[err].length > 30) {
                         let responseMsg = response[err].split('collection');
-                        $('#'+err+'-error').append(`<p>`+responseMsg[0]+`<a href="/checkout/?is_collect=True/" class="text-link">collection</a>`+responseMsg[1]+`</p>`);
+                        $('#'+err+'_error').append(`<p>`+responseMsg[0]+`<a href="/checkout/?is_collect=True/" class="text-link">collection</a>`+responseMsg[1]+`</p>`);
                     } else {
-                        $('#'+err+'-error').append(`<p>`+response[err]+`</p>`);
+                        $('#'+err+'_error').append(`<p>`+response[err]+`</p>`);
                     }
                     $('.field-error').show();
                 }
@@ -162,7 +162,7 @@ function submitToStripe(dataToSubmit) {
         stripe.confirmCardPayment(stripeClientSecret, cardPaymentData).then(function(result) {
             if (result.error) {
                 // Show error to your customer (e.g., insufficient funds)
-                $('#card-error').html(`<span class="material-icons">error</span> ${result.error.message}`);
+                $('#card_error').html(`<span class="material-icons">error</span> ${result.error.message}`);
                 $('#below-nav-container').fadeToggle(100);
                 $('#loading-overlay').fadeToggle(100);
                 card.update({ 'disabled': false});
@@ -170,7 +170,7 @@ function submitToStripe(dataToSubmit) {
             } else {
                 // The payment has been processed!
                 if (result.paymentIntent.status === 'succeeded') {
-                    // form.submit(); // comment out for testing webhooks
+                    form.submit(); // comment out for testing webhooks
                 }
             }
         });

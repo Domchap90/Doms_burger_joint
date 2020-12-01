@@ -22,7 +22,9 @@ def add_to_order(request, item_id):
     if item_id in list(order.keys()):
         if order[item_id] < 10:
             order[item_id] += 1
-            messages.success(request, f'Added "{food_item.name}" to your order.')
+            messages.success(
+                request,
+                f'Added "{food_item.name}" to your order.')
         else:
             messages.error(request, f'You have reached your order limit for \
 "{food_item.name}".')

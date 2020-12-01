@@ -111,7 +111,8 @@ class TestMenuView(TestCase):
         data = {"sort_key": "price_asc", "category": "dessert"}
         response = self.client.get("/menu/sort/", data)
 
-        # Read response data to string and then evaluate as list of dictionaries
+        # Read response data to string and then evaluate as list of
+        # dictionaries
         deserialized_data = json.loads(response.content)
         deserialized_items = eval(deserialized_data)
 

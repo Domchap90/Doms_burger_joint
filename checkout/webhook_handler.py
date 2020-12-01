@@ -22,15 +22,18 @@ class StripeWH_Handler:
     def _send_confirmation_email_to_nonmember(self, order, is_collection):
         cust_email = order.email
         sent_info = get_sent_info(order, is_collection)
-
+        print("_send_confirmation_email_to_nonmember entered")
         subject = render_to_string(
             'checkout/confirmation_email/email_subject.txt',
             {'order': order}
         )
         body = render_to_string(
             'checkout/confirmation_email/email_body_nonmember.txt',
-            {'order': order, 'from_email': settings.DEFAULT_FROM_EMAIL, 'sent_info': sent_info}
-        )
+            {
+                'order': order,
+                'from_email': settings.DEFAULT_FROM_EMAIL,
+                'sent_info': sent_info
+            })
 
         send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email],
                   fail_silently=False)
@@ -38,7 +41,7 @@ class StripeWH_Handler:
     def _send_confirmation_email_to_member(self, order, is_collection, member):
         cust_email = order.email
         sent_info = get_sent_info(order, is_collection)
-
+        print("_send_confirmation_email_to_member entered")
         subject = render_to_string(
             'checkout/confirmation_email/email_subject.txt',
             {'order': order}
@@ -46,7 +49,7 @@ class StripeWH_Handler:
 
         if member.reward_status == 4:
             reward_msg = "Almost there, you will receive a free burger on your \
-next order." 
+next order."
         elif member.reward_status == 5:
             reward_msg = "Congratulations, you earned a free burger on this \
 order."
@@ -63,7 +66,6 @@ needed to grab your free burger."
         send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email],
                   fail_silently=False)
 
-
     def handle_event(self, event):
         """ Handles generic Webhooks """
         return HttpResponse(
@@ -73,7 +75,7 @@ needed to grab your free burger."
 
     def handle_successful_payment_intent(self, event):
         """ handles payment_intent.succeeded """
-
+        print("handle_successful_payment_intent enetered")
         intent = event.data.object
         pid = intent.id
         food_order = intent.metadata.food_order
@@ -140,13 +142,17 @@ needed to grab your free burger."
 
         if order_exists:
             if memberprofile is None:
-                self._send_confirmation_email_to_nonmember(order, is_collection)
+                self._send_confirmation_email_to_nonmember(
+                    order, is_collection)
             else:
-                self._send_confirmation_email_to_member(order, is_collection, memberprofile)
+                self._send_confirmation_email_to_member(
+                    order, is_collection, memberprofile)
             return HttpResponse(
-                    content=f"Webhook received: {event['type']} | SUCCESS: Database already contains this order.",
+                    content="Webhook received: "\
++ event['type'] + " | SUCCESS: Database already contains this order.",
                     status=200
                     )
+
         else:
             order = None
             try:
@@ -188,14 +194,16 @@ needed to grab your free burger."
                 # if discount exists, apply it and reset the reward status for
                 # that member.
                 order.discount = discount_result
-                order.grand_total = round(Decimal(order.grand_total) - order.discount, 2)
+                order.grand_total = round(
+                    Decimal(order.grand_total) - order.discount, 2)
                 memberprofile.reward_status -= 5
             else:
                 # no discount means progress reward status
                 memberprofile.reward_status += 1
             MemberProfile.save(memberprofile)
             order.member_profile = memberprofile
-            self._send_confirmation_email_to_member(order, is_collection, memberprofile)
+            self._send_confirmation_email_to_member(
+                order, is_collection, memberprofile)
 
         order.save()
 

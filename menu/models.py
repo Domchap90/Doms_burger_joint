@@ -8,11 +8,11 @@ class Food_Category (models.Model):
     class Meta:
         verbose_name_plural = 'Food_Categories'
     name = models.CharField(max_length=20)
-    friendly_name = models.CharField(max_length=20, null=True, blank=True)
+    friendly_name = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
         return self.name
- 
+
     def get_friendly_name(self):
         return self.friendly_name
 
@@ -33,7 +33,7 @@ class Food_Item (models.Model):
     category = models.ForeignKey('Food_Category', null=True, blank=True,
                                  on_delete=models.SET_NULL)
     total_purchased = models.IntegerField(default=0)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(blank=True)
     food_combos = models.ManyToManyField(Food_Combo, related_name='food_items')
 
     def __str__(self):

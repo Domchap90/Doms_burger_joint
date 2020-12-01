@@ -18,25 +18,28 @@ class Order(models.Model):
                      blank=True, related_name='orders'
                      )
     name = models.CharField(max_length=50, null=False, blank=False)
-    email = models.EmailField(max_length=80, null=False, blank=False, validators=[validate_email])
+    email = models.EmailField(max_length=80, null=False, blank=False,
+                              validators=[validate_email])
     mobile_number = models.CharField(max_length=15, null=False, blank=False)
-    for_collection = models.BooleanField(default=False, null=True, blank=True, editable=True)
+    for_collection = models.BooleanField(default=False, null=True, blank=True,
+                                         editable=True)
     # Postcode & address_line1 changed to required in the delivery form
-    postcode = models.CharField(max_length=9, null=True, blank=True)
-    address_line1 = models.CharField(max_length=80, null=True, blank=True)
-    address_line2 = models.CharField(max_length=80, null=True, blank=True)
-    delivery_instructions = models.CharField(max_length=100, null=True,
-                                             blank=True)
+    postcode = models.CharField(max_length=9, blank=True)
+    address_line1 = models.CharField(max_length=80, blank=True)
+    address_line2 = models.CharField(max_length=80, blank=True)
+    delivery_instructions = models.CharField(max_length=100, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     item_quantity_count = models.IntegerField(null=True, blank=True, default=0)
-    combo_quantity_count = models.IntegerField(null=True, blank=True, default=0)
+    combo_quantity_count = models.IntegerField(
+        null=True, blank=True, default=0)
     order_count = models.IntegerField(null=False, blank=False, default=0)
     delivery_fee = models.DecimalField(max_digits=6, decimal_places=2,
                                        null=False, default=0)
-    discount = models.DecimalField(max_digits=6, decimal_places=2, null=False, default=0.00)
+    discount = models.DecimalField(
+        max_digits=6, decimal_places=2, null=False, default=0.00)
     order_total = models.DecimalField(max_digits=10, decimal_places=2,
                                       null=False, default=0)
-    grand_total = models.DecimalField(max_digits=10, decimal_places=2, 
+    grand_total = models.DecimalField(max_digits=10, decimal_places=2,
                                       null=False, default=0)
     pid = models.CharField(max_length=254, null=False, blank=False, default='')
 
@@ -51,16 +54,20 @@ class Order(models.Model):
         Update grand total each time a line item is added,
         accounting for delivery costs.
         """
-        self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
-        self.item_quantity_count = self.lineitems.aggregate(Sum('quantity'))['quantity__sum']
-        self.combo_quantity_count = self.lineitems.aggregate(Sum('combo_quantity'))['combo_quantity__sum']
+        self.order_total = self.lineitems.aggregate(
+            Sum('lineitem_total'))['lineitem_total__sum'] or 0
+        self.item_quantity_count = self.lineitems.aggregate(
+            Sum('quantity'))['quantity__sum']
+        self.combo_quantity_count = self.lineitems.aggregate(
+            Sum('combo_quantity'))['combo_quantity__sum']
         self.order_count = 0
         if self.item_quantity_count:
             self.order_count += self.item_quantity_count
         if self.combo_quantity_count:
             self.order_count += self.combo_quantity_count
         self.delivery_fee = settings.DELIVERY_FEE
-        self.grand_total = float(self.order_total) + self.delivery_fee - float(self.discount)
+        self.grand_total = float(
+            self.order_total) + self.delivery_fee - float(self.discount)
         self.save()
 
     def save(self, *args, **kwargs):
@@ -86,7 +93,7 @@ class OrderLineItem(models.Model):
     quantity = models.IntegerField(null=False, blank=False, default=0)
     combo_item = models.ForeignKey(Food_Combo, null=True, blank=True,
                                    on_delete=models.CASCADE)
-    combo_id = models.CharField(max_length=256, null=True, blank=True)
+    combo_id = models.CharField(max_length=256, blank=True)
     combo_quantity = models.IntegerField(null=False, blank=False, default=0)
     lineitem_total = models.DecimalField(
         max_digits=6, decimal_places=2, null=False,
@@ -134,8 +141,11 @@ class OrderLineItem(models.Model):
 
 
 class ComboLineItem(models.Model):
-    combo = models.ForeignKey(OrderLineItem, null=False, blank=False, on_delete=models.CASCADE, related_name='combocontents')
-    food_item = models.ForeignKey(Food_Item, null=False, blank=False, on_delete=models.CASCADE)
+    combo = models.ForeignKey(
+        OrderLineItem, null=False, blank=False, on_delete=models.CASCADE,
+        related_name='combocontents')
+    food_item = models.ForeignKey(
+        Food_Item, null=False, blank=False, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=False, blank=False, default=0)
 
     def save(self, *args, **kwargs):
