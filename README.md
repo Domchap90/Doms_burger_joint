@@ -216,7 +216,7 @@ User stories: 3, 17, 18
 - In your heroku app page navigate to the 'Deploy' tab and then 'Deployment method' section. 
   Here you will have the opportunity to automatically deploy your app whenever you push to github.
 
-- (CLI) pip3 install whitenoise
+- (in CLI) pip3 install whitenoise
 - Add whitenoise middleware to middleware config (settings, 50)
 
 ## 

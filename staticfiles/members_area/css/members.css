@@ -1,0 +1,161 @@
+.member-container {
+    margin: 10% 0%;
+    padding: 20px 10px;
+}
+
+.member-container h1 {
+    margin: 0;
+}
+
+.signup-btns-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#signup_btn {
+    background-color: red;
+}
+@media (min-width: 600px) {
+    .member-container {
+        margin: 10% 10%;
+        padding: 20px 10px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .member-container {
+        margin: 8% 22%;
+    }
+}
+
+/*********************************************************** Profile page */
+.reward-status-container .col.s2 {
+    width: fit-content;
+}
+.reward-status-container img {
+    width: 40px;
+    height: 40px;
+}
+
+p.reward-qualification-msg {
+    font-weight: bold;
+}
+span {
+    font-style: italic;
+    font-weight: normal;
+}
+#user_details_form {
+    max-width: 500px;
+}
+#user_details_form input {
+    padding-left: 10px;
+}
+#user_details_form input:focus {
+    background-color: white;
+    box-shadow: none !important;
+}
+.pagination_container {
+/* if number of paginated btns below threshold pagination
+width will be shrunk and centred within its container as 
+specified in profile_page.js */
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+.pagination {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.pagination li.active {
+    background-color: black;
+    color: #fff;
+    font-weight: bold;
+}
+.pagination li,
+.pagination li a {
+    display: flex;
+    align-items: center;
+}
+.pagination li {
+    font-size: 1.2rem;
+    margin: 0 10px;
+    padding: 0 10px;
+    line-height: 30px;
+}
+.pagination li a {
+    padding: 0px;
+    color: #000;
+}
+@media (min-width:601px) {
+    .reward-status-container img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (min-width:900px) {
+    .reward-status-container img {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/******************************************************* Collect or Delivery */
+.collect-delivery-title {
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
+.collect-delivery.member-container {
+    margin: 120px 0 0 0;
+}
+#delivery_btn {
+    background-color: #fff;
+    
+}
+#delivery_btn a {
+    color: #000;
+}
+#delivery_btn:hover,
+#delivery_btn:focus {
+    background-color: #ffff00;
+}
+.address-info-container {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+.address-container {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    background-color: #000;
+    color: #fff;
+}
+.location-container {
+    width: 50%;
+    background-color: #fff;
+    color: #000;
+}
+.location-container .category-title {
+    text-align: right;
+    margin: 50px 10px 0 0;
+}
+#store_address {
+    width: fit-content;
+    margin: 10px 0 10px 10px;
+}
+.delivery-info {
+    width: 50%;
+    transform: translate(-50%, 50%);
+    margin-left: 50%;
+    text-align: center;
+}
+
+@media (min-width: 993px) {
+    .location-container .category-title {
+        margin: 40px 10px 0 0;
+    }
+}
