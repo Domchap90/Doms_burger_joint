@@ -307,7 +307,7 @@ a.sidenav-trigger {
     max-width:initial;          
 }
 .hero-burger-image {
-    background: url(/media/heroimage_burger_fries_optimized.jpg);
+    background: url(../menu_images/heroimage_burger_fries_optimized.jpg);
     background-color: red;
     height: 66.684vw;
     max-height: calc(100vh - 174px);

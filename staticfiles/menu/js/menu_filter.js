@@ -36,13 +36,14 @@ function getFilteredResults(category_name) {
         data: dataToSend,
         dataType: 'json',
         success: function(response) {
+            console.log("SUCCESS");
             const itemsList = JSON.parse(response);
             let counter = 0;
             for(let item of itemsList) {
                 counter++;
                 $("#item_name_"+counter).html(item['fields']['name']);
                 $("#item_pic_"+counter).attr(
-                    'src', 'staticfiles/menu_images/'+item['fields']['image']);
+                    'src', '../../menu_images/'+item['fields']['image']);
                 $("#item_desc_inline_"+counter).html(
                     item['fields']['description']);
                 $("#item_price_"+counter).html(item['fields']['price']);
