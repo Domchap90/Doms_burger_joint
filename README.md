@@ -196,6 +196,30 @@ User stories: 3, 17, 18
 ## Automated Testing
 
 # Deployment
+## Setting up remote database
+
+- In settings add "import dj_database_url".
+- Set default database to read from the config variable in heroku or whichever platform used to deploy your app (settings, 114-116).
+- Can set up database config in an if statement depending on whether the app is running in heroku or not.
+- Run migrations again in CLI: python3 manage.py migrate
+- Load products in CLI, starting with those which have no dependencies: python3 manage.py loaddata [name_of_fixture]
+- Run command above for food_categories, food_combos & food_items.
+
+## Storing Static Files to the Cloud
+
+- Prevent heroku from attempting to collect static files (in CLI): heroku config:set DISABLE_COLLECTSTATIC=1 --app [app_name]
+- Set app as an allowed host for heroku (settings, 25).
+- Generate secret key (using https://miniwebtool.com/wordpress-secret-key-generator/) 
+  then add to heroku config vars and also to your local environment variables.
+- Ensure the secret key is not revealed anywhere in the code as this will potentially be exposed in github.
+- Commit your changes and push to heroku.
+- In your heroku app page navigate to the 'Deploy' tab and then 'Deployment method' section. 
+  Here you will have the opportunity to automatically deploy your app whenever you push to github.
+
+- (CLI) pip3 install whitenoise
+- Add whitenoise middleware to middleware config (settings, 50)
+
+## 
 
 # Credits
 ## Content 
