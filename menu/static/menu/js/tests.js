@@ -40,7 +40,7 @@ QUnit.module('Menu filter tests:', function(hooks) {
                     counter++;
                     $("#item_name_" + counter).html(item['fields']['name']);
                     $("#item_pic_" + counter).attr(
-                        'src', '/media/' + item['fields']['image']);
+                        'src', '/static/menu_images/' + item['fields']['image']);
                     $("#item_desc_inline_" + counter).html(
                         item['fields']['description']);
                     $("#item_price_" + counter).html(
@@ -169,13 +169,13 @@ order.</p>`,
                 let item = JSON.parse(response);  
                 for ( i of item ) { 
                     $("#"+combo_category+"_image").html(
-                        `<img class="combo-img" src="/media/`+
+                        `<img class="combo-img" src="/static/menu_images/`+
                         i['fields']['image']+`">`);
                     $("#"+combo_category+"_description").html(
                         i['fields']['description']);
 
                     // Collect results for assertion
-                    responseItems.push("/media/"+i['fields']['image'],
+                    responseItems.push("/static/menu_images/"+i['fields']['image'],
                                        i['fields']['description'])
                 }
             },

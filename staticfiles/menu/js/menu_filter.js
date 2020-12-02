@@ -43,7 +43,7 @@ function getFilteredResults(category_name) {
                 counter++;
                 $("#item_name_"+counter).html(item['fields']['name']);
                 $("#item_pic_"+counter).attr(
-                    'src', '../../menu_images/'+item['fields']['image']);
+                    'src', '/static/menu_images/'+item['fields']['image']);
                 $("#item_desc_inline_"+counter).html(
                     item['fields']['description']);
                 $("#item_price_"+counter).html(item['fields']['price']);

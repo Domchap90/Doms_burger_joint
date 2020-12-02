@@ -37,7 +37,7 @@ function updateComboSelection(selectedItem){
 
             for (let i of item ) {
                 $("#"+combo_category+"_image").html(
-                    `<img class="combo-img" src="../../menu_images/`+
+                    `<img class="combo-img" src="/static/menu_images/`+
                     i['fields']['image']+`">`);
                 $("#"+combo_category+"_description").html(
                     i['fields']['description']);
