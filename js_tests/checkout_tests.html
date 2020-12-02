@@ -27,51 +27,51 @@
 
             <div class="col s12" id="spending_warning"></div>
 
-            <form id="payment-form">
+            <form id="payment_form">
                 <input type="hidden" name="csrfmiddlewaretoken" value="csrf_123">
                 <input type="hidden" name="for_collection" value="False">
 
                  <input type="text" name="name" maxlength="50" autofocus=""
                  placeholder="First name will do" class="stripe-style-input" required="" id="id_name" value="James">  
 
-                <div class="field-error" id="name-error"></div>
+                <div class="field-error" id="name_error"></div>
 
                 <input type="text" name="mobile_number" maxlength="15" 
                 placeholder="So we can contact you" class="stripe-style-input" required="" id="id_mobile_number" value="07771 777 666">
 
-                <div class="field-error" id="mobile_number-error"></div>
+                <div class="field-error" id="mobile_number_error"></div>
 
                 <input type="email" name="email" maxlength="80" placeholder="To send your confirmation"
                 class="stripe-style-input" required="" id="id_email" value="test@domain.co.uk">
 
-                <div class="field-error" id="email-error"></div>
+                <div class="field-error" id="email_error"></div>
 
                 <input type="text" name="address_line1" maxlength="80" 
                 placeholder="Include flat number if applicable" class="stripe-style-input"
                 required="" id="id_address_line1" value="101 test rd">
 
-                <div class="field-error" id="address_line1-error"></div>
+                <div class="field-error" id="address_line1_error"></div>
 
                 <input type="text" name="address_line2" maxlength="80" placeholder="(optional)"
                 class="stripe-style-input" id="id_address_line2" value="London">
 
-                <div class="field-error" id="address_line2-error"></div>
+                <div class="field-error" id="address_line2_error"></div>
 
                 <input type="text" name="postcode" maxlength="9" placeholder="e.g. CT11 8AH"
                 class="stripe-style-input" required="" id="id_postcode" value="S1D 3AP">
 
-                <div class="field-error" id="postcode-error"></div>
+                <div class="field-error" id="postcode_error"></div>
 
                 <input type="text" name="delivery_instructions" maxlength="100" placeholder="Any instructions for your driver"
                 class="stripe-style-input" id="id_delivery_instructions" value="Leave round the back">
 
-                <div class="field-error" id="delivery_instructions-error"></div>
+                <div class="field-error" id="delivery_instructions_error"></div>
                
-                <div id="card-element"><!--Stripe.js injects the Card Element--></div>
+                <div id="card_element"><!--Stripe.js injects the Card Element--></div>
 
-                <p id="card-error" role="alert"></p>
+                <p id="card_error" role="alert"></p>
                 
-                <button id="place-order-btn">
+                <button id="place_order_btn">
                     PLACE YOUR ORDER (£100)
                 </button>
                 

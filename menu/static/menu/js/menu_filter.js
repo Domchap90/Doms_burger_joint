@@ -1,3 +1,4 @@
+// Adds listener event to filter switches
 $('.switch').find("input[type=checkbox]").on("click",function() {
     let switchID = $(this).parent().parent().attr('id');
     let otherSwitchID;
@@ -7,10 +8,13 @@ $('.switch').find("input[type=checkbox]").on("click",function() {
     } else {
         otherSwitchID='price_low_high';
     }
-    let otherSwitchOn = $('#'+otherSwitchID).find("input[type=checkbox]").is(':checked');
+    let otherSwitchOn = $(
+        '#'+otherSwitchID).find("input[type=checkbox]").is(':checked');
 
     if (otherSwitchOn){
-        $('#'+otherSwitchID).find("input[type=checkbox]").prop("checked", false);
+    // Prevents both switches being on at the same time.
+        $('#'+otherSwitchID).find("input[type=checkbox]").prop(
+            "checked", false);
     }
 });
 
@@ -34,13 +38,16 @@ function getFilteredResults(category_name) {
         success: function(response) {
             const itemsList = JSON.parse(response);
             let counter = 0;
-            for(item of itemsList) {
+            for(let item of itemsList) {
                 counter++;
                 $("#item_name_"+counter).html(item['fields']['name']);
-                $("#item_pic_"+counter).attr('src', '/media/'+item['fields']['image']);
-                $("#item_desc_inline_"+counter).html(item['fields']['description']);
+                $("#item_pic_"+counter).attr(
+                    'src', '/media/'+item['fields']['image']);
+                $("#item_desc_inline_"+counter).html(
+                    item['fields']['description']);
                 $("#item_price_"+counter).html(item['fields']['price']);
-                $("#item_desc_block_"+counter).html(item['fields']['description']);
+                $("#item_desc_block_"+counter).html(
+                    item['fields']['description']);
             }
         }
     })

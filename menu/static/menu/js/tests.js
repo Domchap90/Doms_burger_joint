@@ -22,7 +22,8 @@ QUnit.module('Menu filter tests:', function(hooks) {
             'category': 'burgers'
         }
 
-        // Setup mock ajax response to intercept actual AJAX calls - avoids live server testing
+        /* Setup mock ajax response to intercept actual AJAX calls - avoids
+        live server testing */
         $.mockjax({
             url: "sort/",
             contentType: 'application/text',
@@ -38,10 +39,14 @@ QUnit.module('Menu filter tests:', function(hooks) {
                 for (item of JSON.parse(response)) {
                     counter++;
                     $("#item_name_" + counter).html(item['fields']['name']);
-                    $("#item_pic_" + counter).attr('src', '/media/' + item['fields']['image']);
-                    $("#item_desc_inline_" + counter).html(item['fields']['description']);
-                    $("#item_price_" + counter).html(item['fields']['price']);
-                    $("#item_desc_block_" + counter).html(item['fields']['description']);
+                    $("#item_pic_" + counter).attr(
+                        'src', '/media/' + item['fields']['image']);
+                    $("#item_desc_inline_" + counter).html(
+                        item['fields']['description']);
+                    $("#item_price_" + counter).html(
+                        item['fields']['price']);
+                    $("#item_desc_block_" + counter).html(
+                        item['fields']['description']);
                 }
             }
         });
@@ -52,11 +57,15 @@ QUnit.module('Menu filter tests:', function(hooks) {
             let secondPriceListed = parseFloat($("#item_price_2").html());
             let thirdPriceListed = parseFloat($("#item_price_3").html());
 
-            // Data sent from ajax call is matching the data from filter buttons pressed
-            assert.deepEqual($.mockjax.unmockedAjaxCalls()[0]['data'], expectedSortData, "correct data sent");
+            /* Data sent from ajax call is matching the data from filter
+            buttons pressed */
+            assert.deepEqual($.mockjax.unmockedAjaxCalls()[0]['data'],
+                             expectedSortData, "correct data sent");
 
             // Items price sorted in ascending order
-            assert.ok(thirdPriceListed > secondPriceListed && secondPriceListed > firstPriceListed, "list in ascending order");
+            assert.ok(thirdPriceListed > secondPriceListed && 
+                      secondPriceListed > firstPriceListed,
+                      "list in ascending order");
 
             $.mockjax.clear();
             done();
@@ -76,10 +85,12 @@ QUnit.module('Menu filter tests:', function(hooks) {
             assert.propEqual(switchA, true, 'switch A is on');
             assert.propEqual(switchB, false, 'switch B stays off');
             $('#price_desc').trigger('click');
-            assert.propEqual(switchA, false, 'after another click switch A is off');
+            assert.propEqual(
+                switchA, false, 'after another click switch A is off');
         });
 
-        QUnit.test('switch A is on, switch B is off: Upon clicking B ', function(assert) {
+        QUnit.test('switch A is on, switch B is off: Upon clicking B ',
+                   function(assert) {
             $('#price_desc').trigger('click');
             $('#price_asc').trigger('click');
             let switchA = $('#price_desc').is(':checked');
@@ -109,7 +120,8 @@ QUnit.module('Combo items tests:', function(hooks) {
         $('.form-error').attr('id','err_3');
 
         $('#combo_btn').trigger('click');
-        assert.ok($('.form-error#err_3').is(':empty'), 'no errors rendered when form is complete');
+        assert.ok($('.form-error#err_3').is(':empty'),
+                 'no errors rendered when form is complete');
         let formInputs = $('form').children('input');
 
         for (input of formInputs){
@@ -121,9 +133,13 @@ QUnit.module('Combo items tests:', function(hooks) {
             $(input).val('');
 
             $('#combo_btn').trigger('click');
-            // Check error message is raised when form is submitted with empty field. 
-            assert.equal($('.form-error#err_3').html(), `<p>Please select all food options to add the combo to your order.</p>`,
-                         "error message displaying for empty "+input.name+" field");
+            /* Check error message is raised when form is submitted with
+            empty field. */
+            assert.equal(
+                $('.form-error#err_3').html(),
+                `<p>Please select all food options to add the combo to your \
+order.</p>`,
+                "error message displaying for empty "+input.name+" field");
         }
     });
 
@@ -152,11 +168,15 @@ QUnit.module('Combo items tests:', function(hooks) {
             success: function(response) {
                 let item = JSON.parse(response);  
                 for ( i of item ) { 
-                    $("#"+combo_category+"_image").html(`<img class="combo-img" src="/media/`+i['fields']['image']+`">`);
-                    $("#"+combo_category+"_description").html(i['fields']['description']);
+                    $("#"+combo_category+"_image").html(
+                        `<img class="combo-img" src="/media/`+
+                        i['fields']['image']+`">`);
+                    $("#"+combo_category+"_description").html(
+                        i['fields']['description']);
 
                     // Collect results for assertion
-                    responseItems.push("/media/"+i['fields']['image'], i['fields']['description'])
+                    responseItems.push("/media/"+i['fields']['image'],
+                                       i['fields']['description'])
                 }
             },
             error: function(response){
@@ -165,16 +185,23 @@ QUnit.module('Combo items tests:', function(hooks) {
         });
 
         setTimeout(function() {
-            // Get updated field information from DOM to compare against the ajax response info
+            /* Get updated field information from DOM to compare against the
+            ajax response info */
             let changedFieldImgSrc = $("#c3_starter_image img").attr('src'); 
             let changedFieldDesc = $("#c3_starter_description").html();
 
             // Data sent from ajax call is matching the item changed in form
-            assert.deepEqual($.mockjax.unmockedAjaxCalls()[0]['data'], expectedItemData, "correct data sent");
+            assert.deepEqual(
+                $.mockjax.unmockedAjaxCalls()[0]['data'],
+                expectedItemData, "correct data sent"
+                );
 
             // ajax response correctly updates changed fields information
-            assert.equal(responseItems[0], changedFieldImgSrc, "image updated correctly");
-            assert.equal(responseItems[1], changedFieldDesc, "description updated correctly");
+            assert.equal(responseItems[0], changedFieldImgSrc,
+                         "image updated correctly");
+            assert.equal(
+                responseItems[1], changedFieldDesc,
+                "description updated correctly");
 
             $.mockjax.clear();
             done();

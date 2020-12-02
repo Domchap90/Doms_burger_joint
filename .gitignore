@@ -2,3 +2,7 @@
 *.pyc
 __pycache__
 core.Microsoft* 
+.coverage
+core.python3.24215.1606471451
+core.python3.6964.1606471316
+package-lock.json

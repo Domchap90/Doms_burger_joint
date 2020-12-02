@@ -1,7 +1,7 @@
 $(document).ready(function(){
     window.addEventListener( "pageshow", function ( event ) {
-        // Determines if page was reloaded using bf cache and
-        // reloads from server to retrieve correct context data.
+        /* Determines if page was reloaded using bf cache and
+        reloads from server to retrieve correct context data. */
         var loadedFromCache = event.persisted ||
         ( typeof window.performance != "undefined" && 
             window.performance.navigation.type === 2 );
@@ -39,17 +39,18 @@ function updateBtnState() {
     updateCheckoutBtnState();
 
     // Evaluate sum of combo items for each id
-    for(combo of combos) {
+    for(let combo of combos) {
         let comboQty = $(combo).find('.order-qty');
 
         // First check that quantity area belongs to a combo
         if (comboQty.length>0) {
             // Then sum combos with identical ids.
-            combo_val = parseInt(comboQty.children('input').val());
+            let combo_val = parseInt(comboQty.children('input').val());
             
             if (comboQty.children('input').attr('id').split('_')[1]=='1') {
                 sum_combo_items_1 += combo_val;
-            } else if (comboQty.children('input').attr('id').split('_')[1]=='2') {
+            } else if (comboQty.children('input').attr(
+                       'id').split('_')[1]=='2') {
                 sum_combo_items_2 += combo_val;
             } else {
                 sum_combo_items_3 += combo_val;
@@ -59,8 +60,9 @@ function updateBtnState() {
     let items = $('.item-container').children();
     let allItems = items.append(combos);
 
-    // Evaluate state of +/- buttons for each qty area using the sum of combos from above.
-    for(item of allItems) {
+    /* Evaluate state of +/- buttons for each qty area using the sum of combos
+    from above. */
+    for(let item of allItems) {
         let itemQty = $(item).find('.order-qty');
 
         // Check Qty area contains at least 1 element/button to be valid
@@ -70,17 +72,21 @@ function updateBtnState() {
             if (itemQtyInputId.includes("item")) {
                 changeBtnState(itemQty, 0, lowerQtyLimit , itemUpperQtyLimit);
             } else if (itemQtyInputId.includes("combo_2")) {
-                changeBtnState(itemQty, sum_combo_items_2, lowerQtyLimit , comboTwoUpperQtyLimit);
+                changeBtnState(
+                    itemQty, sum_combo_items_2, lowerQtyLimit,
+                    comboTwoUpperQtyLimit);
             } else if (itemQtyInputId.includes("combo_1")){
-                changeBtnState(itemQty, sum_combo_items_1, lowerQtyLimit , comboUpperQtyLimit);
+                changeBtnState(itemQty, sum_combo_items_1, lowerQtyLimit,
+                               comboUpperQtyLimit);
             } else {
-                changeBtnState(itemQty, sum_combo_items_3, lowerQtyLimit , comboUpperQtyLimit);
+                changeBtnState(itemQty, sum_combo_items_3, lowerQtyLimit,
+                               comboUpperQtyLimit);
             }
         }
     }
 }
 
-function changeBtnState(quantityObj, sum_combo_items, lowerLimit , upperLimit) {
+function changeBtnState(quantityObj, sum_combo_items, lowerLimit, upperLimit) {
     // handles item qty button states
     if (quantityObj.children('input').attr('id').split('_')[0]=='item') {
         // Disables add button for item upper limit
@@ -104,24 +110,27 @@ function changeBtnState(quantityObj, sum_combo_items, lowerLimit , upperLimit) {
         }
     } else { 
         // handles combo qty button states
-        combo_inputs = []
+        let combo_inputs = []
 
-        // Gather combos of same id into list in order to iterate through list with appropriate limit.
-        for (input of $('.order-combo-container .order-qty-input')) {
-            if (input.id.split('_')[1] == quantityObj.children('input').attr('id').split('_')[1]) {
+        /* Gather combos of same id into list in order to iterate through list
+        with appropriate limit. */
+        for (let input of $('.order-combo-container .order-qty-input')) {
+            if (input.id.split('_')[1] == quantityObj.children(
+                'input').attr('id').split('_')[1]) {
                 combo_inputs.push(quantityObj);
             }
         }
 
-        // Where combo qty input boxes sum to upper limit, disable add buttons for corresponding combos.
+        /* Where combo qty input boxes sum to upper limit, disable add buttons 
+        for corresponding combos. */
         if (sum_combo_items == upperLimit) {
-            for (combo_input of combo_inputs) { 
+            for (let combo_input of combo_inputs) { 
                 $(combo_input).find('.add i').addClass('disabled'); 
             }
         }
         // Otherwise ensure the add button is enabled.
         else {
-            for (combo_input of combo_inputs) { 
+            for (let combo_input of combo_inputs) { 
                 if ( $(combo_input).find('.add i').hasClass('disabled')) {
                     $(combo_input).find('.add i').removeClass('disabled'); 
                 }
@@ -134,9 +143,11 @@ function changeBtnState(quantityObj, sum_combo_items, lowerLimit , upperLimit) {
         } 
         // Otherwise ensure the remove button is enabled.
         else {
-            for (combo_input of combo_inputs) {
-                if ($(combo_input).find('.remove span').hasClass('disabled')) {
-                    $(combo_input).find('.remove span').removeClass('disabled');
+            for (let combo_input of combo_inputs) {
+                if ($(combo_input).find('.remove span').hasClass(
+                        'disabled')) {
+                    $(combo_input).find('.remove span').removeClass(
+                        'disabled');
                 }
             }
         }
@@ -156,7 +167,8 @@ function increaseQuantity(selectedQuantityBtn){
     }
     let qtyValue = $('#'+itemQtyId).val();
 
-    // Only allow quantity to be increased when the button is not disabled (from updateBtnState).
+    /* Only allow quantity to be increased when the button is not disabled
+    (from updateBtnState). */
     if (!$(selectedQuantityBtn).children().hasClass('disabled')) {
         let oldQtyValue = qtyValue;
         qtyValue = parseInt(qtyValue)+1;
@@ -204,12 +216,13 @@ function updateQty(itemQtyId, newQtyVal, oldQtyVal) {
         url: `edit_item/${typeOfItem}/${itemID}/`,
         data: itemData,
         dataType: 'json',
-        success: function(response) {
+        success: function(response) {            
             // receives subtotal from backend and updates total values
             let subtotal = JSON.parse(response['subtotal']);
             subtotal_change = JSON.parse(response['subtotal_change']);
             if (typeOfItem == 'combo') {
-                $('#comborow_'+comboHashKey+' .order-combo-subtotal').html('£'+subtotal);
+                $('#comborow_'+comboHashKey+' .order-combo-subtotal').html(
+                    '£'+subtotal);
             } else {
                 $('#itemrow_'+itemID+' div:nth-child(4)').html('£'+subtotal);
             }
@@ -233,7 +246,8 @@ function updateTotals(changedByAmount) {
 }
 
 function updateRemainingSpend(newTotal) {
-    // Updates the warning about how much the user needs to spend in order to qualify for delivery
+    /* Updates the warning about how much the user needs to spend in order to
+    qualify for delivery. */
     $('#spending_warning').empty();
     $.ajax({
         type: 'GET',
@@ -241,9 +255,14 @@ function updateRemainingSpend(newTotal) {
         data: {'total': newTotal},
         dataType: 'json',
         success: function(response) {
-            let remaining_spend = JSON.parse(response['remaining_delivery_amount']);
+            let remaining_spend = JSON.parse(
+                response['remaining_delivery_amount']);
             if (remaining_spend > 0) {
-                $('#spending_warning').html(`<p>You still need to spend £`+remaining_spend.toFixed(2)+` more to be eligible for delivery.</p>`);
+                $('#spending_warning').html(
+                    `<p>You still need to spend £`+
+                    remaining_spend.toFixed(2)+
+                    ` more to be eligible for delivery.</p>`);
+
                 $('.checkout-btn').prop("disabled", true);
                 $('.checkout-btn').addClass('disabled');
             } else {
@@ -251,8 +270,6 @@ function updateRemainingSpend(newTotal) {
                 if ($('.checkout-btn').hasClass('disabled')){
                     $('.checkout-btn').removeClass('disabled');
                 }
-                // let proceedBtn = document.getElementById('proceed-checkout-link');
-                // $(proceedBtn).attr("href", "/checkout/collect_or_delivery/");
             }
         }
     });
@@ -287,7 +304,8 @@ function deactivateAllButtons() {
 }
 
 function activateAllButtons() {
-    // Allows buttons to be pressed after server has finished dealing with request
+    /* Allows buttons to be pressed after server has finished dealing with
+    request */
     let buttons = document.getElementsByTagName('button');
 
     Array.from(buttons).forEach( button => {

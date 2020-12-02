@@ -1,7 +1,8 @@
 $(document).ready(function() {
     $('.detail-order-row').hide();
     $('.general-order-row').click(function(){
-    // Creates accordian effect where only one row's details can be viewed at a time 
+    /* Creates accordian effect where only one row's details can be viewed at
+    a time */
         let detailRowId = $(this).next().attr('id');
 
         // Allows the single viewed row to be closed so all rows are hidden
@@ -38,19 +39,24 @@ function controlPaginationMenuLength() {
     }
 }
 
-function displayButtons(paginatedNumberBtns, activeElement, numPageBtnsToDisplay) {
-    /* Limits the number of paginated buttons to be displayed when there are many */
+function displayButtons(
+    paginatedNumberBtns, activeElement, numPageBtnsToDisplay) {
+// Limits the number of paginated buttons to be displayed when there are many 
     
     let btnsToDisplay = [];
-    // limits will dictate the number of buttons either side of the active element
+    /* limits will dictate the number of buttons either side of the active 
+    element */
     const limit = numPageBtnsToDisplay/2;
 
     for (numberBtn of paginatedNumberBtns){
         // read page number from id of button
         let numberBtnValue = parseInt(numberBtn.id.split('_')[1]);
         if (activeElement > limit) {
-        // enforces limits when active element is greater than number of pages to be displayed / 2
-            if(numberBtnValue <= (activeElement + limit) && numberBtnValue > (activeElement - limit)) {
+        /* enforces limits when active element is greater than number of pages
+        to be displayed / 2 */
+            if(numberBtnValue <= (
+               activeElement + limit) && numberBtnValue > (
+                   activeElement - limit)) {
                 btnsToDisplay.push(numberBtn);
             }
         } else {

@@ -23,7 +23,8 @@ QUnit.module('Accordian effect', function(hook){
         $('tbody tr:nth-child(odd)').each(function(i) {
             i++;
             $(this).trigger('click');
-            assert.ok($(this).next().is(":hidden")==false, `row ${i}'s contents are now showing`);
+            assert.ok($(this).next().is(":hidden")==false,
+                     `row ${i}'s contents are now showing`);
         });
     });
 
@@ -32,25 +33,33 @@ QUnit.module('Accordian effect', function(hook){
             i++;
             $(this).next().show();
             $(this).trigger('click');
-            assert.ok($(this).next().is(":hidden"), `row ${i}'s contents are back to their hidden state`);
+            assert.ok($(this).next().is(":hidden"),
+                      `row ${i}'s contents are back to their hidden state`);
         });
     });
 
-    test("Click row of order table with another row's body open ", function(assert) {
+    test("Click row of order table with another row's body open ",
+         function(assert) {
         $('#detail_0123').show();
         $('tbody tr:nth-child(3)').trigger('click');
 
-        assert.ok($('#detail_0123').is(':hidden'), "row 1's body closes as row 2 is clicked");
+        assert.ok(
+            $('#detail_0123').is(':hidden'),
+            "row 1's body closes as row 2 is clicked");
 
         $('#detail_0234').show();
         $('tbody tr:nth-child(5)').trigger('click');
 
-        assert.ok($('#detail_0234').is(':hidden'), "row 2's body closes as row 3 is clicked");
+        assert.ok(
+            $('#detail_0234').is(':hidden'),
+            "row 2's body closes as row 3 is clicked");
 
         $('#detail_0345').show();
         $('tbody tr:nth-child(1)').trigger('click');
 
-        assert.ok($('#detail_0345').is(':hidden'), "row 3's body closes as row 1 is clicked");
+        assert.ok(
+            $('#detail_0345').is(':hidden'),
+            "row 3's body closes as row 1 is clicked");
     });
     
 });

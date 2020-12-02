@@ -5,12 +5,14 @@ const stripe = Stripe(stripePublicKey);
 const elements = stripe.elements({
     fonts: [
         {
-            cssSrc: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap',
+            cssSrc: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@\
+            400&display=swap',
         },
     ],
 });
 const form = document.getElementById('payment_form');
-const isCollection = ($('input[name="for_collection"]').val() == 'True') ? true : false;
+const isCollection = (
+    $('input[name="for_collection"]').val() == 'True') ? true : false;
 const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
 
 const style = {
@@ -48,14 +50,17 @@ function updateSubmitBtnState() {
 card.addEventListener('change', function(event){
     $('#card_error').empty();
     if (event.error){
-        $('#card_error').html(`<span class="material-icons">error</span>  ${event.error.message}`);
+        $('#card_error').html(`<span class="material-icons">error</span>\
+        ${event.error.message}`);
     } 
 })
 
 // form.addEventListener('submit', validateForm(event));
 
 async function validateForm(event) {
-    // First stop form being submitted immediately to allow control of form submission
+// First stop form being submitted immediately to allow control of form
+// submission
+
     event.preventDefault(); // comment out code for JS testing
     // Clear previous error message if necessary
     $('#server_err').empty();
@@ -66,7 +71,7 @@ async function validateForm(event) {
     let isValid = false;
 
     // Initiate with form fields shared amongst Collection and Delivery forms
-    dataToValidate = {
+    const dataToValidate = {
         'name': $.trim(form.name.value),
         'mobile_number': $.trim(form.mobile_number.value),
         'email': $.trim(form.email.value),
@@ -77,13 +82,15 @@ async function validateForm(event) {
         dataToValidate['address_line1'] = $.trim(form.address_line1.value);
         dataToValidate['address_line2'] = $.trim(form.address_line2.value);
         dataToValidate['postcode'] = $.trim(form.postcode.value);
-        dataToValidate['delivery_instructions'] = $.trim(form.delivery_instructions.value);
+        dataToValidate['delivery_instructions'] = $.trim(
+            form.delivery_instructions.value);
     }
 
     try {
         isValid = await isFormValid(dataToValidate);
     } catch(error) {
-        $('#server_err').html("We were unable to process your request at this time. Please try again later.");
+        $('#server_err').html("We were unable to process your request at this\
+            time. Please try again later.");
     }
     if (isValid == false) {
         $('#loading-overlay').fadeToggle(100);
@@ -108,10 +115,12 @@ async function isFormValid(formData){
             if (response['valid']) {
                 result = JSON.parse(response['valid']);
             } else {
-                for (err in response) {
+                for (let err in response) {      
                     if (err == 'postcode' && response[err].length > 30) {
                         let responseMsg = response[err].split('collection');
-                        $('#'+err+'_error').append(`<p>`+responseMsg[0]+`<a href="/checkout/?is_collect=True/" class="text-link">collection</a>`+responseMsg[1]+`</p>`);
+                        $('#'+err+'_error').append(`<p>`+responseMsg[0]+
+                        `<a href="/checkout/?is_collect=True/" class=\
+                        "text-link">collection</a>`+responseMsg[1]+`</p>`);
                     } else {
                         $('#'+err+'_error').append(`<p>`+response[err]+`</p>`);
                     }
@@ -142,6 +151,7 @@ function submitToStripe(dataToSubmit) {
             }
         }
     }
+      
     if (isCollection == false) {
         cardPaymentData['payment_method']['billing_details']['address'] = {
                     line1: dataToSubmit['address_line1'],
@@ -156,13 +166,15 @@ function submitToStripe(dataToSubmit) {
         }
     }
 
-    // Send form data to the server before calling Stripe. To ensure info is not lost if user exits
-    // whilst loading the success page.
+    /* Send form data to the server before calling Stripe. To ensure info is
+    not lost if user exits whilst loading the success page. */
     $.post(url, data).done(function() {
-        stripe.confirmCardPayment(stripeClientSecret, cardPaymentData).then(function(result) {
+        stripe.confirmCardPayment(stripeClientSecret, cardPaymentData).then(
+            function(result) {
             if (result.error) {
                 // Show error to your customer (e.g., insufficient funds)
-                $('#card_error').html(`<span class="material-icons">error</span> ${result.error.message}`);
+                $('#card_error').html(`<span class="material-icons">error\
+                    </span>${result.error.message}`);
                 $('#below-nav-container').fadeToggle(100);
                 $('#loading-overlay').fadeToggle(100);
                 card.update({ 'disabled': false});
@@ -179,4 +191,3 @@ function submitToStripe(dataToSubmit) {
         location.reload();
     })
 }
-

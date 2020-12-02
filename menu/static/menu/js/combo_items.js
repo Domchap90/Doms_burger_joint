@@ -4,21 +4,23 @@ $(document).ready(function(){
 });
 
 function validateComboForm(form) {
-    // Notifies user that all form fields have to be selected in order to send the form.
+    /* Notifies user that all form fields have to be selected in order to send
+    the form. */
 
     $('.form-error#err_'+form).empty();
-    addComboForm = document.forms["add_combo_"+form];
+    const addComboForm = document.forms["add_combo_"+form];
 
-    for (field of addComboForm) {
+    for (let field of addComboForm) {
         if ($(field).prop('required') && field.value=='') {
-            $('.form-error#err_'+form).html(`<p>Please select all food options to add the combo to your order.</p>`);
+            $('.form-error#err_'+form).html(`<p>Please select all food options \
+to add the combo to your order.</p>`);
         }
     }
 }
 
 function updateComboSelection(selectedItem){
-    // From changed field id, function sends ajax call to server and 
-    // dynamically updates item's info on page (image and description)
+    /* From changed field id, function sends ajax call to server and 
+    dynamically updates item's info on page (image and description) */
     let selectedID = selectedItem.value;
     let combo_category = selectedItem.id;
     let itemData = {
@@ -33,9 +35,12 @@ function updateComboSelection(selectedItem){
         success: function(response) {
             let item = JSON.parse(response);
 
-            for ( i of item ) {
-                $("#"+combo_category+"_image").html(`<img class="combo-img" src="/media/`+i['fields']['image']+`">`);
-                $("#"+combo_category+"_description").html(i['fields']['description']);
+            for (let i of item ) {
+                $("#"+combo_category+"_image").html(
+                    `<img class="combo-img" src="/media/`+
+                    i['fields']['image']+`">`);
+                $("#"+combo_category+"_description").html(
+                    i['fields']['description']);
             }
         },
         error: function(response){
