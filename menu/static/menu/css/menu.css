@@ -257,10 +257,6 @@
     font-size: 16px;
 }
 
-.combo-desc p {
-    margin-block-start: 0;
-}
-
 .combo-img-container {
     display: flex;
     justify-content: center;

@@ -19,8 +19,8 @@ A prototype for a burger delivery service's web application. Serving customers w
 3. Technologies Used
     
 4. Testing
-    - [Manual Testing](#manual-testing)
     - [Automated Testing](#automated-testing)
+    - [Manual Testing](#manual-testing)
 
 5. Deployment
 
@@ -195,12 +195,6 @@ User stories: 3, 17, 18
 # Technologies Used
 
 # Testing
-## Manual Testing
-### Checkout Form
-### Webhooks 
-### Quantity Buttons (Food order)
-### Google API Fail
-
 ## Automated Testing
 ### HTML Validation
 #### Running Tests
@@ -228,10 +222,19 @@ Eventually tests were run until no more significant errors/warnings were flagged
 #### Running Tests
 
 - Each css file was copied into the W3C validation service (https://jigsaw.w3.org/css-validator/#validate_by_input) and the 'check' button clicked.
+- Six css files were tested in total: 'base.css' plus the css file from every app.
 
 #### Results
 
-
+<p>
+    <a href="http://jigsaw.w3.org/css-validator/check/referer">
+        <img style="border:0;width:88px;height:31px"
+            src="http://jigsaw.w3.org/css-validator/images/vcss"
+            alt="Valid CSS!" />
+    </a>
+</p>
+All tests passed with no errors or significant warnings. There were some minor warnings about using same 'border-color' as 'background-color'. 
+However this was done in anticipation of the hover effect changing the background-color to reveal the contrasting border color.
 
 ### Django Testing (Python code)
 #### Running Tests
@@ -373,6 +376,18 @@ of tests and manipulations could be carried out and assessed almost instantly. W
 No manual testing required here.
 
 All tests passed.
+
+## Manual Testing
+### Checkout Form
+
+
+### Webhooks 
+
+
+### Quantity Buttons (Food order)
+
+
+### Google API Fail
 
 
 # Deployment
