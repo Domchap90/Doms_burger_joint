@@ -87,6 +87,9 @@ A prototype for a burger delivery service's web application. Serving customers w
 
 - Predominant background color: white
 - Header and paragraph text color: black
+#ededed
+#d4d4d4
+#fafafa
 - Buttons: background - black, foreground text - white
 hover: background - yellow, foreground text - black
 
@@ -218,6 +221,7 @@ User stories: 3, 17, 18
 
 - (in CLI) pip3 install whitenoise
 - Add whitenoise middleware to middleware config (settings, 50)
+- Add session storage variable to settings (line 173).
 
 ## 
 

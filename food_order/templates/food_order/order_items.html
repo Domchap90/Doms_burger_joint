@@ -2,6 +2,10 @@
 {% load static %}
 {% load order_tools %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'food_order/css/food_order.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="below-nav-container">
     <div class="order-items-container">

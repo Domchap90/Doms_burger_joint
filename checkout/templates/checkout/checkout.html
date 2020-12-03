@@ -10,6 +10,10 @@
     <div class="below-nav-container">
         <div class="checkout-form-container">
 
+            <h1 id="collection_delivery_title">
+            {% if is_collect %}Collection{% else %}Delivery{% endif %} Details
+            </h1>
+            
             {% if not request.user.is_authenticated %}
                 <p>You are not currently logged in to your account. To be eligible for rewards, please sign in <a href="{% url 'account_login' %}?next={{request.path}}" class="text-link">here</a>.</p>
             {% elif reward_notification %}
@@ -32,9 +36,6 @@
 				{% endif %}
 			</div>
 
-            <h1 id="collection_delivery_title">
-            {% if is_collect %}Collection{% else %}Delivery{% endif %} Details
-            </h1>
             <form action="{% url 'checkout' %}" method="POST" id="payment_form">
             {% csrf_token %}
                 <h2 class="form-subtitle">Who wants these Burgers?</h2>
@@ -73,7 +74,7 @@
             </form>
         </div>
     </div>
-    <div id="loading-overlay">
+    <div id="loading_overlay">
         <div class="loading-animation">
             <div></div>
             <div></div>

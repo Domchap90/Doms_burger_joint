@@ -5,8 +5,8 @@ const stripe = Stripe(stripePublicKey);
 const elements = stripe.elements({
     fonts: [
         {
-            cssSrc: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@\
-            400&display=swap',
+            cssSrc: 'https://fonts.googleapis.com/css2?family=Montserrat:wght\
+@400&display=swap',
         },
     ],
 });
@@ -23,14 +23,14 @@ const style = {
         fontSize: "16px",
         "::placeholder": {
             color: "#5e5e5e",
-            fontFamily: "Montserrat",
+            fontFamily: '"Montserrat", sans-serif',
         }
     },
 };
 const card = elements.create("card", { hidePostalCode: true, style: style });
 
+
 $(document).ready(function() {
-    // $('.field-error').hide();
     // Stripe injects an iframe into the DOM
     card.mount("#card_element");
 
@@ -58,8 +58,8 @@ card.addEventListener('change', function(event){
 // form.addEventListener('submit', validateForm(event));
 
 async function validateForm(event) {
-// First stop form being submitted immediately to allow control of form
-// submission
+/* First stop form being submitted immediately to allow control of form
+submission */
 
     event.preventDefault(); // comment out code for JS testing
     // Clear previous error message if necessary
@@ -93,8 +93,8 @@ async function validateForm(event) {
             time. Please try again later.");
     }
     if (isValid == false) {
-        $('#loading-overlay').fadeToggle(100);
-        $('#below-nav-container').fadeToggle(100);
+        $('#loading_overlay').fadeToggle(100);
+        $('.below-nav-container').fadeToggle(100);
         card.update({ 'disabled': false});
         $('#place_order_btn').attr('disabled', false);
     } else {

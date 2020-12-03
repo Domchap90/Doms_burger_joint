@@ -88,6 +88,27 @@ specified in profile_page.js */
     padding: 0px;
     color: #000;
 }
+
+thead, .general-order-row {
+    background-color: black;
+    color: white;
+}
+.general-order-row:hover {
+    background-color: white;
+    color: black;
+}
+table {
+    border: 0.5px solid black;
+}
+tr:not(:last-child), thead tr {
+    border-bottom: 0.5px solid white;
+}
+
+.general-order-row td,
+tr th {
+    text-align: center;
+}
+
 @media (min-width:601px) {
     .reward-status-container img {
         width: 60px;

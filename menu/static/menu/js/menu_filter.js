@@ -36,7 +36,6 @@ function getFilteredResults(category_name) {
         data: dataToSend,
         dataType: 'json',
         success: function(response) {
-            console.log("SUCCESS");
             const itemsList = JSON.parse(response);
             let counter = 0;
             for(let item of itemsList) {

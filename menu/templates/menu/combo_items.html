@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'menu/css/menu.css' %}">
+{% endblock %}
+
 {% block content %}
     <div class="below-nav-container">
 
