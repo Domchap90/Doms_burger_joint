@@ -114,7 +114,7 @@ class TestCheckoutView(TestCase):
             [field.value() for field in response.context['form']],
             ['elvisTheKing', '07771 555 229', 'heartbreak@hotel.com', False,
              '3764 Elvis Presley Boulevard', 'Memphis, Tennessee', 'TN 38116',
-             None])
+             ""])
 
     def test_checkout_GET_discount_unused(self):
         """ Case whereby user doesn't select the free item they are

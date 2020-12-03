@@ -57,16 +57,16 @@ class TestMenuView(TestCase):
         self.assertTemplateUsed(response, 'menu/menu_items.html')
 
         # returns correct context to template
-        self.assertQuerysetEqual(response.context['selected_category'],
-                                 ["<Food_Category: burgers>"], ordered=False)
+        self.assertEqual(response.context['selected_category'],
+                         "burgers")
         self.assertQuerysetEqual(
             response.context['items'],
             ["<Food_Item: test_food_item1>", "<Food_Item: test_food_item2>"],
             ordered=False)
 
         response2 = self.client.get('%s?category=popular' % reverse('menu'))
-        self.assertQuerysetEqual(response2.context['selected_category'],
-                                 ["<Food_Category: popular>"], ordered=False)
+        self.assertEqual(response2.context['selected_category'],
+                         "popular")
         # returns correctly sorted items for popular category: top 3 burgers,
         # top side, top drink, top dessert
         popular_item_ids = []

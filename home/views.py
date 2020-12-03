@@ -40,8 +40,8 @@ def is_postcode_valid(postcode):
 
     if postcode_valid:
         formatted_postcode = []
-        # format postcode so all entries are standardized with no spaces or
-        # lower case characters
+        """ format postcode so all entries are standardized with no spaces or
+        lower case characters """
         for char in postcode:
             if char != " ":
                 formatted_postcode.append(char.upper())
@@ -58,7 +58,6 @@ def is_postcode_valid(postcode):
 
     if postcode_valid:
         # API convert postcode to geocode
-        # gmap_key = googlemaps.Client(key=settings.GOOGLEMAPS_API_KEY)
         geocode_url = "https://maps.googleapis.com/maps/api/geocode/json?address=components=postal_code:\
         "+postcode_string+"|country:GB&key="+settings.GOOGLEMAPS_API_KEY
         try:
@@ -80,8 +79,8 @@ def is_postcode_valid(postcode):
 
             distance_response = requests.get(distance_url).json()
 
-            # extract value from JSON response object & split the string to
-            # get the value only.
+            """ extract value from JSON response object & split the string to
+            get the value only. """
             distance_miles = float(
                 distance_response['rows'][0]['elements'][0]['distance'][
                     'text'].split(' ')[0])
