@@ -137,16 +137,12 @@
 
             <div class="row">
                 <div class="order-btn-container col s12 l5 offset-l7">
-                    <a href="{% url 'menu' %}?category=burgers">
-                        <button>
-                            BACK TO MENU
-                        </button> 
+                    <a class="button" href="{% url 'menu' %}?category=burgers">
+                        BACK TO MENU         
                     </a>
                     
-                    <a href="{% url 'collect_or_delivery' %}" id="proceed_checkout_link">
-                        <button class="checkout-btn">
-                            PROCEED TO CHECKOUT
-                        </button>
+                    <a class="button checkout-btn" href="{% url 'collect_or_delivery' %}" id="proceed_checkout_link">
+                        PROCEED TO CHECKOUT
                     </a>
                     
                 </div>

@@ -128,26 +128,32 @@ tr th {
     font-family: 'Montserrat', sans-serif;
     text-align: center;
 }
+
 .collect-delivery.member-container {
     margin: 120px 0 0 0;
 }
+
 #delivery_btn {
     background-color: #fff;
-    
+    color: black;
 }
+
 #delivery_btn a {
     color: #000;
 }
+
 #delivery_btn:hover,
 #delivery_btn:focus {
     background-color: #ffff00;
 }
+
 .address-info-container {
     height: 200px;
     display: flex;
     justify-content: center;
     margin-top: 50px;
 }
+
 .address-container {
     width: 50%;
     display: flex;
@@ -155,19 +161,23 @@ tr th {
     background-color: #000;
     color: #fff;
 }
+
 .location-container {
     width: 50%;
     background-color: #fff;
     color: #000;
 }
+
 .location-container .category-title {
     text-align: right;
     margin: 50px 10px 0 0;
 }
+
 #store_address {
     width: fit-content;
     margin: 10px 0 10px 10px;
 }
+
 .delivery-info {
     width: 50%;
     transform: translate(-50%, 50%);

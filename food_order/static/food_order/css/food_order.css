@@ -97,7 +97,7 @@ button.qty-btn {
     justify-content: space-evenly;
 }
 
-.order-items-container .order-btn-container button {
+.order-items-container .order-btn-container .button {
     border: 2px solid black !important;
     font-size: 1.2rem;
 }

@@ -2,6 +2,7 @@
 <html lang="en">
 {% load static %}
 	<head>
+        <title>Dom's Burger Joint</title>
 		{% block meta %}
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<meta charset="utf-8">
@@ -195,7 +196,7 @@
                 {% for message in messages %}
                     {% include 'includes/toasts/message.html' %} 
                 {% endfor %}              
-            <div>
+            </div>
         {% endif %}
 
         {% block content %}

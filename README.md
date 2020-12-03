@@ -203,7 +203,34 @@ User stories: 3, 17, 18
 
 ## Automated Testing
 ### HTML Validation
+#### Running Tests
+
+- Each html template was copied into the W3C validation service (https://validator.w3.org/#validate_by_input) and the 'check' button clicked.
+- Each error/ warning assessed and if independent of django template framework the error was corrected.
+- Only files which were amended by myself were tested, leaving many of the allauth files untested.
+- Tested 11 templates in this manner including the 'base.html'.
+
+#### Results
+
+Only reporting non Django template related errors, the main issue flagged was the repeated use of either buttons as descendants of anchor tags
+or vice versa. After this was flagged in one of the initial tests, the button class was created in 'base.css' (lines 69-78) to allow links to look
+exactly the same and behave almost identically to an actual button element. All the html was amended to modify any combination of buttons and anchor
+tags to anchor tags alone holding the class 'button'. Any ids or classes the button tag had were passed onto the anchor tag. After doing this the
+button/ link functionality was retested.
+
+Buttons were still left in the code only for form submissions however.
+
+Small issues were flagged such as the occasional missing '/' at the start of a closing tag. These were easily fixed on the spot.
+
+Eventually tests were run until no more significant errors/warnings were flagged.
+
 ### CSS Validation
+#### Running Tests
+
+- Each css file was copied into the W3C validation service (https://jigsaw.w3.org/css-validator/#validate_by_input) and the 'check' button clicked.
+
+#### Results
+
 
 
 ### Django Testing (Python code)

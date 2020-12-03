@@ -10,8 +10,8 @@
         <h2 class="collect-delivery-title">How would you like to receive your burgers?</h2>
         <div class="collect-delivery signup-container">  
             <div class="signup-btns-container">
-                <button id="delivery_btn"><a href="{% url 'checkout' %}">DELIVERY</a></button>
-                <button><a href="{% url 'checkout' %}?is_collect=True">COLLECT</a></button>
+                <a class="button" href="{% url 'checkout' %}" id="delivery_btn">DELIVERY</a>
+                <a class="button" href="{% url 'checkout' %}?is_collect=True">COLLECT</a>
             </div>
             <div class="address-info-container">
                 <div class="location-container">
