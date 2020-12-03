@@ -196,10 +196,16 @@ User stories: 3, 17, 18
 
 # Testing
 ## Manual Testing
+### Checkout Form
+### Webhooks 
+### Quantity Buttons (Food order)
+### Google API Fail
 
 ## Automated Testing
 ### HTML Validation
 ### CSS Validation
+
+
 ### Django Testing (Python code)
 #### Running Tests
 
@@ -343,6 +349,11 @@ All tests passed.
 
 
 # Deployment
+## View website
+
+if you simply want to view the site then please visit:<br>
+https://doms-burger-joint.herokuapp.com/
+
 ## Setting up remote database
 
 - In settings add "import dj_database_url".
@@ -355,6 +366,13 @@ All tests passed.
 ## Storing Static Files to the Cloud
 
 - Prevent heroku from attempting to collect static files (in CLI): heroku config:set DISABLE_COLLECTSTATIC=1 --app [app_name]
+- (in CLI) pip3 install whitenoise
+- Add whitenoise middleware to middleware config (settings, 50)
+- Add session storage variable to settings (line 173).
+- python3 manage.py collectstatic
+
+## Deploy to Heroku
+
 - Set app as an allowed host for heroku (settings, 25).
 - Generate secret key (using https://miniwebtool.com/wordpress-secret-key-generator/) 
   then add to heroku config vars and also to your local environment variables.
@@ -362,12 +380,7 @@ All tests passed.
 - Commit your changes and push to heroku.
 - In your heroku app page navigate to the 'Deploy' tab and then 'Deployment method' section. 
   Here you will have the opportunity to automatically deploy your app whenever you push to github.
-
-- (in CLI) pip3 install whitenoise
-- Add whitenoise middleware to middleware config (settings, 50)
-- Add session storage variable to settings (line 173).
-
-## 
+- Ensure Django 'DEBUG' variable is set equal to False before deploying to Heroku.
 
 # Credits
 ## Content 
