@@ -196,7 +196,151 @@ User stories: 3, 17, 18
 
 # Testing
 ## Manual Testing
+
 ## Automated Testing
+### HTML Validation
+### CSS Validation
+### Django Testing (Python code)
+#### Running Tests
+
+- Prior to running any tests, in the settings page of the core app comment out lines 113 - 117 & remove indentation for DATABASES object underneath.
+Also comment out line 173 as instructed.
+- To run one specific python test file, enter in CLI: python3 manage.py test [app_name].[test_file]
+
+- If not installed already, enter in CLI: pip3 install coverage
+- To run python tests for an entire app, enter in CLI: coverage run --source=[app_name] manage.py test
+- '.' signifies a pass, while 'F' signifies a fail & 'E' signifies an error.
+- See what percentage of the app's code has been tested by entering in CLI: coverage report
+- To examine this in more detail and view exactly which lines of code have been tested:
+  - (CLI command) coverage html
+  - (CLI command) python3 -m http.server
+  - Open browser by ctrl + click on http link and selecting htmlcov/
+  - select file to be viewed.
+
+** Note coverage report only reveals what % is tested NOT passed
+
+#### Results
+
+##### Checkout
+
+- forms.py 5 tests ran: all passed
+- models.py 7 tests ran: all passed
+- signals.py 4 tests ran: all passed
+- views.py 18 tests ran: all passed
+- coverage report 86%
+
+All the files were extensively tested although 86% isn't considered high, ideally this would be 100%. However
+the webhooks were tested manually and this accounts for most of the remainder.
+
+##### Food Order
+
+- views.py 7 tests ran: all passed
+- coverage report 99%
+
+Despite only having one test file for this app it still managed to cover almost all python lines of code.
+
+##### Home
+
+- views.py 3 tests ran: all passed
+- coverage report 94%
+
+The missing lines of code from the tests were the exceptions blocks in case of the Google Maps API call failing.
+Whilst mock API responses could have been used in automated testing to replicate this. Instead manual testing was
+chosen to get authentic fails from the API.
+
+##### Members Area
+
+- forms.py 4 tests ran: all passed
+- models.py 3 tests ran: all passed
+- views.py 3 tests ran: all passed
+- coverage report 99%
+
+##### Menu
+
+- models.py 3 tests ran: all passed
+- views.py 6 tests ran: all passed
+- coverage report 98%
+
+### Qunit Testing (Javascript) 
+#### Running Tests
+
+- To run the automated js tests simply type into CLI: python3 -m http.server
+- (CLI command) python3 -m http.server
+- Open browser by ctrl + click on http link and selecting 'js_tests/'
+- Select test to be run. This will be a file of type '.html'.
+** Note: Many of the tests have async components due to Ajax calls being made within functions.
+This may cause a slight delay in rendering the results.
+
+#### Results
+##### Checkout
+
+This wasn't heavily tested automatically due to the two AJAX calls within the 'stripe_element.js' file.
+Meaning it was very much integrated with the back end and therefore most of the logic testing was completed
+in the django view instead. Here the goal was primarily to ensure that the correct AJAX calls were sent from the 
+javascript functions by intercepting the calls via mockjax and using assert equals statements to find the urls
+and data sent from the calls was indeed correct.
+
+The spending warning button state was completely tested. There is the possibility of the user reaching the checkout page
+by entering the checkout url despite the assumption of the 'proceed to checkout' button being successfully disabled
+on the food order page. It's important that the system doesn't allow invalid orders to be made as this could potentially
+lead to a messy job of distinguishing valid orders from non valid in the admin page. Plus the user won't want to spend 
+the delivery fee for nothing.
+
+All tests passed. 
+
+##### Food Order
+
+The 'quantity_buttons.js' file was extensively tested as this is a key piece of javascript for dynamically altering
+the order page. The importance of this cannot be stressed enough because if the user for example increases the quantity of an item
+& the javascript does not update the totals correctly. This could potentially result in the user getting free food but more importantly
+the business losing money.
+
+The structure of the code is a long chain of functions to control isolated aspects of the buttons, such as assessing their states 
+(disabled or not), updating their states & calls to backend to evaluate these aspects. If there is one function that doesn't perform
+as expected then the whole chain breaks down and the system is flawed. Here lies the reason why these tests were more integration based
+rather than unit tested. Unit testing could have been increased further by all means but due to the chaining nature of the functions,
+the tests were structured around triggering an event (namely clicks of a button) and yielding an expected result through DOM manipulation.
+
+The financial gravity of mistakes in this section is a key reason why it was tested manually as well.
+
+All tests passed. 
+
+##### Home
+
+No JS to test.
+
+##### Members Area
+
+The javascript's role in this app was purely to control the display of the order history table for the logged in user in 2
+ways:
+1. To enforce an accordian effect with the table's header and body rows.
+2. To control the number of paginated buttons on display for the table (varying according to screen size).
+
+1. The 'tests.js' static file in the 'members_area' app focused on testing this.
+2. Due to the responsive nature of this test, it would be very difficult to execute using Qunit. Therefore manual testing
+was applied. 
+
+All tests passed. 
+
+##### Menu
+
+The 'menu' app has two js files to test.  
+
+- menu_filter.js
+  1. Toggles switches appropriately so that 2 switches are never 'on' at the same instant.
+  2. Applies filtering as dictated by the switch state via an Ajax call to the sort items view.
+- combo_items.js
+  1. Validates form, essentially highlighting any missing fields from the combo.
+  2. Dynamically updates chosen food item content such as description and image.
+
+These are pretty straight forward DOM manipulation tests. The benefit of using Qunit was to create a test DOM where any number
+of tests and manipulations could be carried out and assessed almost instantly. Which saves time with regards to future adjustments 
+& testing. 
+
+No manual testing required here.
+
+All tests passed.
+
 
 # Deployment
 ## Setting up remote database
