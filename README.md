@@ -86,10 +86,8 @@ A prototype for a burger delivery service's web application. Serving customers w
 ## Color scheme
 
 - Predominant background color: white
+- Other background colors used: #ededed, #d4d4d4 & #fafafa
 - Header and paragraph text color: black
-#ededed
-#d4d4d4
-#fafafa
 - Buttons: background - black, foreground text - white
 hover: background - yellow, foreground text - black
 
@@ -241,12 +239,21 @@ However this was done in anticipation of the hover effect changing the backgroun
 
 - Prior to running any tests, in the settings page of the core app comment out lines 113 - 117 & remove indentation for DATABASES object underneath.
 Also comment out line 173 as instructed.
-- To run one specific python test file, enter in CLI: python3 manage.py test [app_name].[test_file]
 
-- If not installed already, enter in CLI: pip3 install coverage
-- To run python tests for an entire app, enter in CLI: coverage run --source=[app_name] manage.py test
+- To run one specific python test file, enter in CLI:<br>
+    python3 manage.py test [app_name].[test_file]
+
+- If not installed already, enter in CLI: <br>
+    pip3 install coverage
+
+- To run python tests for an entire app, enter in CLI:<br>
+    coverage run --source=[app_name] manage.py test
+
 - '.' signifies a pass, while 'F' signifies a fail & 'E' signifies an error.
-- See what percentage of the app's code has been tested by entering in CLI: coverage report
+
+- See what percentage of the app's code has been tested by entering in CLI:<br>
+    coverage report
+
 - To examine this in more detail and view exactly which lines of code have been tested:
   - (CLI command) coverage html
   - (CLI command) python3 -m http.server
@@ -378,17 +385,330 @@ No manual testing required here.
 All tests passed.
 
 ## Manual Testing
-### Checkout Form
+### Checkout Form Validation
+#### Submits valid data
 
+Proceed through checkout as a customer would do. Entering details that should pass form validation and be redirected to the checkout success
+page. 
+
+    Valid data to submit 
+        Name = James
+        Mobile = 07777 555 555
+        Email = test@domain.co.uk
+        Address Line 1 = 101 random st
+        Address Line 2 = random town
+        Post Code = W1W 7JB
+        Delivery instructions = (leave blank)
+        Payment = 4242424242424242 04/24 242 (Test payment data)
+    
+
+1. Ensure order has a valid total amount by selecting enough items in the menu.
+2. Proceed through orders and click 'Delivery' button.
+3. Fill out checkout form with valid data to submit.
+4. Click 'Place your order' button to submit the form.
+5. Observe:
+    1. Next page loaded
+    2. Details rendered on page.
+
+Expected outcome should render:
+
+1. checkout success page.
+2. The following observations:
+    - Order number matches the last parameter of the url.
+    - Order details matched the initial chosen items from the menu.
+    - 'Sent to' section should contain the address fields as entered in test.
+    - 'Your details' section should contain the personal details as entered in the test 
+  
+Test passed.
+
+#### Rejects invalid data
+
+Proceed through checkout as a customer would do. However enter details that should not pass form validation and dynamically highlight errors
+within the checkout form.
+
+    Invalid data to submit 
+        Name = (leave blank)
+        Mobile = 07777 555 555 22 (too long)
+        Email = testdomain.co.uk  (no '@' char)
+        Address Line 1 = 101 random st
+        Address Line 2 = random town
+        Post Code = W1W 7J
+        Delivery Instructions = (leave blank)
+        Payment = 5555555555555555 12/12 121
+
+1. Repeat steps 1 - 5 for 'Submits valid data' test, however this time enter the invalid data to submit instead.
+
+Expected outcome should render:
+
+1. Checkout form page after loading visual dissappears.
+2. The following errors:
+    - Name error - "This field is required."
+    - Mobile error - "This phone number is too long. It can only have a maximum of 11 digits without a '+'."
+    - Email error - "Enter a valid email address."
+    - Postcode error - "Sorry it looks like you are not eligible for delivery. However please feel free to make an order for **collection**."
+    - Payment error 'Your card number is invalid'.
+      
+Test passed.
+
+### Reward Status 
+
+With the customers reward status being known prior to starting the tests, it should correctly progress as each successful order is made. Reaching
+a maximum of 5 - qualifying amount & a minimum of 0 - after using discount.
+
+#### Correctly increases
+
+1. Navigate to the admin page by using the base url + '/admin/'.
+2. Under 'Authentication and Authorization' select 'users', then click on the user's username to see their details.
+3. Set their reward status to 4.
+4. Login as that user.
+5. In the user's profile page *Note* the number of golden burger icons.
+6. Fill order with items to total over the minimum delivery amount, proceed to checkout, delivery.
+7. Fill out form with valid details and submit.
+8. *Note* if discount applied in checkout success page.
+9. Upon reaching checkout success page, navigate to members area whilst staying logged in.
+10. *Note* the number of golden burger icons out of 5.
+
+Expected outcome is:
+
+5. 4
+8. No discount applied
+10. 5
+
+Test passed.
+
+#### Correctly resets
+
+Following on from the 'Correctly increases' test:
+
+1. Staying logged in as the same user as the previous test, now repeat stages 5 - 10.
+
+Expected outcome is:
+5. 5
+8. Discount applied
+10. 0
+
+Test passed.
 
 ### Webhooks 
 
+Webhooks are the most intricate system being used in the entire app. Therefore it's worth doing thorough testing 
+to ensure that the app is communicating properly with Stripe. Webhooks are responsible for sending data back to our app
+not too disimilar from an API. In Stripe's case it is authorizing & processing payment data that has been sent to it.
+and communicating the results of the authorization. It tells us whether the charge has succeeded & other various pieces of
+information about what stage of completion the payment intent has reached for development purposes. These are accessible
+from the Stripe dashboard (https://dashboard.stripe.com/test/webhooks).
+
+#### User Logged Out Delivery
+
+1. Ensure that if a user profile is currently logged in, it needs to be logged out.
+2. Comment out line 191 in stripe_element.js to prevent form submitting.
+3. Fill order with items to total over the minimum delivery amount, proceed to checkout, delivery.
+4. Fill out form with valid details and submit.
+5. *Note* time & observe visual of page.
+6. Navigate to django admin page for site & within the section checkout, orders.
+7. Ensure orders are in the order of most recent at the top, then click on the top order.
+8. *Note* is that the order recently made?
+9. Navigate to your stripe dashboard.
+10. *Note* stripe webhook events for the time noted in stage 5.
+11. Check Terminal (if running from local IDE) for backend email details matching the users
+information and order information. If running in heroku Check the user's email account for an email
+from d0mch4pl3@gmail.com.
+12. Undo stage 2.
+
+Expected outcome:
+
+5. Page loading animation frozen.
+8. True.
+10. Stripe webhooks all succeed:
+  - payment_intent.succeeded 
+  - payment_intent.created
+  - charge.succeeded
+11. True
+
+#### Other Webhook Tests
+
+- Repeat for User Logged Out Collection but change stage 3 to proceed to checkout via collect instead of delivery.
+- Repeat for User Logged In Delivery but stage 1 must be logged in.
+- Repeat for 'User Logged In Collection' test but stage 1 must be logged in & stage 3 uses collection checkout.
+
+All webhook tests share the same expected outcomes as 'User Logged Out Delivery'.
+
+All tests passed.
 
 ### Quantity Buttons (Food order)
 
+#### Test 1 Description
+
+This test attempts to emulate a typical process a user may go through to select how many combos they want. The purpose here
+is to ensure that any combination of combo packages that share the same type (e.g. family deal) can be selected as long as
+their total quantity doesn't go over the combo sum limits as outlined in the quantity_buttons.js global variables (lines 18-21).
+
+Combo items 1 & 3 have a combo sum limit of 5.
+
+1. Ensure order is initially empty.
+2. Navigate to 'DEALS', then 'COMBOS' via the nav bar.
+3. Add two 'Regular Meal's or two 'Deluxe Meal's each containing different items.
+4. Navigate to 'YOUR ORDER(2)' via the nav bar and *Note* the initial quantity button states.
+5. Click on '+' quantity button for one of the combos until the button becomes disabled.
+6. *Note* the quantity in the input box upon the button becoming disabled.
+7. Now Click on the '-' quantity button for the same combo until the button becomes disabled.
+8. *Note* the new quantity in the input box upon the '-' button becoming disabled.
+9. Repeat stages 5 - 8 for the other combo
+
+After completing the test, there should be 5 *Notes*. Each referring to the two numbers showing inside the two quantity inputs. Due to the 
+combo sum quantity limits being equal to 5 for these two combos.
+The expected output should render:<br>
+(1, 1), (4, 1), (1, 1), (1, 4), (1, 1) 
+
+#### Result 1
+
+(1, 1), (4, 1), (1, 1), (1, 4), (1, 1) 
+
+Test passed.
+
+#### Test 2 Description
+
+Another very similar test was conducted only on this occasion the limits were explored starting with quantity values initiated to 1 & 1 for combos
+A & B respectively (initiated at step 4). However this time the combo is the 'Family Deal' (combo 2, combo sum limit 3).
+
+4. Initiated Combo A: 1, Combo B: 1
+5. Click on '+' quantity button for combo A until the button becomes disabled.
+6. *Note* the quantity in the input box upon the button becoming disabled.
+7. Now Click on the '-' quantity button for combo A until it becomes disabled.
+8. *Note* the new quantity after the '-' button becomes disabled with A.
+9. Repeat stages 5 - 8 for combo B.
+
+After completing the test, there should be 5 *Notes*. Each referring to the two numbers showing inside the two quantity inputs.
+The expected output should render:<br>
+(1, 1) - A & B minus buttons disabled, (2, 1) - A plus button disabled & B minus disabled, (1, 1) - A & B minus buttons disabled, (1, 2) - A minus button disabled, B plus disabled, (1, 1) - A & B minus buttons disabled
+
+#### Issue
+
+Actual outcome:<br>
+(1, 1), (2, 1), (2, 1), (2, 1), (2, 1)<br>
+
+Upon performing the test, the disabled states were not being re-enabled after moving away from limits in certain cases.<br>
+
+This bug was frustrating because no errors flagged it was a case of observing the buttons simply not change as they were expected to.
+
+#### Solution: 
+
+Console log statements were inserted into every conditional block of logic throughout the changeBtnState function to pick up which 
+parts of my code were getting executed. Test 2 was then repeated with chrome developer tools open in the console view to observe the
+output. <br>
+It quickly became apparent that the final else block was never executed. Therefore the error lay within how the conditional statements
+were structured . I had a long chained conditional sequence only allowing one block to be executed thereby if an add or minus button 
+were to be disabled (at the limit), this was at the top of the chain of conditions. This wouldn't allow the opposite button to be re-enabled.
+
+This problem tends to be specific with combos due to the summing nature of the limits allowing an upper limit and a lower limit to be closer
+to each other on a particular combo.
+
+Logic changed from:
+
+    if(handling upper limit) {
+        // disable plus button
+    } else if(handling lower limit){
+        // disable minus button
+    } else (handling inbetween limits) {
+        // re-enable both button states
+    }
+
+To:
+
+    if(handing upper limit) {
+    // disable plus button
+    }else (handling not upper limit) {
+        // re-enable plus button
+    }
+
+    if (handling lower limit){
+        // disable minus button
+    }
+    else (handling not lower limit) {
+        // re-enable minus button
+    }
+
+This logic doesn't assume that limits can't be only 1 quantity apart.
+
+After this solution, the test was performed again and passed.
+
+#### Test 3 Description
+
+The primary goal of test 3 is to check that the state of the 'proceed to checkout' button is dynamically altered correctly depending on the total 
+amount of the order.
+
+1. In menu page of app, select any food item under £15.00. Then proceed to the order page.
+2. Upon loading *note* the initial state of the proceed to checkout button, both visually & if the link is working.
+3. Increase the quantity of the item you selected by clicking the add button until the total amount is over the minimum online threshold of £15.
+4. The moment the threshold is passed, *note* the spending warning presence and state of 'Proceed to Checkout' button.
+5. Reload the page.
+6. repeat stage 2.
+7. Decrease the quantity of the item you selected by clicking the minus button until the total amount is below the online threshold of £15.
+8. Repeat stage 4.
+
+After completing the test the expected *notes* should be as follows:<br>
+2. Checkout button visually and functionally disabled with spending warning present.
+4. Spending warning dissappears, checkout button becomes active. Totals increase.
+6. No spending warning, checkout button active.
+8. Spending warning appears, checkout button disabled.
+
+#### Issue
+
+Failed at stage 4. Checkout button was visually active (no disabled class) however upon clicking the link, nothing happened.
+
+#### Solution
+
+The corresponding link for the button was conditionally set to render via the django templates depending on if the backend value of remaining 
+delivery amount was meeting a certain condition. Then javascript would disable or enable the button once a plus or minus quantity button was 
+clicked triggering the long chain of methods that leads to the updateRemainingSpend function.
+
+This worked fine if the intial page was rendered with the link however if it was rendered without and the user increases their spend via the 
+qty buttons the 'updateRemainingSpend' function tries to enable a button that has no link attached to it.
+
+To overcome this problem the initial responsibility of determining whether the button should be disabled was redelegated from the back end 
+view to the front end, adding this as part of the doc ready function updateCheckoutBtnState() (lines 26 & 29 added). The link itself simply 
+remained the same but no longer wrapped in the django conditional tags.
+
+After implementing solution, the test was re-run and everything functioned properly.
 
 ### Google API Fail
 
+In the function 'is_postcode_valid' line 34 of the home views file, the function contains an algorithm that checks whether or not the postcode is valid
+in a number of ways. The parts which assess the string format of the postcode are tested automatically. The more intricate validation occurs through
+the Google Maps API. Two calls are made to the API:<br>
+
+1. Geocode call sends the string postcode to the API along with the key and returns the longitude, latitude coordinates.
+2. Distance call sends the geocoordinates of two locations (store and user's address) and returns the distance between them.
+
+All successful API call outcomes are tested automatically. In this section the instances where they fail will be tested manually to ensure that the app
+doesn't crash and still yields a message to the user notifying them that their postcode isn't valid.
+
+#### Test 1 Description
+
+1. Line 62 in home app views file comment out "+settings.GOOGLEMAPS_API_KEY" and save the changes to file.
+2. In terminal command line:<br>
+    python3 manage.py runserver
+3. Then open port in browser and type in a valid postcode such as "W1W 7JE" & press 'Check Delivery Eligibility' button.
+4. Observe message output below button.
+5. Undo the comment made in stage 1 to reset view back to original state.
+
+Expected outcome is the system doesn't crash but simply yields the same postcode invalid message in the event of the API failing.
+
+#### Result 1
+
+Test passed no issues.
+
+#### Test 2 Description
+
+1. Line 77 in home app views file, remove '+user_lat+' from 'distance_url'.
+2. Repeat stages 2 - 4 of test 1.
+3. Undo stage 1 to reset view back to original state.
+
+Expected outcome is the system doesn't crash but simply yields the same postcode invalid message in the event of the API failing.
+
+#### Result 2
+
+Test passed no issues.
 
 # Deployment
 ## View website
@@ -425,7 +745,18 @@ https://doms-burger-joint.herokuapp.com/
 - Ensure Django 'DEBUG' variable is set equal to False before deploying to Heroku.
 
 # Credits
+
+
 ## Content 
 ## Media
 ## Code
+
+def changeform_link(self) method in OrderLineItem Models (Checkout)
+Resource: https://stackoverflow.com/questions/2857001/adding-links-to-full-change-forms-for-inline-items-in-django-admin
+Solution: answered May 27 '10 at 22:25, Lukasz Korzybski
+                
+        django pagination in Members area profile page and view (Members Area)
+
 ## Acknowledgements
+
+I would like to thank my mentor Brian and all the staff at Code Institute for their support.
