@@ -1,0 +1,330 @@
+.menu-navigator {
+    padding: 20px 10px;
+    margin: 10px 0 50px 0;
+    justify-content: center;
+}
+
+.menu-navigator .row {
+    display: block !important;
+}
+
+.menu-navigator .row div:not(.col-gap) {
+    background-color: black;
+    text-align: center;
+    border: solid 1px white;
+}
+
+.menu-navigator .row div:not(.col-gap):not(.current):hover {
+    border-color: black;
+}
+
+.menu-navigator .row .col a {
+    color: white;
+}
+
+.menu-navigator .col.s4 {
+    padding: 0; 
+} 
+
+.menu-navigator .col.s4 a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-navigator .col.s4 a:hover,
+.menu-navigator .col.m2 a:hover,
+.menu-navigator .row .col.current {
+    background-color: white;
+    border-color: black;
+    color: black;
+}
+
+.menu-navigator .row .col.current a {
+    color: black;
+}
+
+.category-title {
+    text-transform: uppercase;
+    font-family: "Abel", sans-serif;
+}
+
+.switch label .lever {
+    background-color: #8e8282;
+}
+
+.switch label .lever:after {
+    background-color: #605858;
+}
+
+.switch label input[type=checkbox]:checked + .lever {
+    background-color: #dbdb1b;
+}
+
+.switch label input[type=checkbox]:checked + .lever:after {
+    background-color: #ffff00;
+}
+
+#filter_btn_container {
+    text-align: right;
+}
+
+.menu-items-container {
+    margin: 0% 8.3%;
+    padding-bottom: 70px;
+}
+
+.menu-items-container h2 {
+    margin: 1.0rem 0 1.424rem 0;
+}
+
+.menu-items-container .col.s8 {
+    padding-left: 0px;
+}
+
+.menu-item-form {
+    margin-bottom: 30px;
+}
+
+.food-item-name {
+    font-family: "Abel", sans-serif;
+    font-size: 1.4rem;
+    text-align: center;
+    margin: 0;
+    padding: 0 !important;
+}
+
+.menu-option-row {
+    width: 240px;
+    background-color:#ededed;
+    border: solid 0.5px;
+}
+
+.food-image-container {
+    display: flex;
+/* Override materialize css padding */
+    padding: 0px !important;
+}
+
+.food-image-container img {
+    width: 120px;
+    border: solid 1px black;
+    border-right-style: none;
+}
+ 
+@media (min-width: 601px){
+
+    .below-nav-container{
+        margin-top: 147px;
+    }
+
+    .menu-navigator .row {
+        display: flex !important;
+        justify-content: center;
+    }
+
+    .menu-navigator .col.m2 {
+        margin-left: 0;
+        height: 35px;
+    } 
+
+    .menu-navigator .col.m2 a {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .food-item-name {
+        text-align: left;
+    }
+
+    .menu-option-row {
+        width: 100%;
+    }
+
+    .food-image-container img {
+        width: 160px;
+    }
+
+}
+
+@media (min-width: 993px) {
+
+    .menu-items-container {
+        margin: 0% 16.0%;
+    }
+
+    .food-item-name {
+        font-size: 1.5rem;
+    }
+
+    .food-image-container img {
+        width: 200px;
+    }
+
+}
+
+@media (min-width: 1201px) {
+
+    .menu-items-container {
+        margin: 0% 20.0%;
+    }
+
+}
+
+/********************************************************* Combo Deal page   */
+
+.menu-navigator.deals {
+    margin: 0 5%;
+}
+
+.category-title.combo {
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.row.collapsible-header {
+    display: block;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+.collapsible-header h3 {
+    font-size: 1.92rem;
+}
+
+.collapsible-body {
+    background-color: #ededed;
+}
+
+.collapsible-body .row {
+    display: block;
+}
+
+.collapsible-body .row:not(.select-info-row) {
+    text-align: center;
+}
+
+.select-dropdown {
+    width: fit-content !important;
+    z-index: 1000;
+}
+
+.select-dropdown li {
+    display: flex;
+    align-items: center;
+    padding: 0px 10px;
+    width: max-content;
+    font-family: 'Abel', sans-serif;
+    text-transform: uppercase;
+}
+
+.select-dropdown li > span {
+    color: #000;
+    width: 182.03px;
+}
+
+.select-wrapper .caret {
+/* Override Materialize css for select dropdown caret position*/
+    left: 150px;
+    z-index: 1;
+}
+
+.col-gap {
+    background-color: inherit !important;
+}
+
+.combo-info {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.combo-info .select-wrapper input.select-dropdown {
+    padding: 0px 10px;
+    background-color: white;
+    font-family: 'Abel', sans-serif;
+    text-transform: uppercase;
+    border: 1px solid;
+}
+
+.combo-desc {
+    font-size: 16px;
+}
+
+.combo-img-container {
+    display: flex;
+    justify-content: center;
+}
+
+.combo-desc-container {
+    display: flex;
+    justify-content: center;
+}
+
+.combo-img {
+    width: 120px;
+    height: 120px;
+}
+
+.form-error {
+    color: red;
+}
+
+.order-btn-container {
+    text-align: center;
+}
+
+@media (min-width: 601px) {
+
+    .combo-desc {
+        margin: 1.9466666667rem 0 1.168rem 0;
+        font-size: 18px;
+    }
+
+    .combo-img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .order-btn-container {
+        text-align: right;
+    }
+
+    .row.collapsible-header {
+        text-align: left;
+        background-color: #d4d4d4;
+    }
+
+    .row.collapsible-header h3 {
+        text-align: center;
+    }
+
+}
+
+@media (min-width: 993px) {
+    .row.collapsible-header {
+        text-align: center;
+    }
+}
+
+@media (min-width: 1201px) {
+    .select-info-row {
+        height: 180px;
+    }
+
+    .combo-img {
+        width: 170px;
+        height: 170px;
+    }
+
+    .combo-desc-container {
+        height: inherit;
+        align-items: center;
+    }
+}

@@ -1,0 +1,432 @@
+h1 {
+    font-family: 'Abel', sans-serif;
+    text-transform: uppercase;
+    font-size: 2.2rem;
+    color: black;
+}
+.hide {
+    display: none !important;
+}
+
+h2 {
+    font-size: 1.8rem;
+}
+
+p, div {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: black;
+}
+span {
+    font-weight: bold;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+}
+
+hr {
+    margin: 0 0 20px 0;
+    background-color: black;
+    height: 1px;
+}
+
+img {
+    width: 100%;
+}
+
+input:focus {
+    /* Override materialize default style */
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important; 
+    background-color: white;
+}
+
+input {
+    margin-bottom: 0px !important;
+    width: 100%;
+    border: solid 1px black !important;
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box !important;
+}
+/* ::-webkit-input-placeholder,
+:-ms-input-placeholder, */
+::placeholder {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    color: #5e5e5e;
+}
+textarea:focus {
+    border-bottom: none !important;
+}
+
+a {
+    color: black;
+}
+
+.button {
+/* Used when link is required to look like a button */
+    padding: 8px 16px;
+    background-color: black;
+    border: 2px solid black;
+    font-family: 'Abel', sans-serif;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    color: white;
+}
+
+#button_link_form {
+/* Button acting as a link by wrapping it in post form */
+    display: flex;
+}
+
+form button:disabled:hover{
+    background-color: black !important;
+}
+
+.field-error p {
+    color: red;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: black;
+    border-color: black !important;
+    font-family: 'Abel', sans-serif;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    color: white;
+}
+
+button:hover,
+button:focus,
+.button:hover,
+.button:focus {
+    background-color: #ffff00 !important;
+    color: #000;
+}
+
+button:focus,
+.button:focus {
+    outline-style: none;
+}
+
+button:hover.disabled,
+button:focus.disabled,
+.button:hover.disabled,
+.button:focus.disabled {
+    background-color: #000;
+    color: grey;
+}
+
+.disabled {
+    color: grey;
+}
+
+.text-link {
+    text-decoration: underline !important;
+}
+
+.text-link:hover,
+.nav-link:hover {
+    opacity: 0.5;
+}
+
+a:hover:not(.brand-logo) {
+    color: #000;
+    text-decoration: none;
+}
+
+@media (min-width: 993px) {
+    h2 {
+        font-size: 2rem;
+    }
+    p, div {
+        font-size: 16px;
+    }
+}
+/********************************************************* Navbar   */
+
+.navbar-fixed nav {
+    height: 174px;
+    background-color: #fafafa;
+    z-index: 997;
+}
+
+.nav-wrapper{
+    display: flex;
+}
+.logo-container {
+    display: flex;
+}
+.login-status-container {
+    display: flex;
+    align-items: center; 
+    color: black;
+    height: 56px;
+    line-height: 56px;
+    margin-left: 18px;
+    z-index: 998;
+}
+a .login-status-container {
+    color: black;
+}
+a[data-target="account-options"] {
+    width: fit-content;
+    height: fit-content;
+    z-index: 999;
+}
+.dropdown-content {
+    z-index: 996;
+}
+
+.menu-container {
+    width: 100%;
+    height: fit-content;
+}
+
+.menu-container ul {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-self: flex-end;
+    font-family: 'Abel', sans-serif;
+}
+
+.active > a {
+    font-weight: bold;
+}
+
+#account-options {
+    /* Allows account options dropdown to be clicked */
+    z-index: 999;
+    width: 150px !important; 
+}
+#account-options li a {
+    text-align: right;
+    font-family: 'Abel', sans-serif;
+}
+#menu-options {
+    width: 120px !important;
+}
+#deal-options {
+    width: 100px !important;
+}
+
+.nav-wrapper ul li a {
+    color: black;
+    font-size: 18px;
+}
+
+.nav-wrapper ul li a:hover:not(.brand-logo),
+.nav-wrapper .dropdown-content li:hover,
+.nav-wrapper ul li.active,
+.sidenav li.active,
+.sidenav li > a:hover {
+    /* Undo materialize default background shading */
+    background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.sidenav .collapsible-body > ul:not(.collapsible)
+> li.active a {
+    color: black;
+}
+
+.brand-logo {
+    text-align: center;
+    width: fit-content;
+}
+.brand-logo h1 {
+    margin: auto 20px;
+    font-size: 1.8rem;
+}
+
+a.sidenav-trigger {
+    color: black;
+}
+
+#slide_out {
+    font-family: 'Abel', sans-serif;
+}
+#slide_out li.active > a {
+    font-weight: bold;
+}
+#slide_out .collapsible-header {
+    font-family: 'Abel', sans-serif;
+    font-size: 16px;
+    padding: 0 32px;
+}
+#slide_out .collapsible-header.active {
+    font-weight: bold;
+}
+#slide_out .collapsible-header:hover {
+    background-color: rgba(0, 0, 0, 0);
+    opacity: 0.5;
+}
+.sidenav li > a {
+    font-size: 16px;
+}
+#slide_out .collapsible-body li a {
+    font-family: 'Abel', sans-serif;
+    font-size: 16px;
+    padding: 0 48px;
+}
+.sidenav-close {
+    text-align: right;
+}
+.sidenav span {
+    padding-top: 15px;
+}
+
+.brand-logo img {
+    width: 100px;
+    height: 100px;
+}
+
+@media (min-width: 450px){
+    .navbar-brand {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media (min-width: 601px){
+    .nav-wrapper{
+        display: block;
+    }
+    .navbar-fixed nav {
+        height: 210px;
+    }
+    .menu-container {
+        display: flex;
+        padding-top: 90px;
+    }
+}
+
+/********************************************************* Toasts      */
+
+#toast-container {
+    top: 0% !important;
+    right: 0% !important;
+    width: fit-content;
+    height: fit-content;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.toast {
+    background-color: #d4d4d4;
+    color: black;
+    border: solid 1px black;
+}
+
+.below-nav-container {
+    min-height: calc(100vh - 174px);
+    margin-top: 120px;
+    padding: 20px 0px;
+    background-color: white;
+}
+
+/********************************************************* Common Selectors */
+
+/* Shared across most apps */
+.form-subtitle {
+    font-size: 1.2rem;
+}
+
+/* Shared between food_order & checkout_success */
+.combo-unit-list {
+    background-color: #ededed;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+@media(min-width: 993px) {
+    .form-subtitle {
+        font-size: 1.5rem;
+    }
+}
+
+/********************************************************* Allauth pages   */
+
+.allauth-container {
+    padding-top: 10vh;
+    height: 70vh;
+    width: 95%;
+    margin: auto;
+}
+
+.allauth-container h1 {
+    margin: 0px; 
+    text-transform: uppercase;
+}
+.allauth-container #login-form p:last-child {
+    display: flex;
+    align-items: center;
+}
+.allauth-container #forgot_password {
+    margin-bottom: 36px;
+}
+.allauth-container p a:hover {
+    text-decoration: underline;
+    color: black;
+}
+.allauth-container form label {
+    font-size: 14px;
+    color: black;
+    margin: 16px 0;
+    font-family: 'Montserrat', sans-serif;
+}
+.allauth-container form label.active {
+    font-weight: 500;
+}
+.allauth-container input[type=text],
+.allauth-container input[type=email],
+.allauth-container input[type=password],
+.allauth-container p input#id_login {
+    margin-top: 16px;
+    padding-left: 10px;
+    background-color: white !important;
+    border: 1px solid black;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 16px;
+}
+.allauth-container [type="checkbox"] {
+    margin-left: 10px;
+    opacity: 1;
+    width: 10px;
+    position: relative;
+    pointer-events: visiblepainted;
+}
+.allauth-container.signup {
+    padding: 8vh 0;
+    height: 100%;
+}
+
+@media (min-width: 601px) {
+    .allauth-container {
+         max-width: 500px;
+    }
+    .allauth-container.signup {
+        width: 50%;
+    }
+}
+
+@media (min-width: 993px) {
+    .allauth-container form label {
+        font-size: 16px;
+    }
+}
+
+/********************************************************* Logout page   */
+
+.logout-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: 5%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
