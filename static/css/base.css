@@ -77,6 +77,15 @@ a {
     color: white;
 }
 
+#button_link_form {
+/* Button acting as a link by wrapping it in post form */
+    display: flex;
+}
+
+form button:disabled:hover{
+    background-color: black !important;
+}
+
 .field-error p {
     color: red;
 }
