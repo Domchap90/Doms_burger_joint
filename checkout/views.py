@@ -24,21 +24,19 @@ def cached_payment_intent(request):
 
     try:
         pid = request.POST.get('client_secret').split('_secret')[0]
-        is_collection = request.POST.get('is_collection')
         stripe.api_key = settings.STRIPE_SECRET_KEY
         stripe.PaymentIntent.modify(pid, metadata={
             'food_order': json.dumps(request.session.get('food_order', {})),
             'username': request.user,
             'order': json.dumps(request.session.get('food_order')),
-            'is_collection': is_collection,
+            'is_collection': request.POST.get('is_collection'),
         })
 
         return HttpResponse(status=200)
 
     except Exception as e:
-        print(f'Exception is {e}')
         messages.error(request, 'Unfortunately your payment could not be processed at this time. \
-            Please try again in a few minutes.')
+Please try again in a few minutes.')
         return HttpResponse(content=e, status=400)
 
 
@@ -84,10 +82,10 @@ def checkout(request):
             if request.user.is_authenticated:
                 member_profile = MemberProfile.objects.get(member=request.user)
                 if request.POST.get('discount'):
-                    # if hidden discount input exists rendered by non-POST
-                    # checkout view it means there is a discount to be
-                    # applied as well as resetting the reward status for
-                    # that member.
+                    """ if hidden discount input exists rendered by non-POST
+                    checkout view it means there is a discount to be
+                    applied as well as resetting the reward status for
+                    that member. """
                     order.discount = request.POST.get('discount')
                     member_profile.reward_status -= 5
                 else:
@@ -96,6 +94,7 @@ def checkout(request):
                 MemberProfile.save(member_profile)
                 order.member_profile = member_profile
             order.save()
+
             for order_itemid, value in food_order.items():
                 try:
                     save_to_orderlineitem(order_itemid, value, order)
@@ -160,6 +159,7 @@ def checkout(request):
             # Verify your integration in this guide by including this parameter
             metadata={'integration_check': 'accept_a_payment'},
         )
+
     if not stripe_public_key:
         messages.warning(request, 'Stripe public key is missing. Please ensure \
              that it is set in the environment variables.')
@@ -197,8 +197,8 @@ def is_form_valid(request, is_collect):
     for pair in post_data:
         # Format the pair data so they can be added to form_data dict
         key = pair[0]
-        # Eliminates special characters except for those required in emails &
-        # spaces
+        """ Eliminates special characters except for those required in emails &
+        spaces """
         value = re.sub("[^a-zA-Z0-9\\s@.]", "", str(pair[1]))
         if key != 'csrfmiddlewaretoken':
             form_data[key] = value
@@ -207,8 +207,8 @@ def is_form_valid(request, is_collect):
     if form.is_valid() and remaining_spend == 0:
         return JsonResponse({'valid': True}, status=200)
 
-    # Create errors dictionary to populate the form with appropriate messages
-    # in event that it isn't valid.
+    """ Create errors dictionary to populate the form with appropriate messages
+    in event that it isn't valid. """
     err_dict = {}
 
     for field in form:
@@ -241,8 +241,8 @@ def save_to_orderlineitem(order_itemid, item_info, order):
             combo_quantity=item_info[1],
         )
         order_line_item.save()
-        # Iterate through combo contents to add each combo
-        # line item to the combo
+        """ Iterate through combo contents to add each combo
+        line item to the combo """
         for item, qty in item_info[2].items():
             food_item = Food_Item.objects.get(id=item)
             combo_line_item = ComboLineItem(

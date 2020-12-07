@@ -22,7 +22,7 @@ class StripeWH_Handler:
     def _send_confirmation_email_to_nonmember(self, order, is_collection):
         cust_email = order.email
         sent_info = get_sent_info(order, is_collection)
-        print("_send_confirmation_email_to_nonmember entered")
+
         subject = render_to_string(
             'checkout/confirmation_email/email_subject.txt',
             {'order': order}
@@ -41,16 +41,16 @@ class StripeWH_Handler:
     def _send_confirmation_email_to_member(self, order, is_collection, member):
         cust_email = order.email
         sent_info = get_sent_info(order, is_collection)
-        print("_send_confirmation_email_to_member entered")
+
         subject = render_to_string(
             'checkout/confirmation_email/email_subject.txt',
             {'order': order}
         )
 
-        if member.reward_status == 4:
+        if member.reward_status == 5:
             reward_msg = "Almost there, you will receive a free burger on your \
 next order."
-        elif member.reward_status == 5:
+        elif member.reward_status == 0:
             reward_msg = "Congratulations, you earned a free burger on this \
 order."
         else:
@@ -67,7 +67,8 @@ needed to grab your free burger."
                   fail_silently=False)
 
     def handle_event(self, event):
-        """ Handles generic Webhooks """
+        """ Handles Webhooks sent from Stripe """
+
         return HttpResponse(
             content=f"Unhandled Webhook received: {event['type']}.",
             status=200
@@ -75,12 +76,13 @@ needed to grab your free burger."
 
     def handle_successful_payment_intent(self, event):
         """ handles payment_intent.succeeded """
-        print("handle_successful_payment_intent enetered")
+
         intent = event.data.object
         pid = intent.id
         food_order = intent.metadata.food_order
         username = intent.metadata.username
         is_collection = intent.metadata.is_collection
+
         if is_collection == 'false':
             is_collection = False
         else:
@@ -90,6 +92,7 @@ needed to grab your free burger."
         if username != 'AnonymousUser':
             memberprofile = MemberProfile.objects.get(
                             member__username=username)
+
             if memberprofile.reward_status == 5:
                 discount = get_discount(json.loads(food_order))
                 if not isinstance(discount, str):
@@ -99,7 +102,6 @@ needed to grab your free burger."
             memberprofile = None
 
         billing_details = intent.charges.data[0].billing_details
-        # shipping_details = None
         grand_total = round(intent.charges.data[0].amount / 100, 2)
 
         # Empty fields become None, to be consistent with billing details
@@ -149,7 +151,7 @@ needed to grab your free burger."
                     order, is_collection, memberprofile)
             return HttpResponse(
                     content=f"Webhook received: {event['type']} | SUCCESS:\
-                         Database already contains this order.",
+Database already contains this order.",
                     status=200
                     )
 
@@ -177,6 +179,36 @@ needed to grab your free burger."
                 for order_itemid, value in json.loads(food_order).items():
                     save_to_orderlineitem(order_itemid, value, order)
 
+                if memberprofile is None:
+                    self._send_confirmation_email_to_nonmember(
+                        order, is_collection)
+                else:
+                    if discount_result:
+                        """ if discount exists, apply it and reset the reward
+                        status for that member."""
+
+                        order.discount = discount_result
+                        order.grand_total = round(
+                            Decimal(order.grand_total) - order.discount, 2)
+                        memberprofile.reward_status -= 5
+
+                    else:
+                        # no discount means progress reward status
+                        memberprofile.reward_status += 1
+
+                    MemberProfile.save(memberprofile)
+                    order.member_profile = memberprofile
+                    self._send_confirmation_email_to_member(
+                        order, is_collection, memberprofile)
+
+                order.save()
+
+                return HttpResponse(
+                        content=f"Webhook received: {event['type']} \
+| SUCCESS: order created in webhook.",
+                        status=200
+                        )
+
             except Exception as e:
                 if order:
                     order.delete()
@@ -185,32 +217,6 @@ needed to grab your free burger."
                         content=f"Webhook received: {event['type']} | \
                             ERROR: {e}",
                         status=500
-                    )
-
-        if memberprofile is None:
-            self._send_confirmation_email_to_nonmember(order, is_collection)
-        else:
-            if discount_result:
-                # if discount exists, apply it and reset the reward status for
-                # that member.
-                order.discount = discount_result
-                order.grand_total = round(
-                    Decimal(order.grand_total) - order.discount, 2)
-                memberprofile.reward_status -= 5
-            else:
-                # no discount means progress reward status
-                memberprofile.reward_status += 1
-            MemberProfile.save(memberprofile)
-            order.member_profile = memberprofile
-            self._send_confirmation_email_to_member(
-                order, is_collection, memberprofile)
-
-        order.save()
-
-        return HttpResponse(
-                    content=f"Webhook received: {event['type']} \
-                        | SUCCESS: order created in webhook.",
-                    status=200
                     )
 
     def handles_failed_payment_intent(self, event):

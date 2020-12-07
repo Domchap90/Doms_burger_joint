@@ -11,8 +11,8 @@ const elements = stripe.elements({
     ],
 });
 const form = document.getElementById('payment_form');
-const isCollection = (
-    $('input[name="for_collection"]').val() == 'True') ? true : false;
+const isCollection = Boolean(
+    $('input[name="for_collection"]').val() == 'True');
 const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
 
 const style = {
@@ -53,21 +53,25 @@ card.addEventListener('change', function(event){
         $('#card_error').html(`<span class="material-icons">error</span>\
         ${event.error.message}`);
     } 
-})
+});
 
-// form.addEventListener('submit', validateForm(event));
+form.addEventListener('submit', function() {
+    validateForm(event);
+});
 
 async function validateForm(event) {
 /* First stop form being submitted immediately to allow control of form
 submission */
 
-    event.preventDefault(); // comment out code for JS testing
+    // comment out code for JS testing
+    event.preventDefault(); 
+    
     // Clear previous error message if necessary
     $('#server_err').empty();
     card.update({ 'disabled': true});
-    $('#submit-button').attr('disabled', true);
-    $('#below-nav-container').fadeToggle(100);
-    $('#loading-overlay').fadeToggle(100);
+    $('#place_order_btn').attr('disabled', true);
+    $('.below-nav-container').fadeToggle(100);
+    $('#loading_overlay').fadeToggle(100);
     let isValid = false;
 
     // Initiate with form fields shared amongst Collection and Delivery forms
@@ -77,6 +81,7 @@ submission */
         'email': $.trim(form.email.value),
         'csrfmiddlewaretoken': form.csrfmiddlewaretoken.value,
     }
+    
     // Add delivery form field information if applicable
     if (!isCollection) {
         dataToValidate['address_line1'] = $.trim(form.address_line1.value);
@@ -141,6 +146,7 @@ function submitToStripe(dataToSubmit) {
         'client_secret': stripeClientSecret,
         'is_collection': isCollection,
     }
+
     let cardPaymentData = {
         payment_method: {
             card: card,
@@ -175,10 +181,10 @@ function submitToStripe(dataToSubmit) {
                 // Show error to your customer (e.g., insufficient funds)
                 $('#card_error').html(`<span class="material-icons">error\
                     </span>${result.error.message}`);
-                $('#below-nav-container').fadeToggle(100);
-                $('#loading-overlay').fadeToggle(100);
+                $('.below-nav-container').fadeToggle(100);
+                $('#loading_overlay').fadeToggle(100);
                 card.update({ 'disabled': false});
-                $('#submit-button').attr('disabled', false);
+                $('#place_order_btn').attr('disabled', false);
             } else {
                 // The payment has been processed!
                 if (result.paymentIntent.status === 'succeeded') {

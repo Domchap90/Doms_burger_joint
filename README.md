@@ -492,18 +492,38 @@ Test passed.
 ### Webhooks 
 
 Webhooks are the most intricate system being used in the entire app. Therefore it's worth doing thorough testing 
-to ensure that the app is communicating properly with Stripe. Webhooks are responsible for sending data back to our app
-not too disimilar from an API. In Stripe's case it is authorizing & processing payment data that has been sent to it.
-and communicating the results of the authorization. It tells us whether the charge has succeeded & other various pieces of
-information about what stage of completion the payment intent has reached for development purposes. These are accessible
-from the Stripe dashboard (https://dashboard.stripe.com/test/webhooks).
+to ensure that the app is communicating properly with Stripe. Webhooks are responsible for sending data back to the app's server
+not too disimilar from an API. In Stripe's case it is authorizing & processing payment data that has been sent to stripe with a
+payment intent object.
 
-#### User Logged Out Delivery
+Stripe tells the server whether the charge has succeeded & other various pieces of information about what stage of completion 
+the payment intent has reached for development purposes. These are accessible from the Stripe dashboard 
+(https://dashboard.stripe.com/test/webhooks).
 
-1. Ensure that if a user profile is currently logged in, it needs to be logged out.
+In this app's checkout system Stripe's webhooks also serve as a fallback for the user not reaching the checkout success page for whatever reason.
+Perhaps they accidentally close the window after clicking submit. In this case, the user would be unsure of whether or not their order had been
+processed by the business. For this situation some sort of feedback would be incredibly useful. Driving the decision to send an email via the
+webhook handler. This email's contents vary depending on many factors:
+
+1. The order type that was made - Collection or Delivery.
+2. User logged in or not.
+3. The reward status if the user was logged in.
+4. Address information on the submitted checkout form.
+
+The tests must cover all of these variables. Furthermore the webhooks not only serve as a fall back but they are the only means by which Stripe can 
+communicate successful events directly to the server once they have occured at the Stripe end. Therefore they will have to be tested with the checkout success page 
+being reached as well. 
+
+When the webhooks are acting as a fallback, they assume the responsibility of creating the order and saving that information to the database. As well as altering
+the reward status for the member. Upon the successful rendering of the checkout success page, the tests need to ensure that there has been no duplication of efforts
+in the hand over of this responsibility. Specifically this means that two emails aren't sent to the user and they don't have two duplicate orders made at the same time.
+
+#### Anonymous User Delivery
+
+1. Ensure that any user profile is currently logged out.
 2. Comment out line 191 in stripe_element.js to prevent form submitting.
-3. Fill order with items to total over the minimum delivery amount, proceed to checkout, delivery.
-4. Fill out form with valid details and submit.
+3. Fill order with items to total over the minimum delivery amount, proceed to checkout via **Delivery** option.
+4. Fill out form with [valid details](#submits-valid-data) and submit.
 5. *Note* time & observe visual of page.
 6. Navigate to django admin page for site & within the section checkout, orders.
 7. Ensure orders are in the order of most recent at the top, then click on the top order.
@@ -513,7 +533,7 @@ from the Stripe dashboard (https://dashboard.stripe.com/test/webhooks).
 11. Check Terminal (if running from local IDE) for backend email details matching the users
 information and order information. If running in heroku Check the user's email account for an email
 from d0mch4pl3@gmail.com.
-12. Undo stage 2.
+12. Undo stage 2 & repeat the test stages 3 - 11.
 
 Expected outcome:
 
@@ -523,17 +543,91 @@ Expected outcome:
   - payment_intent.succeeded 
   - payment_intent.created
   - charge.succeeded
-11. True
+11. Email Details:
+  - 'To' field of email reads 'test@domain.co.uk'
+  - Identifies 'James' as recipient.
+  - Correct date & time order was placed.
+  - Sent to:
+    - 101 random st
+    - random town
+    - W1W 7JB
+  - Amount paid shows correct totals.
 
-#### Other Webhook Tests
+12. Expected outcome 5 will be different as the page loading animation no longer freezes but runs for a breif 
+period of time before the checkout success page is rendered. The remaining outcomes 8, 10, 11 should be exactly 
+the same with no duplicate emails or orders.
 
-- Repeat for User Logged Out Collection but change stage 3 to proceed to checkout via collect instead of delivery.
-- Repeat for User Logged In Delivery but stage 1 must be logged in.
-- Repeat for 'User Logged In Collection' test but stage 1 must be logged in & stage 3 uses collection checkout.
+Anonymous user delivery test passed.
 
-All webhook tests share the same expected outcomes as 'User Logged Out Delivery'.
+#### Member Delivery
 
-All tests passed.
+1. Ensure that a member profile is currently logged in.
+2. Set reward status to 4 in the admin page for the logged in member profile.
+3. Comment out line 191 in stripe_element.js to prevent form submitting.
+4. Fill order with items to total over the minimum online spend amount, proceed to checkout via **Delivery** option.
+5. Fill out form with [valid details](#submits-valid-data) and submit.
+6. *Note* time & observe visual of page.
+7. Navigate to member's profile page & within the section 'Order History', open the top order.
+8. *Note* is that the order recently made?
+9. Navigate to your stripe dashboard.
+10. *Note* stripe webhook events for the time noted in stage 6.
+11. Check Terminal (if running from local IDE) for backend email details matching the users
+information and order information. If running in heroku Check the user's email account for an email
+from d0mch4pl3@gmail.com.
+12. Repeat stages 4 - 11 two more times & *Note* the email message regarding reward status on each occasion
+at stage 11.
+13. Undo stage 3 & repeat the test stages 3 - 11 one more time ensuring no duplications.
+
+Expected outcome:
+
+6. Page loading animation frozen.
+8. True.
+10. Stripe webhooks all succeed:
+  - payment_intent.succeeded 
+  - payment_intent.created
+  - charge.succeeded
+11. Email Details:
+  - 'To' field of email reads 'test@domain.co.uk'
+  - Identifies 'James' as recipient.
+  - Correct date & time order was placed.
+  - Reward status messages: 
+    - Reward status = 5
+
+            Email message = "Almost there, you will receive a free burger on your next order."
+    - (stage 12) Reward status = 0
+
+            Email message = "Congratulations, you earned a free burger on this order."
+    - (stage 12) Reward status = 1
+
+            Email message = "Just 4 more order(s) needed to grab your free burger."
+  - Sent to:
+    - 101 random st
+    - random town
+    - W1W 7JB
+  - Amount paid shows correct totals.
+
+13. Expected outcome 6 will be different as the page loading animation no longer freezes but runs for a breif 
+period of time before the checkout success page is rendered. The remaining outcomes 8, 10 should be 
+the same with no duplicate emails or orders however 11 only includes one email result corresponding to a 
+reward status of 2.
+
+Member delivery test passed.
+
+#### Collection Webhook Tests
+
+Repeat this format of testing for 'Anonymous User Collection' & 'Member Collection' only changing the checkout method
+to collect instead of delivery.
+
+The expected outcomes for the collection tests are essentially the same apart from the email contents. Instead of
+containing 'Sent to' address, the email will state the following:
+
+    Available for collection from:
+            20 Wardour St, 
+            West End,
+            London,
+            W1D 6QG
+
+All webhook collection tests passed.
 
 ### Quantity Buttons (Food order)
 
