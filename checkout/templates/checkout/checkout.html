@@ -18,17 +18,25 @@
                 <p>You are not currently logged in to your account. To be eligible for rewards, please sign in <a href="{% url 'account_login' %}?next={{request.path}}" class="text-link">here</a>.</p>
             {% elif reward_notification %}
                 <div class="rewards-notification">
-                {{ reward_notification }} 
-                <a class="button" href="{% url 'menu' %}?category=burgers">Get free burger</a>
+                    <p>{{ reward_notification }}</p>
+                    <div class="notification-btn-container">
+                        <a class="button" href="{% url 'menu' %}?category=burgers">Get free burger</a>
+                    </div>
                 </div>
             {% elif discount %}
                 <div class="rewards-notification">Congratulations you've earned a free burger! Saving yourself £{{ discount }}.</div>
             {% endif %}
 
+            {% if is_collect %}
+                <p>Why not try <a class="text-link" href="{% url 'checkout' %}">delivery</a> instead?</p>
+            {% endif %}
+
 			<div class="col s12" id="spending_warning">
 				{% if remaining_delivery_amount > 0 %}
 				<p>You still need to spend £{{ remaining_delivery_amount|floatformat:2 }} more to be eligible to order online.</p>
-                <a class="button" href="{% url 'menu' %}?category=burgers">BACK TO MENU</a>
+                <div class="notification-btn-container">
+                    <a class="button" href="{% url 'menu' %}?category=burgers">BACK TO MENU</a>
+                </div>
 				{% endif %}
 			</div>
 
@@ -52,7 +60,7 @@
                         {% endif %}
 
                     {% endfor %}
-                <p>Payment</p>
+                <p>Payment*</p>
                 <div id="card_element"><!--Stripe.js injects the Card Element--></div>
 
                 <p id="card_error" role="alert"></p>
@@ -63,7 +71,7 @@
                 <p class="result-message hidden">Payment succeeded</p>
                 <p id="server_err"></p>
 
-                <button class="submit" id="place_order_btn" onclick="validateForm(event)">
+                <button class="submit" id="place_order_btn">
                     PLACE YOUR ORDER (£{{ total|floatformat:2 }})
                 </button>
 

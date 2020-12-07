@@ -141,9 +141,10 @@
                         BACK TO MENU         
                     </a>
                     
-                    <a class="button checkout-btn" href="{% url 'collect_or_delivery' %}" id="proceed_checkout_link">
-                        PROCEED TO CHECKOUT
-                    </a>
+                    <form method="POST" action="{% url 'collect_or_delivery' %}" id="button_link_form">
+                        {% csrf_token %}
+                        <button class="checkout-btn" id="proceed_checkout_link">PROCEED TO CHECKOUT</button>
+                    </form>
                     
                 </div>
             </div>
