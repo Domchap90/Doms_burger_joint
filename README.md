@@ -16,17 +16,20 @@ A prototype for a burger delivery service's web application. Serving customers w
     - [Non Essential Features](#non-essential-features)
     - [Features Left to Implement](#features-left-to-implement)
 
-3. Technologies Used
+3. [Technologies Used](#technologies-used)
     
 4. Testing
     - [Automated Testing](#automated-testing)
     - [Manual Testing](#manual-testing)
 
 5. Deployment
+    - [View Website](#view-website)
+    - [Setting Up Remote Database](#setting-up-remote-database)
+    - [Storing Static Files to the Cloud](#storing-static-files-to-the-cloud)
+    - [Deploy to Heroku](#deploy-to-heroku)
 
 6. Credits
-    - [Content](#content)
-    - [Media](#media)
+    - [Images Used](#images-used)
     - [Code](#code)
     - [Acknowledgements](#acknowledgements)
 
@@ -191,6 +194,36 @@ by the super user. This could be added in after a few months of usage when the s
 User stories: 3, 17, 18
 
 # Technologies Used
+
+- Django Framework was the most heavily relied upon technology in the app. Being responsible for module communication (referred to as apps in django), rendering html from
+the server, secure user authentication system for the members, database for the food items/combinations and orders. Also for djangos built in testing for python files.
+
+- Stripe: Played a key role in the checkout's payment system. It was implemented via the link in the templates/base.html line 30. Also the doms_burger_joint/settings.py 
+has stripe variables declared lines 183 - 186. The stripe library was imported into the checkout/views.py file to setup the payment intent.
+
+- Qunit for automated testing of the javascript files. Chosen because of its versatility with test DOMS which make the testing of files such as the quantity_buttons.js in
+food_order app much easier.
+
+- Mockjax was used to create mock ajax responses and also intercept live ajax calls from the qunit tests on. Where the testing is isolated with no backend reponses.
+
+- Coverage tool was installed to help assess which lines of code had been left untested with regards to python files.
+
+- Whitenoise was used to store static files for deployment.
+
+- GoogleMaps API was used in the 'is_postcode_valid' view to determine whether the user inputted a postcode that the burger service could deliver to. Its geocode and distance
+matrix APIs were called to in the algorithm.
+
+- SqlLite was used as the internal database storage mechanism when the server is ran in Django.
+
+- Heroku was used to deploy the app.
+
+- Psycopg2 to integrate the sql database and Django objects.
+
+- HTML5 to display web pages.
+
+- Javascript for dynamically altering html files.
+
+- CSS3 to style HTML pages
 
 # Testing
 ## Automated Testing
@@ -710,15 +743,14 @@ Logic changed from:
 To:
 
     if(handing upper limit) {
-    // disable plus button
-    }else (handling not upper limit) {
+        // disable plus button
+    } else (handling not upper limit) {
         // re-enable plus button
     }
 
-    if (handling lower limit){
+    if (handling lower limit) {
         // disable minus button
-    }
-    else (handling not lower limit) {
+    } else (handling not lower limit) {
         // re-enable minus button
     }
 
@@ -805,27 +837,39 @@ Expected outcome is the system doesn't crash but simply yields the same postcode
 Test passed no issues.
 
 # Deployment
-## View website
+## View Website
 
 if you simply want to view the site then please visit:<br>
 https://doms-burger-joint.herokuapp.com/
 
-## Setting up remote database
+## Setting Up Remote Database
 
-- In settings add "import dj_database_url".
+- In settings add:
+
+        import dj_database_url
 - Set default database to read from the config variable in heroku or whichever platform used to deploy your app (settings, 114-116).
 - Can set up database config in an if statement depending on whether the app is running in heroku or not.
-- Run migrations again in CLI: python3 manage.py migrate
-- Load products in CLI, starting with those which have no dependencies: python3 manage.py loaddata [name_of_fixture]
+- Run migrations again in CLI:
+
+        python3 manage.py migrate
+- Load products in CLI, starting with those which have no dependencies:
+
+        python3 manage.py loaddata [name_of_fixture]
 - Run command above for food_categories, food_combos & food_items.
 
 ## Storing Static Files to the Cloud
 
-- Prevent heroku from attempting to collect static files (in CLI): heroku config:set DISABLE_COLLECTSTATIC=1 --app [app_name]
-- (in CLI) pip3 install whitenoise
+- Prevent heroku from attempting to collect static files (in CLI):
+
+        heroku config:set DISABLE_COLLECTSTATIC=1 --app [app_name]
+- In CLI: 
+
+        pip3 install whitenoise
 - Add whitenoise middleware to middleware config (settings, 50)
 - Add session storage variable to settings (line 173).
-- python3 manage.py collectstatic
+- In CLI:
+
+        python3 manage.py collectstatic
 
 ## Deploy to Heroku
 
@@ -839,17 +883,90 @@ https://doms-burger-joint.herokuapp.com/
 - Ensure Django 'DEBUG' variable is set equal to False before deploying to Heroku.
 
 # Credits
+## Images Used
+### Home Page
 
+- Burger icon: https://freesvg.org/simple-fast-food-icon
+- Hero image: https://www.pexels.com/photo/burger-and-fries-1552641/
 
-## Content 
-## Media
+### Members Area
+
+- Burger icon created using:  https://editor.freelogodesign.org/?lang=en&logo=6d301e5c-29c9-4742-b3a8-d2e61c215c93
+
+### Menu pages
+
+The majority of the menu images were resourced by https://www.kaggle.com/kmader/food41. These references will simply be a 6 or 7 digit file name followed by '.jpg'.
+
+#### Burgers
+
+Found in the hamburger category of kaggle.
+
+- The Sloppy Dom: 1392659.jpg
+- Flat Bread Burger: 1334884.jpg 
+- Garden Burger: 1049005.jpg
+- Bunless: 669487.jpg
+- Raddish Burger: 2111010.jpg
+- The Wagyu: 1543118.jpg
+- The Beast: 976482.jpg 
+- Messy Onion Burger: 1038553.jpg
+- Simple Burger: 1634763.jpg
+- Beany Burger: https://pxhere.com/en/photo/1586555
+- Guilt Free Burger: https://pixabay.com/photos/vegan-burger-vegetarian-vegetable-2513503/
+
+#### Sides
+
+- Chunky Fries: 1008945.jpg
+- Thin Fries: 109401.jpg
+- Garlic Fries: 1132539.jpg
+- Cheesey Fries: 20215.jpg 
+
+#### Dessert
+
+- Apple pie: 1109597.jpg 
+- Cheesecake: 1001446.jpg 
+- Icecream: 1799393.jpg
+
+#### Drinks 
+
+- Lemonade: https://www.flickr.com/photos/dominicspics/8674171523
+- Cola: https://www.wallpaperflare.com/closeup-photo-of-coca-cola-tin-can-red-coca-cola-can-coca-cola-wallpaper-zmeez
+- Beer: https://www.flickr.com/photos/tami_chan/21738471735/
+
 ## Code
 
-def changeform_link(self) method in OrderLineItem Models (Checkout)
-Resource: https://stackoverflow.com/questions/2857001/adding-links-to-full-change-forms-for-inline-items-in-django-admin
+The following code snippets were based upon the structure of pre-existing code that can be found online. Below are the snippets
+accompanied by their referenced counterparts.
+
+### Snippet 1 (checkout/models.py 102-120):
+
+Due to the double nested nature of the line items in food combos, a change form was required to access the comboline items. At 
+the order line item level an object could simply be a food item or it could be a combo which involves a deeper level to see 
+what food items the combo is composed of. These deeper levels are referred to as combo line items. 
+
+The problem with Django admin structure is it only allows one level of inline items. The work around for this was to provide a link at the 
+order line level to a separate page for the comboline level.
+
+Resource: https://stackoverflow.com/questions/2857001/adding-links-to-full-change-forms-for-inline-items-in-django-admin<br>
 Solution: answered May 27 '10 at 22:25, Lukasz Korzybski
                 
-        django pagination in Members area profile page and view (Members Area)
+### Snippet 2 (members_area/views.py 25-37, members_area/templates/members_area/profile_page.html 63-97):
+
+I was unsure of the best way to utilise django pagination using the view to render the pages. I came across a useful example to base the initial
+structure of the user profile page's order history on. I kept the link format and adjusted the variable names to be in keeping with my order pages.
+Additional javascript formatting was implemented to solve the issue of there being many page numbers on small screen resolutions. I adjusted my table
+to only display 5 orders per page.
+
+Resource: https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html<br>
+Solution: Pagination with Function-Based Views section
+
+### Snippet 3 (food_order/static/food_order/js/quantity_buttons.js 2-13):
+
+This Snippet doesn't allow the back cached data to be displayed when traversing back through to the order page. The reason the page is reloaded upon
+an attempt to back cache is if it wasn't then the page would show incorrect totals for dynamically updated quantities that were adjusted via the javascript
+in quantity_buttons.js.
+
+Resource: https://stackoverflow.com/questions/63786476/alternative-javascript-method-for-performancenavigation-cross-browser-compatibl<br>
+Solution: asked Sep 8 at 2:49, nr159
 
 ## Acknowledgements
 

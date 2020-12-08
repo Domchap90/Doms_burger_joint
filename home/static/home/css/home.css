@@ -5,7 +5,7 @@
 
 .hero-burger-image {
     background: url(/static/menu_images/heroimage_burger_fries_optimized.jpg);
-    background-color: red;
+    background-color: white;
     height: 66.684vw;
     max-height: calc(100vh - 174px);
     width: 100vw;

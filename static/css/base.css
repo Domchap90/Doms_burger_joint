@@ -328,6 +328,23 @@ a.sidenav-trigger {
     background-color: white;
 }
 
+@media only screen and (max-width: 600px) {
+/* Override Materialize flex alignment of text */
+    #toast-container .toast {
+        justify-content: center;
+    }
+}
+
+@media only screen and (max-width: 992px)
+and (min-width: 601px) {
+/* Override materialize default CSS */
+    #toast-container {
+        top: 0% !important;
+        left: auto !important;
+        width: fit-content;
+    }
+}
+
 /********************************************************* Common Selectors */
 
 /* Shared across most apps */
