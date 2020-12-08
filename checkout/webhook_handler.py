@@ -179,6 +179,8 @@ Database already contains this order.",
                 for order_itemid, value in json.loads(food_order).items():
                     save_to_orderlineitem(order_itemid, value, order)
 
+                order.save()
+
                 if memberprofile is None:
                     self._send_confirmation_email_to_nonmember(
                         order, is_collection)
@@ -198,10 +200,9 @@ Database already contains this order.",
 
                     MemberProfile.save(memberprofile)
                     order.member_profile = memberprofile
+
                     self._send_confirmation_email_to_member(
                         order, is_collection, memberprofile)
-
-                order.save()
 
                 return HttpResponse(
                         content=f"Webhook received: {event['type']} \
