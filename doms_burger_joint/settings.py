@@ -110,7 +110,7 @@ WSGI_APPLICATION = 'doms_burger_joint.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 # comment out 113-117 for testing
-if 'DATABASE_URL' in os.environ:
+if 'DEVELOPMENT' in os.environ:
     DATABASES = {
         'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }

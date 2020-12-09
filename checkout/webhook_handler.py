@@ -80,6 +80,7 @@ needed to grab your free burger."
         intent = event.data.object
         pid = intent.id
         food_order = intent.metadata.food_order
+        order_size = intent.metadata.order_size
         username = intent.metadata.username
         is_collection = intent.metadata.is_collection
 
@@ -102,14 +103,14 @@ needed to grab your free burger."
             memberprofile = None
 
         billing_details = intent.charges.data[0].billing_details
-        grand_total = round(intent.charges.data[0].amount / 100, 2)
-
         # Empty fields become None, to be consistent with billing details
         if not is_collection:
             shipping_details = intent.shipping
             for field, value in shipping_details.address.items():
                 if value == "":
                     shipping_details.address[field] = None
+
+        grand_total = round(intent.charges.data[0].amount / 100, 2)
 
         order_exists = False
         iterations = 1
@@ -121,7 +122,8 @@ needed to grab your free burger."
                         mobile_number__iexact=billing_details.phone,
                         email__iexact=billing_details.email,
                         grand_total=grand_total,
-                        pid=pid
+                        pid=pid,
+                        order_count=order_size
                     )
 
                 else:
@@ -130,14 +132,15 @@ needed to grab your free burger."
                         mobile_number__iexact=billing_details.phone,
                         email__iexact=billing_details.email,
                         address_line1__iexact=shipping_details.address.line1,
-                        address_line2__iexact=shipping_details.address.line2,
                         postcode__iexact=shipping_details.address.postal_code,
                         grand_total=grand_total,
-                        pid=pid
+                        pid=pid,
+                        order_count=order_size
                     )
 
                 order_exists = True
                 break
+
             except Order.DoesNotExist:
                 iterations += 1
                 time.sleep(1)
@@ -178,8 +181,6 @@ Database already contains this order.",
 
                 for order_itemid, value in json.loads(food_order).items():
                     save_to_orderlineitem(order_itemid, value, order)
-
-                order.save()
 
                 if memberprofile is None:
                     self._send_confirmation_email_to_nonmember(

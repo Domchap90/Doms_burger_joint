@@ -12,7 +12,7 @@ Your food is on its way! Your order was successfully placed on {{ order.date }}.
         Delivery Fee:   £{{ order.delivery_fee }}  
         Food Total:     £{{ order.order_total }}
         Discount:      -£{{ order.discount|floatformat:2 }}
-        Grand Total:    £{{ order.grand_total }} 
+        Grand Total:    £{{ order.grand_total|floatformat:2 }} 
 
 Any further questions, please reply on {{ from_email }}.
 

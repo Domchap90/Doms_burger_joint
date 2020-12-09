@@ -29,6 +29,7 @@ def cached_payment_intent(request):
             'food_order': json.dumps(request.session.get('food_order', {})),
             'username': request.user,
             'order': json.dumps(request.session.get('food_order')),
+            'order_size': order_contents(request)['order_count'],
             'is_collection': request.POST.get('is_collection'),
         })
 
@@ -47,14 +48,18 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
     food_order = request.session.get('food_order', {})
+    print(f'food order = {food_order}')
 
-    total = None
+    total = round(order_contents(request)['grand_total'], 2)
+    print(f'total = {total}')
     intent = None
     is_collect = request.GET.get('is_collect', False)
+    print(f'is_COLLECT = {is_collect}')
     reward_notification = None
     discount_result = None
 
     if request.method == 'POST':
+        print("request.method == 'POST'")
         for_collection = True
         if request.POST['for_collection'] == "False":
             for_collection = False
@@ -76,9 +81,11 @@ def checkout(request):
         order_form = set_order_form(form_data, for_collection)
 
         if order_form.is_valid():
+            print("order_form.is_valid()")
             order = order_form.save(commit=False)
             pid = request.POST.get('client_secret').split('_secret')[0]
             order.pid = pid
+            order.grand_total = total
             if request.user.is_authenticated:
                 member_profile = MemberProfile.objects.get(member=request.user)
                 if request.POST.get('discount'):
@@ -100,11 +107,13 @@ def checkout(request):
                     save_to_orderlineitem(order_itemid, value, order)
 
                 except Food_Item.DoesNotExist:
+                    print("Food item doesn't exist")
                     messages.error(request, (
                         "Unfortunately our database was unable to detect an \
                          item selected in your order."
                     ))
                     order.delete()
+                    print('reverse reached.')
                     return redirect(reverse('food_order'))
 
             return redirect(reverse('checkout_success',
@@ -114,7 +123,6 @@ def checkout(request):
 
     else:
         order_form = set_order_form({}, is_collect)
-        total = order_contents(request)['grand_total']
         if request.user.is_authenticated:
             try:
                 member_profile = MemberProfile.objects.get(member=request.user)
@@ -231,6 +239,7 @@ def save_to_orderlineitem(order_itemid, item_info, order):
             food_item=food_item,
             quantity=item_info,
         )
+        order_line_item.save()
     # For the instance of a combo
     else:
         combo_item = Food_Combo.objects.get(id=item_info[0])
@@ -250,7 +259,6 @@ def save_to_orderlineitem(order_itemid, item_info, order):
                                 food_item=food_item,
                                 quantity=qty)
             combo_line_item.save()
-    order_line_item.save()
 
 
 def get_discount(order):
@@ -322,8 +330,6 @@ def checkout_success(request, order_number):
     if request.user.is_authenticated:
         member = MemberProfile.objects.get(member=request.user)
         order.member_profile = member
-
-    order.save()
 
     messages.success(request, f'Thank you for completing your order. \
         You will shortly receive an email to confirm it has been placed. \
