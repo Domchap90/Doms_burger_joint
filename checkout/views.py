@@ -48,18 +48,14 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
     food_order = request.session.get('food_order', {})
-    print(f'food order = {food_order}')
 
-    total = round(order_contents(request)['grand_total'], 2)
-    print(f'total = {total}')
+    total = None
     intent = None
     is_collect = request.GET.get('is_collect', False)
-    print(f'is_COLLECT = {is_collect}')
     reward_notification = None
     discount_result = None
 
     if request.method == 'POST':
-        print("request.method == 'POST'")
         for_collection = True
         if request.POST['for_collection'] == "False":
             for_collection = False
@@ -81,11 +77,10 @@ def checkout(request):
         order_form = set_order_form(form_data, for_collection)
 
         if order_form.is_valid():
-            print("order_form.is_valid()")
             order = order_form.save(commit=False)
             pid = request.POST.get('client_secret').split('_secret')[0]
             order.pid = pid
-            order.grand_total = total
+            # order.grand_total = total
             if request.user.is_authenticated:
                 member_profile = MemberProfile.objects.get(member=request.user)
                 if request.POST.get('discount'):
@@ -95,6 +90,9 @@ def checkout(request):
                     that member. """
                     order.discount = request.POST.get('discount')
                     member_profile.reward_status -= 5
+                elif member_profile.reward_status == 5:
+                    # Case where member doesn't use their discount
+                    member_profile.reward_status = 5
                 else:
                     # no discount means progress reward status
                     member_profile.reward_status += 1
@@ -107,13 +105,12 @@ def checkout(request):
                     save_to_orderlineitem(order_itemid, value, order)
 
                 except Food_Item.DoesNotExist:
-                    print("Food item doesn't exist")
                     messages.error(request, (
                         "Unfortunately our database was unable to detect an \
                          item selected in your order."
                     ))
                     order.delete()
-                    print('reverse reached.')
+
                     return redirect(reverse('food_order'))
 
             return redirect(reverse('checkout_success',
@@ -122,6 +119,7 @@ def checkout(request):
             messages.error(request, "Form could not be submitted.")
 
     else:
+        total = round(order_contents(request)['grand_total'], 2)
         order_form = set_order_form({}, is_collect)
         if request.user.is_authenticated:
             try:

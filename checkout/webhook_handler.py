@@ -150,6 +150,7 @@ needed to grab your free burger."
                 self._send_confirmation_email_to_nonmember(
                     order, is_collection)
             else:
+                # insert discount code here reset status
                 self._send_confirmation_email_to_member(
                     order, is_collection, memberprofile)
             return HttpResponse(
@@ -194,7 +195,9 @@ Database already contains this order.",
                         order.grand_total = round(
                             Decimal(order.grand_total) - order.discount, 2)
                         memberprofile.reward_status -= 5
-
+                    elif memberprofile.reward_status == 5:
+                        # Case where member doesn't use their discount
+                        memberprofile.reward_status = 5
                     else:
                         # no discount means progress reward status
                         memberprofile.reward_status += 1
